@@ -1,0 +1,432 @@
+---
+title: "202105 NHMRC Ideas Grant"
+author: |
+  | Stephen Pederson
+  | Dame Roma Mitchell Cancer Research Laboratories
+  | Adelaide Medical School
+  | University of Adelaide
+date: "03/05/21"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+    echo = TRUE,
+    message = FALSE,
+    warning = FALSE
+)
+```
+
+```{r packages}
+library(tidyverse)
+library(readxl)
+library(zoo)
+library(truncnorm)
+library(parallel)
+library(scales)
+library(glue)
+library(magrittr)
+library(pander)
+```
+
+```{r options}
+theme_set(theme_bw())
+```
+
+
+# Ki67 data
+
+The common measurement of Ki67 data is as a percentage of cells staining +ve for Ki67.
+Example data is taken from PDX samples in the Nature Medicine paper.
+
+```{r load_ki67}
+ki67_natmed <- here::here("data/41591_2020_1168_MOESM3_ESM.xlsx") %>%
+    read_excel(sheet = "S1d") %>%
+    setNames(
+        tibble(
+            names = colnames(.),
+            r1 = unlist(.[1,])
+        ) %>%
+            mutate(
+                names = str_replace_all(names, "\\.\\.\\.+", NA_character_),
+                names = na.locf(names)
+            ) %>%
+            unite(names, names, r1, sep = " ") %>%
+            pull(names) %>%
+            str_remove_all(" NA$")
+    ) %>%
+    dplyr::slice(-1) %>%
+    dplyr::filter(!str_detect(Diagnosis, "Normal"))
+```
+
+```{r plot_ki67}
+ki67_natmed %>%
+    dplyr::select(`Sample ID`, contains("Ki67")) %>%
+    pivot_longer(
+        cols = contains("E2"),
+        names_to = "treat",
+        values_to = "ki67"
+    ) %>%
+    mutate(
+        treat = str_remove_all(treat, "Ki67.+\\(%\\) "),
+        ki67 = as.numeric(ki67)/100,
+        # ki67 = binomial()$linkfun(ki67)
+        # ki67 = log(ki67)
+    ) %>%
+    ggplot(
+        aes(treat, ki67)
+    ) +
+    geom_violin(
+        draw_quantiles = 0.5,
+        trim = FALSE
+    ) +
+    geom_jitter(width = 0.05) +
+    scale_y_continuous(limits = c(0, 1), labels = percent)
+```
+
+
+```{r summary_ki67}
+ki67_natmed %>%
+  dplyr::select(`Sample ID`, contains("Ki67")) %>%
+  pivot_longer(
+    cols = contains("E2"),
+    names_to = "treat",
+    values_to = "ki67"
+  ) %>%
+  mutate(
+    treat = str_remove_all(treat, "Ki67.+\\(%\\) "),
+    ki67 = as.numeric(ki67)/100
+  ) %>%
+  group_by(
+    treat
+  ) %>%
+  summarise(
+    n = n(),
+    across(.cols = contains("ki67"), .fns = list(mean = mean, median = median, sd = sd)),
+    .groups = "drop"
+  ) %>%
+  rename_all(str_replace_all, pattern = "_", replacement = " ") %>%
+  rename_all(str_to_title) %>%
+  pander(
+    caption = "Summary statistics from PDX Ki67 data"
+  )
+```
+
+Given the above plot, a truncated normal distribution may be suitable for simulation of data.
+Note that we'll be using the Wilcoxon, so the exact distributional patterns are less relevant.
+Compare some simulated data to the real data.
+
+In the following the value provided for sd will track the initial sd, but following the principles of transformation for linear variables.
+
+$$
+\text{If } Y = aX + b \text{, then} \\
+\text{Var}(Y) = a^2\text{Var}(X)
+$$
+For example, for a 50% reduction in Ki67, the sd for the reduced sample will be &#8730;(1 - 0.5)&sigma;.
+Likewise for a 70% reduction, the sd for simulation will be &#8730;(1 - 0.7)&sigma;.
+
+```{r sim_params}
+ki0 <- 0.4
+n <- 20
+sigma <- 0.2
+```
+
+Based on the observed PDX data, start with &sigma; = `r sigma`, an initial Ki67 value of `r ki0`, simulating `r n` observations per group.
+Whilst &sigma; = `r sigma` is higher than that in the observed data, it should be noted that for a truncated normal, the observed sd will have a bias to be lower than the provided value.
+By way of example, simulating `r n` point 1000 times, returned a median sd of `r round(replicate(1000, sd(rtruncnorm(n, 0, 1, ki0, sigma))) %>% median(), 3)`.
+Using the sqrt function for the sd of reduced Ki67 data may again be conservative, but for power calculations it is best to err on the side of caution.
+
+```{r check_params}
+tibble(
+    init = rtruncnorm(n, 0, 1, ki0, sigma),
+    red50 = rtruncnorm(n, 0, 1, 0.5*ki0, sqrt(0.5)*sigma),
+    red70 = rtruncnorm(n, 0, 1, (1 - 0.7)*ki0, sqrt(1 - 0.7)*sigma)
+) %>%
+    pivot_longer(cols = everything()) %>%
+    ggplot(aes(name, value)) +
+    geom_violin(draw_quantiles = 0.5, trim = FALSE) +
+    geom_jitter(width = 0.1, alpha = 0.5) +
+    scale_y_continuous(limits = c(0, 1), labels = percent)
+```
+
+
+```{r hist_ki67, echo = FALSE, eval = FALSE}
+ki67_natmed %>%
+    dplyr::select(`Sample ID`, contains("Ki67")) %>%
+    pivot_longer(
+        cols = contains("E2"),
+        names_to = "treat",
+        values_to = "ki67"
+    ) %>%
+    mutate(
+        treat = str_remove_all(treat, "Ki67.+\\(%\\) "),
+        ki67 = as.numeric(ki67)/100,
+        ki67 = binomial()$linkfun(ki67)
+        # ki67 = log(ki67)
+    ) %>%
+    ggplot(
+        aes(ki67, stat(density))
+    ) +
+    geom_histogram(bins = 10) + 
+    # This looks reasonable for the E2 data
+    geom_line(
+        aes(x, y),
+        data = tibble(
+            x = seq(-3, 3, by = 0.01),
+            y = dnorm(x = x, -0.34, sd = 0.9),
+            treat = "E2"
+        ),
+        colour = "blue"
+    ) +
+    geom_line(
+        aes(x, y),
+        data = tibble(
+            x = seq(-5, 5, by = 0.01),
+            y = dnorm(x = x, -1.56, sd = 0.9),
+            treat = "E2+DHT"
+        ),
+        colour = "blue"
+    ) +
+    # E2+DHT looks left skewed
+    facet_wrap(~treat, scales = "free_x")
+```
+
+To generate a power curve, we need power on the y-axis, `n` on the x-axis with different starting values for ki0.
+Importantly, power was estimated using &alpha; = `r round(0.05/3, 3)` as the threshold for significance, given we require multiple testing to be taken into account, and we have three comparisons.
+
+```{r power_fun}
+power_fun <- function(n1, n2, init, reduction, sd = 0.2, alpha = 0.05/3, n_sim = 1e4){
+    p <- replicate(
+        n_sim,
+        {
+            y1 <- rtruncnorm(n1, a = 0, b = 1, mean = init, sd = sd)
+            y2 <- rtruncnorm(n2, a = 0, b = 1, mean = (1-reduction)*init, sd = sqrt(1-reduction)*sd)
+            wilcox.test(y1, y2)$p.value <= alpha
+        }
+    )
+    mean(p)
+}
+```
+
+Data was simulated using equal sized groups for control & treatment, as well as having double the samples in the treatment arm.
+Sample sizes were incremented in steps of 5.
+
+Initial values for Ki67 were simulated as ranging from 10% to 30%, with a reduction from 50 to 70% being simulated.
+Both were incremented in steps of 10%.
+
+
+```{r power_sim}
+n2_ratio <- c(1, 2)
+n <- rep(
+    seq(10, 50, by = 5),
+    length(n2_ratio)
+)
+core_df <- tibble(
+    n1 = n,
+    ratio = rep(n2_ratio, each = length(unique(n))),
+    n2 = floor(n1*ratio)
+)
+power_sim <- list(
+    mutate(core_df, init = 0.1, reduction = 0.5),
+    mutate(core_df, init = 0.2, reduction = 0.5),
+    mutate(core_df, init = 0.3, reduction = 0.5),
+    mutate(core_df, init = 0.1, reduction = 0.6),
+    mutate(core_df, init = 0.2, reduction = 0.6),
+    mutate(core_df, init = 0.3, reduction = 0.6),
+    mutate(core_df, init = 0.1, reduction = 0.7),
+    mutate(core_df, init = 0.2, reduction = 0.7),
+    mutate(core_df, init = 0.3, reduction = 0.7)
+) %>%
+    bind_rows() %>%
+    split(f = seq_along(.$n1)) %>%
+    mclapply(
+        function(x){
+            pwr <- power_fun(
+                n1 = x$n1,
+                n2 = x$n2,
+                init = x$init,
+                reduction = x$reduction, 
+                n_sim = 1e4
+            )
+            mutate(x, pwr = pwr)
+        },
+        mc.cores = 8
+    ) %>%
+    bind_rows() 
+```
+
+```{r plot_power_curve, fig.width = 10, fig.cap = "*Power curve for 50, 60 and 70% Ki67 reduction. Black dots indicate the estimated power for control vs treatment, whilst red dots indicate estimated power for comparison between treatment arms.*"}
+power_sim %>%
+    mutate(
+        reduction = glue("{percent(reduction)} Ki67 Reduction"),
+        init = percent(init),
+    ) %>%
+    ggplot(
+        aes(n1, pwr, colour = init, linetype = as.factor(ratio))
+    ) +
+    geom_line() +
+    geom_hline(yintercept = 0.7, colour = "grey50") +
+    geom_point(
+        aes(n1, pwr),
+        data = . %>%
+            dplyr::filter(
+                n1 == 20, ratio == 2, init == "20%"
+            ),
+        colour = "black"
+    ) +
+    geom_point(
+        aes(n1, pwr),
+        data = . %>%
+            dplyr::filter(
+                n1 == 40, ratio == 1, init == "10%"
+            ),
+        colour = "red"
+    ) +
+    facet_wrap(~as.factor(reduction)) +
+    labs(
+        x = "Sample Size (Untreated)",
+        y = "Power",
+        colour = "Mean Ki67%\n(Untreated)",
+        linetype = expression(frac("#Treated", "#Untreated"))
+    ) +
+    theme(
+        plot.title = element_text(hjust = 0.5)
+    ) +
+    scale_y_continuous(
+        limits = c(0, 1),
+        expand = expansion(c(0, 0)),
+        labels = percent,
+        breaks = seq(0, 1, length.out = 6)
+    )
+```
+
+
+Assuming an initial Ki67 positivity of 20%, choosing a sample size of 20 control + 40 for both treatment arms (N = 100), we have a power:
+
+- &ge;90% to detect Ki67 reduction of 70% or more (assuming &ge;20% initial positivity).
+- 75% to detect Ki67 reduction of 60% or more (assuming &ge;20% initial positivity).
+- 50% to detect Ki67 reduction of 50% or more (assuming &ge;20% initial positivity).
+
+When comparing between already reduced Ki67 positivity in the two treatment arms, this will provide a power of 70% to detect a reduction of 60% or more between the two treatment groups.
+This assumes a lower initial positivity (~10%) in the higher of the two treatment arms.
+
+# CT Scans
+
+Assuming that dogs from the above treatment arms go forward into the next step of the experiment, we need to assess the probability of relapse, and our ability to detect difference.
+According to the McEwen paper, the 100 day probability of being cancer-free for dogs with tumour volumes > 40cc is 50% of patients.
+
+If we assume the above sample sizes (i.e. 20 control and 40 in the treatment arm), we can perform a Fisher's Exact Test, given that this is sampling without replacement.
+Data was simulated using a binomial distribution, simulating the number of dogs with a relapse for a given probability.
+Power was then estimated using Fisher's Exact Test for a difference between the control group and the treatment arm.
+Data for the treatment arm was simulated using the same process, but with a reduced probability of recurrence.
+
+```{r fisher_fun}
+fisher_fun <- function(p1, n1, n2, improvement, n_sim = 1e3, alpha = 0.05){
+    res <- replicate(
+        n_sim,
+        {
+            d1 <- rbinom(1, n1, p1) # The estimated recurrence (which is success in this modelling approach)
+            ## The treatment group
+            p2 <- (1 - improvement)*p1
+            d2 <- rbinom(1, n2, p2)
+            c(d1, n1-d1) %>%
+                rbind(c(d2, n2 - d2)) %>%
+                set_colnames(c("relapse", "survival")) %>%
+                set_rownames(c("control", "treat")) %>%
+                fisher.test() %>%
+                .[["p.value"]] %>%
+                is_less_than(alpha) 
+        }
+    )
+    mean(res)
+}
+```
+
+
+```{r fisher_res}
+core_df <- tibble(
+    n1 = c(15, 20, 30, 40, 50),
+    n2 = c(30, 40, 30, 40, 50),
+    p1 = 0.5
+)
+fisher_res <- list(
+    mutate(core_df, improvement = 0.3),
+    mutate(core_df, improvement = 0.4),
+    mutate(core_df, improvement = 0.5),
+    mutate(core_df, improvement = 0.6),
+    mutate(core_df, improvement = 0.7),
+    mutate(core_df, improvement = 0.8)
+) %>%
+    bind_rows() %>%
+    split(f = seq_along(.$n1)) %>%
+    mclapply(
+        function(x){
+            pwr <- fisher_fun(p1 = x$p1, n1 = x$n1, n2 = x$n2, improvement = x$improvement, n_sim = 5e3)
+            mutate(x, pwr = pwr)
+        },
+        mc.cores = 6
+    ) %>%
+    bind_rows() %>%
+    mutate(ss = glue("({n1}, {n2})"))
+```
+
+
+The power curve below reveals that:
+
+- For the smallest combination (n~c~ = 15, n~treat = 30), a 70% power will only be obtained if the improvement in the 100-day cancer free rate is 73%, i.e. it drops from 50% to 13.5% recurrence
+- Using n~c~ = 50, n~treat~ = 50 gives an estimated power of 70% if the improvement is only 52%, i.e. a drop from 50% to 24% recurrence
+- For an improvement beyond 75% (i.e. 50% down to 12.5% recurrence), all sample sizes return a power &ge;70%
+
+```{r plot_fisher_sim, fig.height=8, fig.width=10, fig.cap = "*Power estimates for various sample sizes based on a control and treatment group. The parameter being measured is the % improvement in the 100-day cancer-free rate. The 100-day cancer-free rate in untreated tumours was set as 50% based on the paper by McEwen. Dashed vertical lines denote half, 1/3 and 1/4 the numbers of patients showing relapse (relative relapse = RR)*"}
+my_percent <- function(x){
+    percent(x, accuracy = 1)
+}
+fisher_res %>%
+  ggplot(
+    aes(improvement, pwr, colour = as.factor(ss))
+  ) +
+  geom_line() +
+  geom_hline(yintercept = 0.7, colour = "grey") +
+  geom_vline(
+    xintercept = c(0.5, 2/3, 3/4),
+    linetype = 2,
+    colour = "grey"
+  ) +
+  geom_text(
+    aes(x, y, label = lab),
+    data = tibble(
+      x = c(1/2, 2/3, 3/4),
+      y = c(0.25, 0.5, 0.65),
+      lab = c("1/2 RR", "1/3 RR", "1/4 RR")
+    ),
+    inherit.aes = FALSE
+  ) +
+  scale_x_continuous(
+    labels = my_percent,
+    breaks = seq(0, 1, by = 0.1),
+  ) +
+  scale_y_continuous(
+    limits = c(0, 1),
+    expand = expansion(c(0, 0)),
+    labels = percent,
+    breaks = seq(0, 1, length.out = 6)
+  ) +
+  labs(
+    x = "% Improvement in 100 days Cancer-Free",
+    y = "Power",
+    colour = expression(paste("(", n[cont], ", ", n[treat], ")"))
+  )
+```
+
+# Conclusion
+
+Based on both the above analyses, the sample sizes of n~i~ = 40 for each of the Ki67 treatment arms would give a consistent power of &ge;70% to detect a reduction in Ki67 &ge;50% in either treatment arm, assuming the initial Ki67 values are &ge;20% in the untreated samples.
+For comparison between treatment arms, this gives a power of 70% to detect a difference &ge;60% in Ki67, assuming Ki67 percentages are above 10% in the higher of the two treatment arms.
+
+This would allow taking 3/4 of dogs forward into the CT scan section of the study.
+Using n~i~ = 30 gives a power &ge;70% to detect a change in the proportion of dogs showing recurrence to being &le;1/3 of what is observed in the untreated group.
+This can also be explained as a 66% reduction in the recurrence rate.
+
+Increasing this to n~i~=40 for each CT scan group would return a power of &ge;70% to detect a reduced recurrence to be 43% of what is observed in the control group (i.e. a reduction of 57% in the recurrence rate).
