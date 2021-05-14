@@ -7,11 +7,18 @@ navbar:
     href: index.html
   - text: About
     href: about.html
-  - text: License
-    href: license.html
+  - text: NHMRC
+    menu:
+      - text: Ideas Grant May 2021
+        href: 202105_NHMRC_IdeasGrant.html
+  - text: CRUK
+    menu:
+      - text: Enobosarm Trial May 2021
+        href: 20210514_CRUK_ClinicalTrial.html
 output:
   workflowr::wflow_html:
     toc: yes
     toc_float: yes
+    code_folding: hide
     theme: cosmo
     highlight: textmate
