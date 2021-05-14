@@ -352,7 +352,7 @@ res <- list(
 ```
 
 
-```{r fig.cap = "Power Curves for various starting Ki67% values and non-responder rates"}
+```{r plot_power_curve, fig.cap = "Power Curves for various starting Ki67% values and non-responder rates"}
 res %>%
   ggplot(
     aes(
