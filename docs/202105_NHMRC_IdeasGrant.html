@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+<meta name="date" content="2021-03-05" />
+
+<title>202105 NHMRC Ideas Grant</title>
+
+<script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-sm-12 col-md-4 col-lg-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-sm-12 col-md-8 col-lg-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Power Calculations</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">202105 NHMRC Ideas Grant</h1>
+<h4 class="author"><div class="line-block">Stephen Pederson<br />
+Dame Roma Mitchell Cancer Research Laboratories<br />
+Adelaide Medical School<br />
+University of Adelaide</div></h4>
+<h4 class="date">03/05/21</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2021-05-14
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>power_calculations/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20210514code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20210514)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20210514code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20210514)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrong5463d91"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> 5463d91 </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrong5463d91" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version 5463d91. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rproj.user/
+
+Untracked files:
+    Untracked:  data/41591_2020_1168_MOESM3_ESM.xlsx
+
+Unstaged changes:
+    Modified:   analysis/_site.yml
+    Deleted:    analysis/license.Rmd
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/202105_NHMRC_IdeasGrant.Rmd</code>) and HTML (<code>docs/202105_NHMRC_IdeasGrant.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+5463d91
+</td>
+<td>
+Steve Ped
+</td>
+<td>
+2021-05-14
+</td>
+<td>
+wflow_publish("analysis/202105_NHMRC_IdeasGrant.Rmd")
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<pre class="r"><code>library(tidyverse)
+library(readxl)
+library(zoo)
+library(truncnorm)
+library(parallel)
+library(scales)
+library(glue)
+library(magrittr)
+library(pander)</code></pre>
+<pre class="r"><code>theme_set(theme_bw())</code></pre>
+<div id="ki67-data" class="section level1">
+<h1>Ki67 data</h1>
+<p>The common measurement of Ki67 data is as a percentage of cells staining +ve for Ki67. Example data is taken from PDX samples in the Nature Medicine paper.</p>
+<pre class="r"><code>ki67_natmed &lt;- here::here(&quot;data/41591_2020_1168_MOESM3_ESM.xlsx&quot;) %&gt;%
+    read_excel(sheet = &quot;S1d&quot;) %&gt;%
+    setNames(
+        tibble(
+            names = colnames(.),
+            r1 = unlist(.[1,])
+        ) %&gt;%
+            mutate(
+                names = str_replace_all(names, &quot;\\.\\.\\.+&quot;, NA_character_),
+                names = na.locf(names)
+            ) %&gt;%
+            unite(names, names, r1, sep = &quot; &quot;) %&gt;%
+            pull(names) %&gt;%
+            str_remove_all(&quot; NA$&quot;)
+    ) %&gt;%
+    dplyr::slice(-1) %&gt;%
+    dplyr::filter(!str_detect(Diagnosis, &quot;Normal&quot;))</code></pre>
+<pre class="r"><code>ki67_natmed %&gt;%
+    dplyr::select(`Sample ID`, contains(&quot;Ki67&quot;)) %&gt;%
+    pivot_longer(
+        cols = contains(&quot;E2&quot;),
+        names_to = &quot;treat&quot;,
+        values_to = &quot;ki67&quot;
+    ) %&gt;%
+    mutate(
+        treat = str_remove_all(treat, &quot;Ki67.+\\(%\\) &quot;),
+        ki67 = as.numeric(ki67)/100,
+        # ki67 = binomial()$linkfun(ki67)
+        # ki67 = log(ki67)
+    ) %&gt;%
+    ggplot(
+        aes(treat, ki67)
+    ) +
+    geom_violin(
+        draw_quantiles = 0.5,
+        trim = FALSE
+    ) +
+    geom_jitter(width = 0.05) +
+    scale_y_continuous(limits = c(0, 1), labels = percent)</code></pre>
+<p><img src="figure/202105_NHMRC_IdeasGrant.Rmd/plot_ki67-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ki67_natmed %&gt;%
+  dplyr::select(`Sample ID`, contains(&quot;Ki67&quot;)) %&gt;%
+  pivot_longer(
+    cols = contains(&quot;E2&quot;),
+    names_to = &quot;treat&quot;,
+    values_to = &quot;ki67&quot;
+  ) %&gt;%
+  mutate(
+    treat = str_remove_all(treat, &quot;Ki67.+\\(%\\) &quot;),
+    ki67 = as.numeric(ki67)/100
+  ) %&gt;%
+  group_by(
+    treat
+  ) %&gt;%
+  summarise(
+    n = n(),
+    across(.cols = contains(&quot;ki67&quot;), .fns = list(mean = mean, median = median, sd = sd)),
+    .groups = &quot;drop&quot;
+  ) %&gt;%
+  rename_all(str_replace_all, pattern = &quot;_&quot;, replacement = &quot; &quot;) %&gt;%
+  rename_all(str_to_title) %&gt;%
+  pander(
+    caption = &quot;Summary statistics from PDX Ki67 data&quot;
+  )</code></pre>
+<table style="width:69%;">
+<caption>Summary statistics from PDX Ki67 data</caption>
+<colgroup>
+<col width="12%" />
+<col width="6%" />
+<col width="16%" />
+<col width="19%" />
+<col width="13%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">Treat</th>
+<th align="center">N</th>
+<th align="center">Ki67 Mean</th>
+<th align="center">Ki67 Median</th>
+<th align="center">Ki67 Sd</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">E2</td>
+<td align="center">17</td>
+<td align="center">0.4216</td>
+<td align="center">0.3541</td>
+<td align="center">0.1729</td>
+</tr>
+<tr class="even">
+<td align="center">E2+DHT</td>
+<td align="center">17</td>
+<td align="center">0.1984</td>
+<td align="center">0.2</td>
+<td align="center">0.0783</td>
+</tr>
+</tbody>
+</table>
+<p>Given the above plot, a truncated normal distribution may be suitable for simulation of data. Note that we’ll be using the Wilcoxon, so the exact distributional patterns are less relevant. Compare some simulated data to the real data.</p>
+<p>In the following the value provided for sd will track the initial sd, but following the principles of transformation for linear variables.</p>
+<p><span class="math display">\[
+\text{If } Y = aX + b \text{, then} \\
+\text{Var}(Y) = a^2\text{Var}(X)
+\]</span> For example, for a 50% reduction in Ki67, the sd for the reduced sample will be √(1 - 0.5)σ. Likewise for a 70% reduction, the sd for simulation will be √(1 - 0.7)σ.</p>
+<pre class="r"><code>ki0 &lt;- 0.4
+n &lt;- 20
+sigma &lt;- 0.2</code></pre>
+<p>Based on the observed PDX data, start with σ = 0.2, an initial Ki67 value of 0.4, simulating 20 observations per group. Whilst σ = 0.2 is higher than that in the observed data, it should be noted that for a truncated normal, the observed sd will have a bias to be lower than the provided value. By way of example, simulating 20 point 1000 times, returned a median sd of 0.186. Using the sqrt function for the sd of reduced Ki67 data may again be conservative, but for power calculations it is best to err on the side of caution.</p>
+<pre class="r"><code>tibble(
+    init = rtruncnorm(n, 0, 1, ki0, sigma),
+    red50 = rtruncnorm(n, 0, 1, 0.5*ki0, sqrt(0.5)*sigma),
+    red70 = rtruncnorm(n, 0, 1, (1 - 0.7)*ki0, sqrt(1 - 0.7)*sigma)
+) %&gt;%
+    pivot_longer(cols = everything()) %&gt;%
+    ggplot(aes(name, value)) +
+    geom_violin(draw_quantiles = 0.5, trim = FALSE) +
+    geom_jitter(width = 0.1, alpha = 0.5) +
+    scale_y_continuous(limits = c(0, 1), labels = percent)</code></pre>
+<p><img src="figure/202105_NHMRC_IdeasGrant.Rmd/check_params-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>To generate a power curve, we need power on the y-axis, <code>n</code> on the x-axis with different starting values for ki0. Importantly, power was estimated using α = 0.017 as the threshold for significance, given we require multiple testing to be taken into account, and we have three comparisons.</p>
+<pre class="r"><code>power_fun &lt;- function(n1, n2, init, reduction, sd = 0.2, alpha = 0.05/3, n_sim = 1e4){
+    p &lt;- replicate(
+        n_sim,
+        {
+            y1 &lt;- rtruncnorm(n1, a = 0, b = 1, mean = init, sd = sd)
+            y2 &lt;- rtruncnorm(n2, a = 0, b = 1, mean = (1-reduction)*init, sd = sqrt(1-reduction)*sd)
+            wilcox.test(y1, y2)$p.value &lt;= alpha
+        }
+    )
+    mean(p)
+}</code></pre>
+<p>Data was simulated using equal sized groups for control &amp; treatment, as well as having double the samples in the treatment arm. Sample sizes were incremented in steps of 5.</p>
+<p>Initial values for Ki67 were simulated as ranging from 10% to 30%, with a reduction from 50 to 70% being simulated. Both were incremented in steps of 10%.</p>
+<pre class="r"><code>n2_ratio &lt;- c(1, 2)
+n &lt;- rep(
+    seq(10, 50, by = 5),
+    length(n2_ratio)
+)
+core_df &lt;- tibble(
+    n1 = n,
+    ratio = rep(n2_ratio, each = length(unique(n))),
+    n2 = floor(n1*ratio)
+)
+power_sim &lt;- list(
+    mutate(core_df, init = 0.1, reduction = 0.5),
+    mutate(core_df, init = 0.2, reduction = 0.5),
+    mutate(core_df, init = 0.3, reduction = 0.5),
+    mutate(core_df, init = 0.1, reduction = 0.6),
+    mutate(core_df, init = 0.2, reduction = 0.6),
+    mutate(core_df, init = 0.3, reduction = 0.6),
+    mutate(core_df, init = 0.1, reduction = 0.7),
+    mutate(core_df, init = 0.2, reduction = 0.7),
+    mutate(core_df, init = 0.3, reduction = 0.7)
+) %&gt;%
+    bind_rows() %&gt;%
+    split(f = seq_along(.$n1)) %&gt;%
+    mclapply(
+        function(x){
+            pwr &lt;- power_fun(
+                n1 = x$n1,
+                n2 = x$n2,
+                init = x$init,
+                reduction = x$reduction, 
+                n_sim = 1e4
+            )
+            mutate(x, pwr = pwr)
+        },
+        mc.cores = 8
+    ) %&gt;%
+    bind_rows() </code></pre>
+<pre class="r"><code>power_sim %&gt;%
+    mutate(
+        reduction = glue(&quot;{percent(reduction)} Ki67 Reduction&quot;),
+        init = percent(init),
+    ) %&gt;%
+    ggplot(
+        aes(n1, pwr, colour = init, linetype = as.factor(ratio))
+    ) +
+    geom_line() +
+    geom_hline(yintercept = 0.7, colour = &quot;grey50&quot;) +
+    geom_point(
+        aes(n1, pwr),
+        data = . %&gt;%
+            dplyr::filter(
+                n1 == 20, ratio == 2, init == &quot;20%&quot;
+            ),
+        colour = &quot;black&quot;
+    ) +
+    geom_point(
+        aes(n1, pwr),
+        data = . %&gt;%
+            dplyr::filter(
+                n1 == 40, ratio == 1, init == &quot;10%&quot;
+            ),
+        colour = &quot;red&quot;
+    ) +
+    facet_wrap(~as.factor(reduction)) +
+    labs(
+        x = &quot;Sample Size (Untreated)&quot;,
+        y = &quot;Power&quot;,
+        colour = &quot;Mean Ki67%\n(Untreated)&quot;,
+        linetype = expression(frac(&quot;#Treated&quot;, &quot;#Untreated&quot;))
+    ) +
+    theme(
+        plot.title = element_text(hjust = 0.5)
+    ) +
+    scale_y_continuous(
+        limits = c(0, 1),
+        expand = expansion(c(0, 0)),
+        labels = percent,
+        breaks = seq(0, 1, length.out = 6)
+    )</code></pre>
+<div class="figure" style="text-align: center">
+<img src="figure/202105_NHMRC_IdeasGrant.Rmd/plot_power_curve-1.png" alt="*Power curve for 50, 60 and 70% Ki67 reduction. Black dots indicate the estimated power for control vs treatment, whilst red dots indicate estimated power for comparison between treatment arms.*" width="960" />
+<p class="caption">
+<em>Power curve for 50, 60 and 70% Ki67 reduction. Black dots indicate the estimated power for control vs treatment, whilst red dots indicate estimated power for comparison between treatment arms.</em>
+</p>
+</div>
+<p>Assuming an initial Ki67 positivity of 20%, choosing a sample size of 20 control + 40 for both treatment arms (N = 100), we have a power:</p>
+<ul>
+<li>≥90% to detect Ki67 reduction of 70% or more (assuming ≥20% initial positivity).</li>
+<li>75% to detect Ki67 reduction of 60% or more (assuming ≥20% initial positivity).</li>
+<li>50% to detect Ki67 reduction of 50% or more (assuming ≥20% initial positivity).</li>
+</ul>
+<p>When comparing between already reduced Ki67 positivity in the two treatment arms, this will provide a power of 70% to detect a reduction of 60% or more between the two treatment groups. This assumes a lower initial positivity (~10%) in the higher of the two treatment arms.</p>
+</div>
+<div id="ct-scans" class="section level1">
+<h1>CT Scans</h1>
+<p>Assuming that dogs from the above treatment arms go forward into the next step of the experiment, we need to assess the probability of relapse, and our ability to detect difference. According to the McEwen paper, the 100 day probability of being cancer-free for dogs with tumour volumes &gt; 40cc is 50% of patients.</p>
+<p>If we assume the above sample sizes (i.e. 20 control and 40 in the treatment arm), we can perform a Fisher’s Exact Test, given that this is sampling without replacement. Data was simulated using a binomial distribution, simulating the number of dogs with a relapse for a given probability. Power was then estimated using Fisher’s Exact Test for a difference between the control group and the treatment arm. Data for the treatment arm was simulated using the same process, but with a reduced probability of recurrence.</p>
+<pre class="r"><code>fisher_fun &lt;- function(p1, n1, n2, improvement, n_sim = 1e3, alpha = 0.05){
+    res &lt;- replicate(
+        n_sim,
+        {
+            d1 &lt;- rbinom(1, n1, p1) # The estimated recurrence (which is success in this modelling approach)
+            ## The treatment group
+            p2 &lt;- (1 - improvement)*p1
+            d2 &lt;- rbinom(1, n2, p2)
+            c(d1, n1-d1) %&gt;%
+                rbind(c(d2, n2 - d2)) %&gt;%
+                set_colnames(c(&quot;relapse&quot;, &quot;survival&quot;)) %&gt;%
+                set_rownames(c(&quot;control&quot;, &quot;treat&quot;)) %&gt;%
+                fisher.test() %&gt;%
+                .[[&quot;p.value&quot;]] %&gt;%
+                is_less_than(alpha) 
+        }
+    )
+    mean(res)
+}</code></pre>
+<pre class="r"><code>core_df &lt;- tibble(
+    n1 = c(15, 20, 30, 40, 50),
+    n2 = c(30, 40, 30, 40, 50),
+    p1 = 0.5
+)
+fisher_res &lt;- list(
+    mutate(core_df, improvement = 0.3),
+    mutate(core_df, improvement = 0.4),
+    mutate(core_df, improvement = 0.5),
+    mutate(core_df, improvement = 0.6),
+    mutate(core_df, improvement = 0.7),
+    mutate(core_df, improvement = 0.8)
+) %&gt;%
+    bind_rows() %&gt;%
+    split(f = seq_along(.$n1)) %&gt;%
+    mclapply(
+        function(x){
+            pwr &lt;- fisher_fun(p1 = x$p1, n1 = x$n1, n2 = x$n2, improvement = x$improvement, n_sim = 5e3)
+            mutate(x, pwr = pwr)
+        },
+        mc.cores = 6
+    ) %&gt;%
+    bind_rows() %&gt;%
+    mutate(ss = glue(&quot;({n1}, {n2})&quot;))</code></pre>
+<p>The power curve below reveals that:</p>
+<ul>
+<li>For the smallest combination (n<sub>c</sub> = 15, n~treat = 30), a 70% power will only be obtained if the improvement in the 100-day cancer free rate is 73%, i.e. it drops from 50% to 13.5% recurrence</li>
+<li>Using n<sub>c</sub> = 50, n<sub>treat</sub> = 50 gives an estimated power of 70% if the improvement is only 52%, i.e. a drop from 50% to 24% recurrence</li>
+<li>For an improvement beyond 75% (i.e. 50% down to 12.5% recurrence), all sample sizes return a power ≥70%</li>
+</ul>
+<pre class="r"><code>my_percent &lt;- function(x){
+    percent(x, accuracy = 1)
+}
+fisher_res %&gt;%
+  ggplot(
+    aes(improvement, pwr, colour = as.factor(ss))
+  ) +
+  geom_line() +
+  geom_hline(yintercept = 0.7, colour = &quot;grey&quot;) +
+  geom_vline(
+    xintercept = c(0.5, 2/3, 3/4),
+    linetype = 2,
+    colour = &quot;grey&quot;
+  ) +
+  geom_text(
+    aes(x, y, label = lab),
+    data = tibble(
+      x = c(1/2, 2/3, 3/4),
+      y = c(0.25, 0.5, 0.65),
+      lab = c(&quot;1/2 RR&quot;, &quot;1/3 RR&quot;, &quot;1/4 RR&quot;)
+    ),
+    inherit.aes = FALSE
+  ) +
+  scale_x_continuous(
+    labels = my_percent,
+    breaks = seq(0, 1, by = 0.1),
+  ) +
+  scale_y_continuous(
+    limits = c(0, 1),
+    expand = expansion(c(0, 0)),
+    labels = percent,
+    breaks = seq(0, 1, length.out = 6)
+  ) +
+  labs(
+    x = &quot;% Improvement in 100 days Cancer-Free&quot;,
+    y = &quot;Power&quot;,
+    colour = expression(paste(&quot;(&quot;, n[cont], &quot;, &quot;, n[treat], &quot;)&quot;))
+  )</code></pre>
+<div class="figure" style="text-align: center">
+<img src="figure/202105_NHMRC_IdeasGrant.Rmd/plot_fisher_sim-1.png" alt="*Power estimates for various sample sizes based on a control and treatment group. The parameter being measured is the % improvement in the 100-day cancer-free rate. The 100-day cancer-free rate in untreated tumours was set as 50% based on the paper by McEwen. Dashed vertical lines denote half, 1/3 and 1/4 the numbers of patients showing relapse (relative relapse = RR)*" width="960" />
+<p class="caption">
+<em>Power estimates for various sample sizes based on a control and treatment group. The parameter being measured is the % improvement in the 100-day cancer-free rate. The 100-day cancer-free rate in untreated tumours was set as 50% based on the paper by McEwen. Dashed vertical lines denote half, 1/3 and 1/4 the numbers of patients showing relapse (relative relapse = RR)</em>
+</p>
+</div>
+</div>
+<div id="conclusion" class="section level1">
+<h1>Conclusion</h1>
+<p>Based on both the above analyses, the sample sizes of n<sub>i</sub> = 40 for each of the Ki67 treatment arms would give a consistent power of ≥70% to detect a reduction in Ki67 ≥50% in either treatment arm, assuming the initial Ki67 values are ≥20% in the untreated samples. For comparison between treatment arms, this gives a power of 70% to detect a difference ≥60% in Ki67, assuming Ki67 percentages are above 10% in the higher of the two treatment arms.</p>
+<p>This would allow taking 3/4 of dogs forward into the CT scan section of the study. Using n<sub>i</sub> = 30 gives a power ≥70% to detect a change in the proportion of dogs showing recurrence to being ≤1/3 of what is observed in the untreated group. This can also be explained as a 66% reduction in the recurrence rate.</p>
+<p>Increasing this to n<sub>i</sub>=40 for each CT scan group would return a power of ≥70% to detect a reduced recurrence to be 43% of what is observed in the control group (i.e. a reduction of 57% in the recurrence rate).</p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.0.3 (2020-10-10)
+Platform: x86_64-pc-linux-gnu (64-bit)
+Running under: Ubuntu 18.04.5 LTS
+
+Matrix products: default
+BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.7.1
+LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.7.1
+
+locale:
+ [1] LC_CTYPE=en_AU.UTF-8       LC_NUMERIC=C              
+ [3] LC_TIME=en_AU.UTF-8        LC_COLLATE=en_AU.UTF-8    
+ [5] LC_MONETARY=en_AU.UTF-8    LC_MESSAGES=en_AU.UTF-8   
+ [7] LC_PAPER=en_AU.UTF-8       LC_NAME=C                 
+ [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+[11] LC_MEASUREMENT=en_AU.UTF-8 LC_IDENTIFICATION=C       
+
+attached base packages:
+[1] parallel  stats     graphics  grDevices utils     datasets  methods  
+[8] base     
+
+other attached packages:
+ [1] pander_0.6.3    magrittr_2.0.1  glue_1.4.2      scales_1.1.1   
+ [5] truncnorm_1.0-8 zoo_1.8-9       readxl_1.3.1    forcats_0.5.1  
+ [9] stringr_1.4.0   dplyr_1.0.5     purrr_0.3.4     readr_1.4.0    
+[13] tidyr_1.1.3     tibble_3.1.1    ggplot2_3.3.3   tidyverse_1.3.1
+[17] workflowr_1.6.2
+
+loaded via a namespace (and not attached):
+ [1] Rcpp_1.0.6        here_1.0.1        lubridate_1.7.10  lattice_0.20-41  
+ [5] assertthat_0.2.1  rprojroot_2.0.2   digest_0.6.27     utf8_1.2.1       
+ [9] R6_2.5.0          cellranger_1.1.0  backports_1.2.1   reprex_2.0.0     
+[13] evaluate_0.14     highr_0.9         httr_1.4.2        pillar_1.6.0     
+[17] rlang_0.4.10      rstudioapi_0.13   whisker_0.4       jquerylib_0.1.4  
+[21] rmarkdown_2.7     labeling_0.4.2    munsell_0.5.0     broom_0.7.6      
+[25] compiler_4.0.3    httpuv_1.6.0      modelr_0.1.8      xfun_0.22        
+[29] pkgconfig_2.0.3   htmltools_0.5.1.1 tidyselect_1.1.0  fansi_0.4.2      
+[33] crayon_1.4.1      dbplyr_2.1.1      withr_2.4.2       later_1.2.0      
+[37] grid_4.0.3        jsonlite_1.7.2    gtable_0.3.0      lifecycle_1.0.0  
+[41] DBI_1.1.1         git2r_0.28.0      cli_2.5.0         stringi_1.5.3    
+[45] farver_2.1.0      fs_1.5.0          promises_1.2.0.1  xml2_1.3.2       
+[49] bslib_0.2.4       ellipsis_0.3.1    generics_0.1.0    vctrs_0.3.7      
+[53] tools_4.0.3       hms_1.0.0         yaml_2.2.1        colorspace_2.0-0 
+[57] rvest_1.0.0       knitr_1.33        haven_2.4.1       sass_0.3.1       </code></pre>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
