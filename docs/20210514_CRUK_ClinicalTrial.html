@@ -357,7 +357,7 @@ div.tocify {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="20210514_CRUK_Clinical_Trial.html">Enobosarm Trial May 2021</a>
+      <a href="20210514_CRUK_ClinicalTrial.html">Enobosarm Trial May 2021</a>
     </li>
   </ul>
 </li>
@@ -502,16 +502,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongd2c34cf"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> d2c34cf </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongd8842f4"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> d8842f4 </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongd2c34cf" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongd8842f4" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version d2c34cf. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version d8842f4. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -519,6 +519,7 @@ Note that you need to be careful to ensure that all relevant files for the analy
 <pre><code>
 Ignored files:
     Ignored:    .Rproj.user/
+    Ignored:    analysis/figure/
 
 Untracked files:
     Untracked:  data/41591_2020_1168_MOESM3_ESM.xlsx
@@ -569,6 +570,40 @@ Message
 Rmd
 </td>
 <td>
+d8842f4
+</td>
+<td>
+Steve Ped
+</td>
+<td>
+2021-05-14
+</td>
+<td>
+Ran simulations
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+0e6d4c7
+</td>
+<td>
+Steve Ped
+</td>
+<td>
+2021-05-14
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
 d2c34cf
 </td>
 <td>
@@ -590,34 +625,50 @@ Added CRUK Clinical Trial
 </div>
 <pre class="r"><code>library(tidyverse)
 library(readxl)
-library(zoo)
-library(truncnorm)
-library(parallel)
 library(scales)
 library(glue)
 library(magrittr)
-library(pander)</code></pre>
+library(pander)
+library(cowplot)
+library(matrixStats)
+library(e1071)
+library(sn)
+library(zoo)
+library(truncnorm)
+library(parallel)</code></pre>
 <pre class="r"><code>theme_set(theme_bw())</code></pre>
 <div id="ki67-data" class="section level1">
 <h1>Ki67 data</h1>
 <p>The common measurement of Ki67 data is as a percentage of cells staining +ve for Ki67. Example data is taken from PDX samples in the Nature Medicine paper.</p>
 <pre class="r"><code>ki67_natmed &lt;- here::here(&quot;data/41591_2020_1168_MOESM3_ESM.xlsx&quot;) %&gt;%
-    read_excel(sheet = &quot;S1d&quot;) %&gt;%
-    setNames(
-        tibble(
-            names = colnames(.),
-            r1 = unlist(.[1,])
-        ) %&gt;%
-            mutate(
-                names = str_replace_all(names, &quot;\\.\\.\\.+&quot;, NA_character_),
-                names = na.locf(names)
-            ) %&gt;%
-            unite(names, names, r1, sep = &quot; &quot;) %&gt;%
-            pull(names) %&gt;%
-            str_remove_all(&quot; NA$&quot;)
+  read_excel(sheet = &quot;S1d&quot;) %&gt;%
+  setNames(
+    tibble(
+      names = colnames(.),
+      r1 = unlist(.[1,])
     ) %&gt;%
-    dplyr::slice(-1) %&gt;%
-    dplyr::filter(!str_detect(Diagnosis, &quot;Normal&quot;))</code></pre>
+      mutate(
+        names = str_replace_all(names, &quot;\\.\\.\\.+&quot;, NA_character_),
+        names = na.locf(names)
+      ) %&gt;%
+      unite(names, names, r1, sep = &quot; &quot;) %&gt;%
+      pull(names) %&gt;%
+      str_remove_all(&quot; NA$&quot;)
+  ) %&gt;%
+  dplyr::slice(-1) %&gt;%
+  dplyr::filter(!str_detect(Diagnosis, &quot;Normal&quot;)) %&gt;%
+  mutate(
+    across(
+      .fns = function(x){
+        if (!any(is.na(suppressWarnings(as.numeric(x))))){
+          x &lt;- as.numeric(x)
+        }
+        x
+      }
+    ),
+    diff = `Ki67-positive epithelial cells (%) E2+DHT` - `Ki67-positive epithelial cells (%) E2`,
+    logFC = log2(`Ki67-positive epithelial cells (%) E2+DHT` / `Ki67-positive epithelial cells (%) E2`)
+  )</code></pre>
 <pre class="r"><code>ki67_natmed %&gt;%
     dplyr::select(`Sample ID`, contains(&quot;Ki67&quot;)) %&gt;%
     pivot_longer(
@@ -641,6 +692,43 @@ library(pander)</code></pre>
     geom_jitter(width = 0.05) +
     scale_y_continuous(limits = c(0, 1), labels = percent)</code></pre>
 <p><img src="figure/20210514_CRUK_ClinicalTrial.Rmd/plot_ki67-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plot_ki67-1">
+Past versions of plot_ki67-1.png
+</button>
+</p>
+<div id="fig-plot_ki67-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+0e6d4c7
+</td>
+<td>
+Steve Ped
+</td>
+<td>
+2021-05-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>ki67_natmed %&gt;%
   dplyr::select(`Sample ID`, contains(&quot;Ki67&quot;)) %&gt;%
   pivot_longer(
@@ -701,6 +789,322 @@ library(pander)</code></pre>
 </tbody>
 </table>
 <p>Given the above plot, a truncated normal distribution may be suitable for simulation of data. Note that we’ll be using the Wilcoxon, so the exact distributional patterns are less relevant. Compare some simulated data to the real data.</p>
+<p>The PDX data provides information about the same sample in E2 and E2+DHT, which is analogous to pre and post treatment on the same sample. In this way the differences can be estimated and approximated during simulation.</p>
+<pre class="r"><code>a &lt;- ki67_natmed %&gt;%
+  ggplot(
+    aes(`Ki67-positive epithelial cells (%) E2`, diff)
+  ) + 
+  geom_point() +
+  geom_smooth(
+    method = &quot;lm&quot;, formula = y ~ x
+  ) +
+  labs(
+    y = &quot;Change in % after DHT treatment&quot;
+  )
+b &lt;- ki67_natmed %&gt;%
+  ggplot(
+    aes(`Ki67-positive epithelial cells (%) E2`, logFC)
+  ) + 
+  geom_point() +
+  geom_smooth(
+    method = &quot;lm&quot;, formula = y ~ x
+  ) +
+  labs(
+    y = &quot;log2 Change in % after DHT treatment&quot;
+  )
+plot_grid(a, b, labels = c(&quot;A&quot;, &quot;B&quot;))</code></pre>
+<div class="figure" style="text-align: center">
+<img src="figure/20210514_CRUK_ClinicalTrial.Rmd/plot_logFC-1.png" alt="*Changes in Ki67 observed within PDX samples on the A) linear and B) logarithmic scale. Using the log~2~ scale for modelling Ki67 reduction is clearly more independent of the initial observed values.*" width="672" />
+<p class="caption">
+<em>Changes in Ki67 observed within PDX samples on the A) linear and B) logarithmic scale. Using the log<sub>2</sub> scale for modelling Ki67 reduction is clearly more independent of the initial observed values.</em>
+</p>
+</div>
+<pre class="r"><code>ki67_natmed %&gt;%
+  dplyr::select(logFC) %&gt;%
+  dplyr::filter(logFC &gt; min(logFC)) %&gt;%
+  summarise(
+    Mean = mean(logFC),
+    Median = median(logFC),
+    SD = sd(logFC),
+    MAD = mad(logFC),
+    Skewness = skewness(logFC),
+    `Shapiro-Wilk` = shapiro.test(logFC)$p.value
+  ) %&gt;%
+  pander(
+    caption = glue(
+      &quot;Summary statistics for changes in log~2~ Ki67% observed within paired samples.
+      The results from the Shapiro-Wilk test indicates that the values are not normally distributed. As such, an alternative distribution should be used in simulation.
+      Note that for this table, the extreme outlier was excluded to ensure a conservative approach.
+      &quot;
+    )
+  )</code></pre>
+<table style="width:86%;">
+<caption>Summary statistics for changes in log<sub>2</sub> Ki67% observed within paired samples. The results from the Shapiro-Wilk test indicates that the values are not normally distributed. As such, an alternative distribution should be used in simulation. Note that for this table, the extreme outlier was excluded to ensure a conservative approach.</caption>
+<colgroup>
+<col width="12%" />
+<col width="12%" />
+<col width="12%" />
+<col width="12%" />
+<col width="15%" />
+<col width="20%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">Mean</th>
+<th align="center">Median</th>
+<th align="center">SD</th>
+<th align="center">MAD</th>
+<th align="center">Skewness</th>
+<th align="center">Shapiro-Wilk</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">-1.038</td>
+<td align="center">-1.014</td>
+<td align="center">0.5679</td>
+<td align="center">0.8582</td>
+<td align="center">-0.02534</td>
+<td align="center">0.01758</td>
+</tr>
+</tbody>
+</table>
+<p>Given the above table, data can be simulated using a skew-normal with mean μ = -1, σ = 0.6 and a skewness of -0.03 to ensure a conservative approach is taken. A skew-normal distribution should also be used. Power calculations can be made for the Wilcoxon Rank-Sum test and T-statistics of the differences, given the approximate normality observed in the differences.</p>
+<pre class="r"><code>set.seed(12345)
+replicate(1000, rsn(17, -1, 0.6, -0.03)) %&gt;%
+  set_colnames(paste0(&quot;rep&quot;, seq_len(ncol(.)))) %&gt;%
+  as_tibble() %&gt;%
+  pivot_longer(
+    cols = everything(),
+    names_to = &quot;rep&quot;,
+    values_to = &quot;logFC&quot;
+  ) %&gt;% 
+  group_by(rep) %&gt;%
+  summarise(
+    mean = mean(logFC),
+    p = suppressWarnings(wilcox.test(logFC, y = ki67_natmed$logFC)$p.value)
+  ) %&gt;%
+  arrange(mean) %&gt;%
+  summarise(
+    n = n(),
+    mean = mean(mean),
+    `P &lt; 0.05` = mean(p &lt; 0.05)
+  ) %&gt;%
+  pander(
+    caption = glue(
+      &quot;Results comparing data simulation to observed values for {.$n} simulations with 17 values.
+      The overall mean seems appropriate for simulating a reduction of 50% and the vast majority of simulations ({.$n*(1-.$`P &lt; 0.05`)}) accepted the Null Hypothesis for the Wilcoxon Rank-Sum Test, where distributions were considered identical.
+      &quot;
+    )
+  )</code></pre>
+<table style="width:38%;">
+<caption>Results comparing data simulation to observed values for 1000 simulations with 17 values. The overall mean seems appropriate for simulating a reduction of 50% and the vast majority of simulations (993) accepted the Null Hypothesis for the Wilcoxon Rank-Sum Test, where distributions were considered identical.</caption>
+<colgroup>
+<col width="9%" />
+<col width="12%" />
+<col width="15%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">n</th>
+<th align="center">mean</th>
+<th align="center">P &lt; 0.05</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">1000</td>
+<td align="center">-1.012</td>
+<td align="center">0.007</td>
+</tr>
+</tbody>
+</table>
+<p>Given the above results, the same values will be used for simulating changes in Ki67 values for a series of initial Ki67 values and sample sizes. As discussed <a href="202105_NHMRC_IdeasGrant.html">elsewhere</a>, the distribution of initial starting values will be generated using a truncated normal distribution and initial values ranging from 10 to 40%.</p>
+<p>As these will be pre/post treatment samples, the sample size will be identical in both groups. Given that we have paired tests, this is essentially testing the distribution used for generation of difference and almost always return a significant results</p>
+<pre class="r"><code>tibble(
+  pre = rtruncnorm(20, 0, 1, 0.4, 0.35),
+  logFC = rsn(20, -1, 0.6, -0.02),
+  post = 2^(log2(pre) + logFC)
+) %&gt;%
+  with(
+    wilcox.test(x = pre, y = post, paired = TRUE)
+  ) %&gt;%
+  pander(
+    caption = &quot;Example Wilcoxon Rank-Sum results for n = 20&quot;
+  )</code></pre>
+<table style="width:83%;">
+<caption>Example Wilcoxon Rank-Sum results for n = 20</caption>
+<colgroup>
+<col width="23%" />
+<col width="25%" />
+<col width="34%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">Test statistic</th>
+<th align="center">P value</th>
+<th align="center">Alternative hypothesis</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">190</td>
+<td align="center">0.0007076 * * *</td>
+<td align="center">two.sided</td>
+</tr>
+</tbody>
+</table>
+<p>A more realistic simulation may be to include a proportion of non-responders.</p>
+<pre class="r"><code>set.seed(12345)
+p_non &lt;- 0.33
+n &lt;- 40
+tibble(
+  pre = rtruncnorm(n, 0, 1, 0.4, 0.35),
+  respon = as.logical(rbinom(n, 1, p_non)),
+  logFC = rsn(n, -1, 0.6, -0.02),
+  post = case_when(
+    respon ~ 2^(log2(pre) + logFC),
+    !respon ~ rtruncnorm(n, 0, 1, 0.4, 0.35)
+  )
+) %&gt;%
+  with(
+    wilcox.test(x = pre, y = post, paired = TRUE)
+  ) %&gt;%
+  pander(
+    caption = glue(
+      &quot;Example Wilcoxon Rank-Sum results for n = {n} including a {percent(p_non)} non-responder rate.&quot;
+    )
+  )</code></pre>
+<table style="width:75%;">
+<caption>Example Wilcoxon Rank-Sum results for n = 40 including a 33% non-responder rate.</caption>
+<colgroup>
+<col width="23%" />
+<col width="16%" />
+<col width="34%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">Test statistic</th>
+<th align="center">P value</th>
+<th align="center">Alternative hypothesis</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">556</td>
+<td align="center">0.04976 *</td>
+<td align="center">two.sided</td>
+</tr>
+</tbody>
+</table>
+<p>Thus an appropriate approach may be to simulate including various sample sizes and various non-responder rates.</p>
+<pre class="r"><code>sim_data &lt;- function(n, ki0, p_non, sigma_ki, ...){
+  tibble(
+    pre = rtruncnorm(n, 0, 1, ki0, sigma_ki),
+    responder = as.logical(rbinom(n, 1, 1-p_non)),
+    logFC = rsn(n, -1, 1, -0.02),
+    post = case_when(
+      responder ~ 2^(log2(pre) + logFC),
+      !responder ~ rtruncnorm(n, 0, 1, ki0, sigma_ki)
+    )
+  )
+}
+sim_test &lt;- function(n, ki0, p_non, sigma_ki, alpha = 0.05){
+  df &lt;- sim_data(n, ki0, p_non, sigma_ki)
+  wilcox.test(x = df$pre, y = df$post, paired = TRUE)$p.value &lt; alpha
+}</code></pre>
+<pre class="r"><code>res &lt;- list(
+  tibble(n = 20, ki0 = 0.4, p_non = 0.1, sigma_ki = 0.35),
+  tibble(n = 30, ki0 = 0.4, p_non = 0.1, sigma_ki = 0.35),
+  tibble(n = 40, ki0 = 0.4, p_non = 0.1, sigma_ki = 0.35),
+  tibble(n = 50, ki0 = 0.4, p_non = 0.1, sigma_ki = 0.35),
+  tibble(n = 30, ki0 = 0.4, p_non = 0.2, sigma_ki = 0.35),
+  tibble(n = 20, ki0 = 0.4, p_non = 0.2, sigma_ki = 0.35),
+  tibble(n = 40, ki0 = 0.4, p_non = 0.2, sigma_ki = 0.35),
+  tibble(n = 50, ki0 = 0.4, p_non = 0.2, sigma_ki = 0.35),
+  tibble(n = 20, ki0 = 0.4, p_non = 0.3, sigma_ki = 0.35),
+  tibble(n = 30, ki0 = 0.4, p_non = 0.3, sigma_ki = 0.35),
+  tibble(n = 40, ki0 = 0.4, p_non = 0.3, sigma_ki = 0.35),
+  tibble(n = 50, ki0 = 0.4, p_non = 0.3, sigma_ki = 0.35),
+  tibble(n = 20, ki0 = 0.4, p_non = 0.4, sigma_ki = 0.35),
+  tibble(n = 30, ki0 = 0.4, p_non = 0.4, sigma_ki = 0.35),
+  tibble(n = 40, ki0 = 0.4, p_non = 0.4, sigma_ki = 0.35),
+  tibble(n = 50, ki0 = 0.4, p_non = 0.4, sigma_ki = 0.35),
+  tibble(n = 20, ki0 = 0.2, p_non = 0.1, sigma_ki = sqrt(0.5)*0.35),
+  tibble(n = 30, ki0 = 0.2, p_non = 0.1, sigma_ki = sqrt(0.5)*0.35),
+  tibble(n = 40, ki0 = 0.2, p_non = 0.1, sigma_ki = sqrt(0.5)*0.35),
+  tibble(n = 50, ki0 = 0.2, p_non = 0.1, sigma_ki = sqrt(0.5)*0.35),
+  tibble(n = 20, ki0 = 0.2, p_non = 0.2, sigma_ki = sqrt(0.5)*0.35),
+  tibble(n = 30, ki0 = 0.2, p_non = 0.2, sigma_ki = sqrt(0.5)*0.35),
+  tibble(n = 40, ki0 = 0.2, p_non = 0.2, sigma_ki = sqrt(0.5)*0.35),
+  tibble(n = 50, ki0 = 0.2, p_non = 0.2, sigma_ki = sqrt(0.5)*0.35),
+  tibble(n = 20, ki0 = 0.2, p_non = 0.3, sigma_ki = sqrt(0.5)*0.35),
+  tibble(n = 30, ki0 = 0.2, p_non = 0.3, sigma_ki = sqrt(0.5)*0.35),
+  tibble(n = 40, ki0 = 0.2, p_non = 0.3, sigma_ki = sqrt(0.5)*0.35),
+  tibble(n = 50, ki0 = 0.2, p_non = 0.3, sigma_ki = sqrt(0.5)*0.35),
+  tibble(n = 20, ki0 = 0.2, p_non = 0.4, sigma_ki = sqrt(0.5)*0.35),
+  tibble(n = 30, ki0 = 0.2, p_non = 0.4, sigma_ki = sqrt(0.5)*0.35),
+  tibble(n = 40, ki0 = 0.2, p_non = 0.4, sigma_ki = sqrt(0.5)*0.35),
+  tibble(n = 50, ki0 = 0.2, p_non = 0.4, sigma_ki = sqrt(0.5)*0.35),
+  tibble(n = 20, ki0 = 0.1, p_non = 0.1, sigma_ki = sqrt(0.25)*0.35),
+  tibble(n = 30, ki0 = 0.1, p_non = 0.1, sigma_ki = sqrt(0.25)*0.35),
+  tibble(n = 40, ki0 = 0.1, p_non = 0.1, sigma_ki = sqrt(0.25)*0.35),
+  tibble(n = 50, ki0 = 0.1, p_non = 0.1, sigma_ki = sqrt(0.25)*0.35),
+  tibble(n = 20, ki0 = 0.1, p_non = 0.2, sigma_ki = sqrt(0.25)*0.35),
+  tibble(n = 30, ki0 = 0.1, p_non = 0.2, sigma_ki = sqrt(0.25)*0.35),
+  tibble(n = 40, ki0 = 0.1, p_non = 0.2, sigma_ki = sqrt(0.25)*0.35),
+  tibble(n = 50, ki0 = 0.1, p_non = 0.2, sigma_ki = sqrt(0.25)*0.35),
+  tibble(n = 20, ki0 = 0.1, p_non = 0.3, sigma_ki = sqrt(0.25)*0.35),
+  tibble(n = 30, ki0 = 0.1, p_non = 0.3, sigma_ki = sqrt(0.25)*0.35),
+  tibble(n = 40, ki0 = 0.1, p_non = 0.3, sigma_ki = sqrt(0.25)*0.35),
+  tibble(n = 50, ki0 = 0.1, p_non = 0.3, sigma_ki = sqrt(0.25)*0.35),
+  tibble(n = 20, ki0 = 0.1, p_non = 0.4, sigma_ki = sqrt(0.25)*0.35),
+  tibble(n = 30, ki0 = 0.1, p_non = 0.4, sigma_ki = sqrt(0.25)*0.35),
+  tibble(n = 40, ki0 = 0.1, p_non = 0.4, sigma_ki = sqrt(0.25)*0.35),
+  tibble(n = 50, ki0 = 0.1, p_non = 0.4, sigma_ki = sqrt(0.25)*0.35)
+) %&gt;%
+  mclapply(
+    function(x){
+      res &lt;- replicate(
+        1e4,
+        sim_test(x$n, x$ki0, x$p_non, x$sigma_ki)
+      )
+      mutate(x, pwr = mean(res))
+    },
+    mc.cores = 6
+  ) %&gt;%
+  bind_rows()</code></pre>
+<pre class="r"><code>res %&gt;%
+  ggplot(
+    aes(
+      x = n, y = pwr, 
+      colour = as.factor(percent(p_non)), 
+      linetype = as.factor(percent(ki0)))
+  ) +
+  geom_point() +
+  geom_line() +
+  scale_y_continuous(labels = percent) +
+  labs(
+    x = &quot;Sample Size&quot;,
+    y = &quot;Power&quot;,
+    colour = &quot;% Non-Responders&quot;,
+    linetype = &quot;Initial Ki67 %&quot;
+  )</code></pre>
+<div class="figure" style="text-align: center">
+<img src="figure/20210514_CRUK_ClinicalTrial.Rmd/unnamed-chunk-7-1.png" alt="Power Curves for various starting Ki67% values and non-responder rates" width="672" />
+<p class="caption">
+Power Curves for various starting Ki67% values and non-responder rates
+</p>
+</div>
+</div>
+<div id="conclusion" class="section level1">
+<h1>Conclusion</h1>
+<p>Given the above simulations truly represent the prospective data, we can see that:</p>
+<ul>
+<li>A sample size of 40 still provides a power of 60% to detect a 50% reduction in Ki67 if 40% of patients are non-responders</li>
+<li>Assuming a 30% non-responder rate, this rises to 80% for the same sample size.</li>
+<li>In the worst case scenario as modelled (40% non-responders, 10% initial Ki67) a sample size of 50 is required to achieve a power of 70%.</li>
+</ul>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -726,32 +1130,41 @@ locale:
 [11] LC_MEASUREMENT=en_AU.UTF-8 LC_IDENTIFICATION=C       
 
 attached base packages:
-[1] parallel  stats     graphics  grDevices utils     datasets  methods  
-[8] base     
+[1] parallel  stats4    stats     graphics  grDevices utils     datasets 
+[8] methods   base     
 
 other attached packages:
- [1] pander_0.6.3    magrittr_2.0.1  glue_1.4.2      scales_1.1.1   
- [5] truncnorm_1.0-8 zoo_1.8-9       readxl_1.3.1    forcats_0.5.1  
- [9] stringr_1.4.0   dplyr_1.0.5     purrr_0.3.4     readr_1.4.0    
-[13] tidyr_1.1.3     tibble_3.1.1    ggplot2_3.3.3   tidyverse_1.3.1
-[17] workflowr_1.6.2
+ [1] truncnorm_1.0-8    zoo_1.8-9          sn_2.0.0           e1071_1.7-6       
+ [5] matrixStats_0.58.0 cowplot_1.1.1      pander_0.6.3       magrittr_2.0.1    
+ [9] glue_1.4.2         scales_1.1.1       readxl_1.3.1       forcats_0.5.1     
+[13] stringr_1.4.0      dplyr_1.0.5        purrr_0.3.4        readr_1.4.0       
+[17] tidyr_1.1.3        tibble_3.1.1       ggplot2_3.3.3      tidyverse_1.3.1   
+[21] workflowr_1.6.2   
 
 loaded via a namespace (and not attached):
- [1] Rcpp_1.0.6        here_1.0.1        lubridate_1.7.10  lattice_0.20-41  
- [5] assertthat_0.2.1  rprojroot_2.0.2   digest_0.6.27     utf8_1.2.1       
- [9] R6_2.5.0          cellranger_1.1.0  backports_1.2.1   reprex_2.0.0     
-[13] evaluate_0.14     highr_0.9         httr_1.4.2        pillar_1.6.0     
-[17] rlang_0.4.10      rstudioapi_0.13   whisker_0.4       jquerylib_0.1.4  
-[21] rmarkdown_2.7     labeling_0.4.2    munsell_0.5.0     broom_0.7.6      
-[25] compiler_4.0.3    httpuv_1.6.0      modelr_0.1.8      xfun_0.22        
-[29] pkgconfig_2.0.3   htmltools_0.5.1.1 tidyselect_1.1.0  fansi_0.4.2      
-[33] crayon_1.4.1      dbplyr_2.1.1      withr_2.4.2       later_1.2.0      
-[37] grid_4.0.3        jsonlite_1.7.2    gtable_0.3.0      lifecycle_1.0.0  
-[41] DBI_1.1.1         git2r_0.28.0      cli_2.5.0         stringi_1.5.3    
-[45] farver_2.1.0      fs_1.5.0          promises_1.2.0.1  xml2_1.3.2       
-[49] bslib_0.2.4       ellipsis_0.3.1    generics_0.1.0    vctrs_0.3.7      
-[53] tools_4.0.3       hms_1.0.0         yaml_2.2.1        colorspace_2.0-0 
-[57] rvest_1.0.0       knitr_1.33        haven_2.4.1       sass_0.3.1       </code></pre>
+ [1] nlme_3.1-149        fs_1.5.0            lubridate_1.7.10   
+ [4] httr_1.4.2          rprojroot_2.0.2     numDeriv_2016.8-1.1
+ [7] tools_4.0.3         backports_1.2.1     bslib_0.2.4        
+[10] utf8_1.2.1          R6_2.5.0            DBI_1.1.1          
+[13] mgcv_1.8-35         colorspace_2.0-0    withr_2.4.2        
+[16] tidyselect_1.1.0    mnormt_2.0.2        compiler_4.0.3     
+[19] git2r_0.28.0        cli_2.5.0           rvest_1.0.0        
+[22] xml2_1.3.2          labeling_0.4.2      sass_0.3.1         
+[25] proxy_0.4-25        digest_0.6.27       rmarkdown_2.7      
+[28] pkgconfig_2.0.3     htmltools_0.5.1.1   dbplyr_2.1.1       
+[31] highr_0.9           rlang_0.4.10        rstudioapi_0.13    
+[34] jquerylib_0.1.4     generics_0.1.0      farver_2.1.0       
+[37] jsonlite_1.7.2      Matrix_1.2-18       Rcpp_1.0.6         
+[40] munsell_0.5.0       fansi_0.4.2         lifecycle_1.0.0    
+[43] stringi_1.5.3       whisker_0.4         yaml_2.2.1         
+[46] grid_4.0.3          promises_1.2.0.1    crayon_1.4.1       
+[49] lattice_0.20-41     haven_2.4.1         splines_4.0.3      
+[52] hms_1.0.0           tmvnsim_1.0-2       knitr_1.33         
+[55] pillar_1.6.0        reprex_2.0.0        evaluate_0.14      
+[58] modelr_0.1.8        vctrs_0.3.7         httpuv_1.6.0       
+[61] cellranger_1.1.0    gtable_0.3.0        assertthat_0.2.1   
+[64] xfun_0.22           broom_0.7.6         later_1.2.0        
+[67] class_7.3-17        ellipsis_0.3.1      here_1.0.1         </code></pre>
 </div>
 </div>
 
