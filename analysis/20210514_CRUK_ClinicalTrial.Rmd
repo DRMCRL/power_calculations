@@ -22,13 +22,17 @@ knitr::opts_chunk$set(
 ```{r packages}
 library(tidyverse)
 library(readxl)
-library(zoo)
-library(truncnorm)
-library(parallel)
 library(scales)
 library(glue)
 library(magrittr)
 library(pander)
+library(cowplot)
+library(matrixStats)
+library(e1071)
+library(sn)
+library(zoo)
+library(truncnorm)
+library(parallel)
 ```
 
 ```{r options}
@@ -43,22 +47,34 @@ Example data is taken from PDX samples in the Nature Medicine paper.
 
 ```{r load_ki67}
 ki67_natmed <- here::here("data/41591_2020_1168_MOESM3_ESM.xlsx") %>%
-    read_excel(sheet = "S1d") %>%
-    setNames(
-        tibble(
-            names = colnames(.),
-            r1 = unlist(.[1,])
-        ) %>%
-            mutate(
-                names = str_replace_all(names, "\\.\\.\\.+", NA_character_),
-                names = na.locf(names)
-            ) %>%
-            unite(names, names, r1, sep = " ") %>%
-            pull(names) %>%
-            str_remove_all(" NA$")
+  read_excel(sheet = "S1d") %>%
+  setNames(
+    tibble(
+      names = colnames(.),
+      r1 = unlist(.[1,])
     ) %>%
-    dplyr::slice(-1) %>%
-    dplyr::filter(!str_detect(Diagnosis, "Normal"))
+      mutate(
+        names = str_replace_all(names, "\\.\\.\\.+", NA_character_),
+        names = na.locf(names)
+      ) %>%
+      unite(names, names, r1, sep = " ") %>%
+      pull(names) %>%
+      str_remove_all(" NA$")
+  ) %>%
+  dplyr::slice(-1) %>%
+  dplyr::filter(!str_detect(Diagnosis, "Normal")) %>%
+  mutate(
+    across(
+      .fns = function(x){
+        if (!any(is.na(suppressWarnings(as.numeric(x))))){
+          x <- as.numeric(x)
+        }
+        x
+      }
+    ),
+    diff = `Ki67-positive epithelial cells (%) E2+DHT` - `Ki67-positive epithelial cells (%) E2`,
+    logFC = log2(`Ki67-positive epithelial cells (%) E2+DHT` / `Ki67-positive epithelial cells (%) E2`)
+  )
 ```
 
 ```{r plot_ki67}
@@ -117,3 +133,249 @@ ki67_natmed %>%
 Given the above plot, a truncated normal distribution may be suitable for simulation of data.
 Note that we'll be using the Wilcoxon, so the exact distributional patterns are less relevant.
 Compare some simulated data to the real data.
+
+The PDX data provides information about the same sample in E2 and E2+DHT, which is analogous to pre and post treatment on the same sample.
+In this way the differences can be estimated and approximated during simulation.
+
+```{r plot_logFC, fig.cap = "*Changes in Ki67 observed within PDX samples on the A) linear and B) logarithmic scale. Using the log~2~ scale for modelling Ki67 reduction is clearly more independent of the initial observed values.*"}
+a <- ki67_natmed %>%
+  ggplot(
+    aes(`Ki67-positive epithelial cells (%) E2`, diff)
+  ) + 
+  geom_point() +
+  geom_smooth(
+    method = "lm", formula = y ~ x
+  ) +
+  labs(
+    y = "Change in % after DHT treatment"
+  )
+b <- ki67_natmed %>%
+  ggplot(
+    aes(`Ki67-positive epithelial cells (%) E2`, logFC)
+  ) + 
+  geom_point() +
+  geom_smooth(
+    method = "lm", formula = y ~ x
+  ) +
+  labs(
+    y = "log2 Change in % after DHT treatment"
+  )
+plot_grid(a, b, labels = c("A", "B"))
+```
+
+```{r}
+ki67_natmed %>%
+  dplyr::select(logFC) %>%
+  dplyr::filter(logFC > min(logFC)) %>%
+  summarise(
+    Mean = mean(logFC),
+    Median = median(logFC),
+    SD = sd(logFC),
+    MAD = mad(logFC),
+    Skewness = skewness(logFC),
+    `Shapiro-Wilk` = shapiro.test(logFC)$p.value
+  ) %>%
+  pander(
+    caption = glue(
+      "Summary statistics for changes in log~2~ Ki67% observed within paired samples.
+      The results from the Shapiro-Wilk test indicates that the values are not normally distributed. As such, an alternative distribution should be used in simulation.
+      Note that for this table, the extreme outlier was excluded to ensure a conservative approach.
+      "
+    )
+  )
+```
+
+Given the above table, data can be simulated using a skew-normal with mean &mu; = -1, &sigma; = `r round(sd(dplyr::filter(ki67_natmed, logFC > min(logFC))$logFC), 1)` and a skewness of `r round(skewness(dplyr::filter(ki67_natmed, logFC > min(logFC))$logFC), 2)` to ensure a conservative approach is taken.
+A skew-normal distribution should also be used.
+Power calculations can be made for the Wilcoxon Rank-Sum test and T-statistics of the differences, given the approximate normality observed in the differences.
+
+
+```{r}
+set.seed(12345)
+replicate(1000, rsn(17, -1, 0.6, -0.03)) %>%
+  set_colnames(paste0("rep", seq_len(ncol(.)))) %>%
+  as_tibble() %>%
+  pivot_longer(
+    cols = everything(),
+    names_to = "rep",
+    values_to = "logFC"
+  ) %>% 
+  group_by(rep) %>%
+  summarise(
+    mean = mean(logFC),
+    p = suppressWarnings(wilcox.test(logFC, y = ki67_natmed$logFC)$p.value)
+  ) %>%
+  arrange(mean) %>%
+  summarise(
+    n = n(),
+    mean = mean(mean),
+    `P < 0.05` = mean(p < 0.05)
+  ) %>%
+  pander(
+    caption = glue(
+      "Results comparing data simulation to observed values for {.$n} simulations with 17 values.
+      The overall mean seems appropriate for simulating a reduction of 50% and the vast majority of simulations ({.$n*(1-.$`P < 0.05`)}) accepted the Null Hypothesis for the Wilcoxon Rank-Sum Test, where distributions were considered identical.
+      "
+    )
+  )
+```
+
+
+Given the above results, the same values will be used for simulating changes in Ki67 values for a series of initial Ki67 values and sample sizes.
+As discussed [elsewhere](202105_NHMRC_IdeasGrant.html), the distribution of initial starting values will be generated using a truncated normal distribution and initial values ranging from 10 to 40%.
+
+As these will be pre/post treatment samples, the sample size will be identical in both groups.
+Given that we have paired tests, this is essentially testing the distribution used for generation of difference and almost always return a significant results
+
+```{r}
+tibble(
+  pre = rtruncnorm(20, 0, 1, 0.4, 0.35),
+  logFC = rsn(20, -1, 0.6, -0.02),
+  post = 2^(log2(pre) + logFC)
+) %>%
+  with(
+    wilcox.test(x = pre, y = post, paired = TRUE)
+  ) %>%
+  pander(
+    caption = "Example Wilcoxon Rank-Sum results for n = 20"
+  )
+```
+
+A more realistic simulation may be to include a proportion of non-responders.
+
+```{r}
+set.seed(12345)
+p_non <- 0.33
+n <- 40
+tibble(
+  pre = rtruncnorm(n, 0, 1, 0.4, 0.35),
+  respon = as.logical(rbinom(n, 1, p_non)),
+  logFC = rsn(n, -1, 0.6, -0.02),
+  post = case_when(
+    respon ~ 2^(log2(pre) + logFC),
+    !respon ~ rtruncnorm(n, 0, 1, 0.4, 0.35)
+  )
+) %>%
+  with(
+    wilcox.test(x = pre, y = post, paired = TRUE)
+  ) %>%
+  pander(
+    caption = glue(
+      "Example Wilcoxon Rank-Sum results for n = {n} including a {percent(p_non)} non-responder rate."
+    )
+  )
+```
+
+Thus an appropriate approach may be to simulate including various sample sizes and various non-responder rates.
+
+```{r}
+sim_data <- function(n, ki0, p_non, sigma_ki, ...){
+  tibble(
+    pre = rtruncnorm(n, 0, 1, ki0, sigma_ki),
+    responder = as.logical(rbinom(n, 1, 1-p_non)),
+    logFC = rsn(n, -1, 1, -0.02),
+    post = case_when(
+      responder ~ 2^(log2(pre) + logFC),
+      !responder ~ rtruncnorm(n, 0, 1, ki0, sigma_ki)
+    )
+  )
+}
+sim_test <- function(n, ki0, p_non, sigma_ki, alpha = 0.05){
+  df <- sim_data(n, ki0, p_non, sigma_ki)
+  wilcox.test(x = df$pre, y = df$post, paired = TRUE)$p.value < alpha
+}
+```
+
+
+```{r}
+res <- list(
+  tibble(n = 20, ki0 = 0.4, p_non = 0.1, sigma_ki = 0.35),
+  tibble(n = 30, ki0 = 0.4, p_non = 0.1, sigma_ki = 0.35),
+  tibble(n = 40, ki0 = 0.4, p_non = 0.1, sigma_ki = 0.35),
+  tibble(n = 50, ki0 = 0.4, p_non = 0.1, sigma_ki = 0.35),
+  tibble(n = 30, ki0 = 0.4, p_non = 0.2, sigma_ki = 0.35),
+  tibble(n = 20, ki0 = 0.4, p_non = 0.2, sigma_ki = 0.35),
+  tibble(n = 40, ki0 = 0.4, p_non = 0.2, sigma_ki = 0.35),
+  tibble(n = 50, ki0 = 0.4, p_non = 0.2, sigma_ki = 0.35),
+  tibble(n = 20, ki0 = 0.4, p_non = 0.3, sigma_ki = 0.35),
+  tibble(n = 30, ki0 = 0.4, p_non = 0.3, sigma_ki = 0.35),
+  tibble(n = 40, ki0 = 0.4, p_non = 0.3, sigma_ki = 0.35),
+  tibble(n = 50, ki0 = 0.4, p_non = 0.3, sigma_ki = 0.35),
+  tibble(n = 20, ki0 = 0.4, p_non = 0.4, sigma_ki = 0.35),
+  tibble(n = 30, ki0 = 0.4, p_non = 0.4, sigma_ki = 0.35),
+  tibble(n = 40, ki0 = 0.4, p_non = 0.4, sigma_ki = 0.35),
+  tibble(n = 50, ki0 = 0.4, p_non = 0.4, sigma_ki = 0.35),
+  tibble(n = 20, ki0 = 0.2, p_non = 0.1, sigma_ki = sqrt(0.5)*0.35),
+  tibble(n = 30, ki0 = 0.2, p_non = 0.1, sigma_ki = sqrt(0.5)*0.35),
+  tibble(n = 40, ki0 = 0.2, p_non = 0.1, sigma_ki = sqrt(0.5)*0.35),
+  tibble(n = 50, ki0 = 0.2, p_non = 0.1, sigma_ki = sqrt(0.5)*0.35),
+  tibble(n = 20, ki0 = 0.2, p_non = 0.2, sigma_ki = sqrt(0.5)*0.35),
+  tibble(n = 30, ki0 = 0.2, p_non = 0.2, sigma_ki = sqrt(0.5)*0.35),
+  tibble(n = 40, ki0 = 0.2, p_non = 0.2, sigma_ki = sqrt(0.5)*0.35),
+  tibble(n = 50, ki0 = 0.2, p_non = 0.2, sigma_ki = sqrt(0.5)*0.35),
+  tibble(n = 20, ki0 = 0.2, p_non = 0.3, sigma_ki = sqrt(0.5)*0.35),
+  tibble(n = 30, ki0 = 0.2, p_non = 0.3, sigma_ki = sqrt(0.5)*0.35),
+  tibble(n = 40, ki0 = 0.2, p_non = 0.3, sigma_ki = sqrt(0.5)*0.35),
+  tibble(n = 50, ki0 = 0.2, p_non = 0.3, sigma_ki = sqrt(0.5)*0.35),
+  tibble(n = 20, ki0 = 0.2, p_non = 0.4, sigma_ki = sqrt(0.5)*0.35),
+  tibble(n = 30, ki0 = 0.2, p_non = 0.4, sigma_ki = sqrt(0.5)*0.35),
+  tibble(n = 40, ki0 = 0.2, p_non = 0.4, sigma_ki = sqrt(0.5)*0.35),
+  tibble(n = 50, ki0 = 0.2, p_non = 0.4, sigma_ki = sqrt(0.5)*0.35),
+  tibble(n = 20, ki0 = 0.1, p_non = 0.1, sigma_ki = sqrt(0.25)*0.35),
+  tibble(n = 30, ki0 = 0.1, p_non = 0.1, sigma_ki = sqrt(0.25)*0.35),
+  tibble(n = 40, ki0 = 0.1, p_non = 0.1, sigma_ki = sqrt(0.25)*0.35),
+  tibble(n = 50, ki0 = 0.1, p_non = 0.1, sigma_ki = sqrt(0.25)*0.35),
+  tibble(n = 20, ki0 = 0.1, p_non = 0.2, sigma_ki = sqrt(0.25)*0.35),
+  tibble(n = 30, ki0 = 0.1, p_non = 0.2, sigma_ki = sqrt(0.25)*0.35),
+  tibble(n = 40, ki0 = 0.1, p_non = 0.2, sigma_ki = sqrt(0.25)*0.35),
+  tibble(n = 50, ki0 = 0.1, p_non = 0.2, sigma_ki = sqrt(0.25)*0.35),
+  tibble(n = 20, ki0 = 0.1, p_non = 0.3, sigma_ki = sqrt(0.25)*0.35),
+  tibble(n = 30, ki0 = 0.1, p_non = 0.3, sigma_ki = sqrt(0.25)*0.35),
+  tibble(n = 40, ki0 = 0.1, p_non = 0.3, sigma_ki = sqrt(0.25)*0.35),
+  tibble(n = 50, ki0 = 0.1, p_non = 0.3, sigma_ki = sqrt(0.25)*0.35),
+  tibble(n = 20, ki0 = 0.1, p_non = 0.4, sigma_ki = sqrt(0.25)*0.35),
+  tibble(n = 30, ki0 = 0.1, p_non = 0.4, sigma_ki = sqrt(0.25)*0.35),
+  tibble(n = 40, ki0 = 0.1, p_non = 0.4, sigma_ki = sqrt(0.25)*0.35),
+  tibble(n = 50, ki0 = 0.1, p_non = 0.4, sigma_ki = sqrt(0.25)*0.35)
+) %>%
+  mclapply(
+    function(x){
+      res <- replicate(
+        1e4,
+        sim_test(x$n, x$ki0, x$p_non, x$sigma_ki)
+      )
+      mutate(x, pwr = mean(res))
+    },
+    mc.cores = 6
+  ) %>%
+  bind_rows()
+```
+
+
+```{r fig.cap = "Power Curves for various starting Ki67% values and non-responder rates"}
+res %>%
+  ggplot(
+    aes(
+      x = n, y = pwr, 
+      colour = as.factor(percent(p_non)), 
+      linetype = as.factor(percent(ki0)))
+  ) +
+  geom_point() +
+  geom_line() +
+  scale_y_continuous(labels = percent) +
+  labs(
+    x = "Sample Size",
+    y = "Power",
+    colour = "% Non-Responders",
+    linetype = "Initial Ki67 %"
+  )
+```
+
+# Conclusion
+
+Given the above simulations truly represent the prospective data, we can see that:
+
+- A sample size of 40 still provides a power of 60% to detect a 50% reduction in Ki67 if 40% of patients are non-responders
+- Assuming a 30% non-responder rate, this rises to 80% for the same sample size.
+- In the worst case scenario as modelled (40% non-responders, 10% initial Ki67) a sample size of 50 is required to achieve a power of 70%.
+
