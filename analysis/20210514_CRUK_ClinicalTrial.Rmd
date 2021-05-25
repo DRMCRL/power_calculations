@@ -288,72 +288,86 @@ sim_test <- function(n, ki0, p_non, sigma_ki, alpha = 0.05){
 
 
 ```{r}
-res <- list(
-  tibble(n = 20, ki0 = 0.4, p_non = 0.1, sigma_ki = 0.35),
-  tibble(n = 30, ki0 = 0.4, p_non = 0.1, sigma_ki = 0.35),
-  tibble(n = 40, ki0 = 0.4, p_non = 0.1, sigma_ki = 0.35),
-  tibble(n = 50, ki0 = 0.4, p_non = 0.1, sigma_ki = 0.35),
-  tibble(n = 30, ki0 = 0.4, p_non = 0.2, sigma_ki = 0.35),
-  tibble(n = 20, ki0 = 0.4, p_non = 0.2, sigma_ki = 0.35),
-  tibble(n = 40, ki0 = 0.4, p_non = 0.2, sigma_ki = 0.35),
-  tibble(n = 50, ki0 = 0.4, p_non = 0.2, sigma_ki = 0.35),
-  tibble(n = 20, ki0 = 0.4, p_non = 0.3, sigma_ki = 0.35),
-  tibble(n = 30, ki0 = 0.4, p_non = 0.3, sigma_ki = 0.35),
-  tibble(n = 40, ki0 = 0.4, p_non = 0.3, sigma_ki = 0.35),
-  tibble(n = 50, ki0 = 0.4, p_non = 0.3, sigma_ki = 0.35),
-  tibble(n = 20, ki0 = 0.4, p_non = 0.4, sigma_ki = 0.35),
-  tibble(n = 30, ki0 = 0.4, p_non = 0.4, sigma_ki = 0.35),
-  tibble(n = 40, ki0 = 0.4, p_non = 0.4, sigma_ki = 0.35),
-  tibble(n = 50, ki0 = 0.4, p_non = 0.4, sigma_ki = 0.35),
-  tibble(n = 20, ki0 = 0.2, p_non = 0.1, sigma_ki = sqrt(0.5)*0.35),
-  tibble(n = 30, ki0 = 0.2, p_non = 0.1, sigma_ki = sqrt(0.5)*0.35),
-  tibble(n = 40, ki0 = 0.2, p_non = 0.1, sigma_ki = sqrt(0.5)*0.35),
-  tibble(n = 50, ki0 = 0.2, p_non = 0.1, sigma_ki = sqrt(0.5)*0.35),
-  tibble(n = 20, ki0 = 0.2, p_non = 0.2, sigma_ki = sqrt(0.5)*0.35),
-  tibble(n = 30, ki0 = 0.2, p_non = 0.2, sigma_ki = sqrt(0.5)*0.35),
-  tibble(n = 40, ki0 = 0.2, p_non = 0.2, sigma_ki = sqrt(0.5)*0.35),
-  tibble(n = 50, ki0 = 0.2, p_non = 0.2, sigma_ki = sqrt(0.5)*0.35),
-  tibble(n = 20, ki0 = 0.2, p_non = 0.3, sigma_ki = sqrt(0.5)*0.35),
-  tibble(n = 30, ki0 = 0.2, p_non = 0.3, sigma_ki = sqrt(0.5)*0.35),
-  tibble(n = 40, ki0 = 0.2, p_non = 0.3, sigma_ki = sqrt(0.5)*0.35),
-  tibble(n = 50, ki0 = 0.2, p_non = 0.3, sigma_ki = sqrt(0.5)*0.35),
-  tibble(n = 20, ki0 = 0.2, p_non = 0.4, sigma_ki = sqrt(0.5)*0.35),
-  tibble(n = 30, ki0 = 0.2, p_non = 0.4, sigma_ki = sqrt(0.5)*0.35),
-  tibble(n = 40, ki0 = 0.2, p_non = 0.4, sigma_ki = sqrt(0.5)*0.35),
-  tibble(n = 50, ki0 = 0.2, p_non = 0.4, sigma_ki = sqrt(0.5)*0.35),
-  tibble(n = 20, ki0 = 0.1, p_non = 0.1, sigma_ki = sqrt(0.25)*0.35),
-  tibble(n = 30, ki0 = 0.1, p_non = 0.1, sigma_ki = sqrt(0.25)*0.35),
-  tibble(n = 40, ki0 = 0.1, p_non = 0.1, sigma_ki = sqrt(0.25)*0.35),
-  tibble(n = 50, ki0 = 0.1, p_non = 0.1, sigma_ki = sqrt(0.25)*0.35),
-  tibble(n = 20, ki0 = 0.1, p_non = 0.2, sigma_ki = sqrt(0.25)*0.35),
-  tibble(n = 30, ki0 = 0.1, p_non = 0.2, sigma_ki = sqrt(0.25)*0.35),
-  tibble(n = 40, ki0 = 0.1, p_non = 0.2, sigma_ki = sqrt(0.25)*0.35),
-  tibble(n = 50, ki0 = 0.1, p_non = 0.2, sigma_ki = sqrt(0.25)*0.35),
-  tibble(n = 20, ki0 = 0.1, p_non = 0.3, sigma_ki = sqrt(0.25)*0.35),
-  tibble(n = 30, ki0 = 0.1, p_non = 0.3, sigma_ki = sqrt(0.25)*0.35),
-  tibble(n = 40, ki0 = 0.1, p_non = 0.3, sigma_ki = sqrt(0.25)*0.35),
-  tibble(n = 50, ki0 = 0.1, p_non = 0.3, sigma_ki = sqrt(0.25)*0.35),
-  tibble(n = 20, ki0 = 0.1, p_non = 0.4, sigma_ki = sqrt(0.25)*0.35),
-  tibble(n = 30, ki0 = 0.1, p_non = 0.4, sigma_ki = sqrt(0.25)*0.35),
-  tibble(n = 40, ki0 = 0.1, p_non = 0.4, sigma_ki = sqrt(0.25)*0.35),
-  tibble(n = 50, ki0 = 0.1, p_non = 0.4, sigma_ki = sqrt(0.25)*0.35)
-) %>%
-  mclapply(
-    function(x){
-      res <- replicate(
-        1e4,
-        sim_test(x$n, x$ki0, x$p_non, x$sigma_ki)
-      )
-      mutate(x, pwr = mean(res))
-    },
-    mc.cores = 6
+res <- replicate(
+  10,
+  list(
+    tibble(n = 20, ki0 = 0.4, p_non = 0.1, sigma_ki = 0.35),
+    tibble(n = 30, ki0 = 0.4, p_non = 0.1, sigma_ki = 0.35),
+    tibble(n = 40, ki0 = 0.4, p_non = 0.1, sigma_ki = 0.35),
+    tibble(n = 50, ki0 = 0.4, p_non = 0.1, sigma_ki = 0.35),
+    tibble(n = 30, ki0 = 0.4, p_non = 0.2, sigma_ki = 0.35),
+    tibble(n = 20, ki0 = 0.4, p_non = 0.2, sigma_ki = 0.35),
+    tibble(n = 40, ki0 = 0.4, p_non = 0.2, sigma_ki = 0.35),
+    tibble(n = 50, ki0 = 0.4, p_non = 0.2, sigma_ki = 0.35),
+    tibble(n = 20, ki0 = 0.4, p_non = 0.3, sigma_ki = 0.35),
+    tibble(n = 30, ki0 = 0.4, p_non = 0.3, sigma_ki = 0.35),
+    tibble(n = 40, ki0 = 0.4, p_non = 0.3, sigma_ki = 0.35),
+    tibble(n = 50, ki0 = 0.4, p_non = 0.3, sigma_ki = 0.35),
+    tibble(n = 20, ki0 = 0.4, p_non = 0.4, sigma_ki = 0.35),
+    tibble(n = 30, ki0 = 0.4, p_non = 0.4, sigma_ki = 0.35),
+    tibble(n = 40, ki0 = 0.4, p_non = 0.4, sigma_ki = 0.35),
+    tibble(n = 50, ki0 = 0.4, p_non = 0.4, sigma_ki = 0.35),
+    tibble(n = 20, ki0 = 0.2, p_non = 0.1, sigma_ki = sqrt(0.5)*0.35),
+    tibble(n = 30, ki0 = 0.2, p_non = 0.1, sigma_ki = sqrt(0.5)*0.35),
+    tibble(n = 40, ki0 = 0.2, p_non = 0.1, sigma_ki = sqrt(0.5)*0.35),
+    tibble(n = 50, ki0 = 0.2, p_non = 0.1, sigma_ki = sqrt(0.5)*0.35),
+    tibble(n = 20, ki0 = 0.2, p_non = 0.2, sigma_ki = sqrt(0.5)*0.35),
+    tibble(n = 30, ki0 = 0.2, p_non = 0.2, sigma_ki = sqrt(0.5)*0.35),
+    tibble(n = 40, ki0 = 0.2, p_non = 0.2, sigma_ki = sqrt(0.5)*0.35),
+    tibble(n = 50, ki0 = 0.2, p_non = 0.2, sigma_ki = sqrt(0.5)*0.35),
+    tibble(n = 20, ki0 = 0.2, p_non = 0.3, sigma_ki = sqrt(0.5)*0.35),
+    tibble(n = 30, ki0 = 0.2, p_non = 0.3, sigma_ki = sqrt(0.5)*0.35),
+    tibble(n = 40, ki0 = 0.2, p_non = 0.3, sigma_ki = sqrt(0.5)*0.35),
+    tibble(n = 50, ki0 = 0.2, p_non = 0.3, sigma_ki = sqrt(0.5)*0.35),
+    tibble(n = 20, ki0 = 0.2, p_non = 0.4, sigma_ki = sqrt(0.5)*0.35),
+    tibble(n = 30, ki0 = 0.2, p_non = 0.4, sigma_ki = sqrt(0.5)*0.35),
+    tibble(n = 40, ki0 = 0.2, p_non = 0.4, sigma_ki = sqrt(0.5)*0.35),
+    tibble(n = 50, ki0 = 0.2, p_non = 0.4, sigma_ki = sqrt(0.5)*0.35),
+    tibble(n = 20, ki0 = 0.1, p_non = 0.1, sigma_ki = sqrt(0.25)*0.35),
+    tibble(n = 30, ki0 = 0.1, p_non = 0.1, sigma_ki = sqrt(0.25)*0.35),
+    tibble(n = 40, ki0 = 0.1, p_non = 0.1, sigma_ki = sqrt(0.25)*0.35),
+    tibble(n = 50, ki0 = 0.1, p_non = 0.1, sigma_ki = sqrt(0.25)*0.35),
+    tibble(n = 20, ki0 = 0.1, p_non = 0.2, sigma_ki = sqrt(0.25)*0.35),
+    tibble(n = 30, ki0 = 0.1, p_non = 0.2, sigma_ki = sqrt(0.25)*0.35),
+    tibble(n = 40, ki0 = 0.1, p_non = 0.2, sigma_ki = sqrt(0.25)*0.35),
+    tibble(n = 50, ki0 = 0.1, p_non = 0.2, sigma_ki = sqrt(0.25)*0.35),
+    tibble(n = 20, ki0 = 0.1, p_non = 0.3, sigma_ki = sqrt(0.25)*0.35),
+    tibble(n = 30, ki0 = 0.1, p_non = 0.3, sigma_ki = sqrt(0.25)*0.35),
+    tibble(n = 40, ki0 = 0.1, p_non = 0.3, sigma_ki = sqrt(0.25)*0.35),
+    tibble(n = 50, ki0 = 0.1, p_non = 0.3, sigma_ki = sqrt(0.25)*0.35),
+    tibble(n = 20, ki0 = 0.1, p_non = 0.4, sigma_ki = sqrt(0.25)*0.35),
+    tibble(n = 30, ki0 = 0.1, p_non = 0.4, sigma_ki = sqrt(0.25)*0.35),
+    tibble(n = 40, ki0 = 0.1, p_non = 0.4, sigma_ki = sqrt(0.25)*0.35),
+    tibble(n = 50, ki0 = 0.1, p_non = 0.4, sigma_ki = sqrt(0.25)*0.35)
   ) %>%
-  bind_rows()
+    mclapply(
+      function(x){
+        res <- replicate(
+          1e3,
+          sim_test(x$n, x$ki0, x$p_non, x$sigma_ki)
+        )
+        mutate(x, pwr = mean(res))
+      },
+      mc.cores = 6
+    ) %>%
+    bind_rows(),
+  simplify = FALSE
+)
 ```
 
 
-```{r plot_power_curve, fig.cap = "Power Curves for various starting Ki67% values and non-responder rates"}
+```{r plot_power_curve, fig.cap = "Power Curves for various starting Ki67% values and non-responder rates. Error bars represent a 95%CI for the simulated power"}
 res %>%
+  bind_rows() %>%
+  group_by(n, ki0, p_non, sigma_ki) %>%
+  summarise(
+    pwr_sd = sd(pwr),
+    pwr = mean(pwr)
+  ) %>%
+  mutate(
+    lwr = pwr - qnorm(0.975)*pwr_sd/sqrt(10),
+    upr = pwr + qnorm(0.975)*pwr_sd/sqrt(10)
+  ) %>%
   ggplot(
     aes(
       x = n, y = pwr, 
@@ -361,6 +375,7 @@ res %>%
       linetype = as.factor(percent(ki0)))
   ) +
   geom_point() +
+  geom_errorbar(aes(ymin = lwr, ymax = upr), width = 0.4) +
   geom_line() +
   scale_y_continuous(labels = percent) +
   labs(
@@ -371,11 +386,158 @@ res %>%
   )
 ```
 
+
+```{r plot_power_curve_mergedki0, fig.cap = "Power Curves for various non-responder rates merged across all simulated values for KI67%. This provides a summarised power for initial ki67 values between 10 and 40%. Error bars represent a 95%CI for the simulated power calculations"}
+res %>%
+  bind_rows() %>%
+  group_by(n, p_non) %>%
+  summarise(
+    pwr_sd = sd(pwr),
+    pwr = mean(pwr)
+  ) %>%
+  mutate(
+    lwr = pwr - qnorm(0.975)*pwr_sd/sqrt(10),
+    upr = pwr + qnorm(0.975)*pwr_sd/sqrt(10)
+  ) %>%
+  ggplot(
+    aes(
+      x = n, y = pwr, 
+      colour = as.factor(percent(p_non))
+    )
+  ) +
+  geom_point() +
+  geom_errorbar(aes(ymin = lwr, ymax = upr), width = 0.4) +
+  geom_line() +
+  scale_y_continuous(labels = percent) +
+  labs(
+    x = "Sample Size",
+    y = "Power",
+    colour = "% Non-Responders",
+    linetype = "Initial Ki67 %"
+  )
+```
+
+# Power Tables {.tabset}
+
+## N = 20
+
+```{r}
+res %>%
+  bind_rows() %>%
+  group_by(n, p_non) %>%
+  dplyr::filter(n == 20) %>%
+  summarise(
+    pwr_sd = sd(pwr),
+    pwr = mean(pwr)
+  ) %>%
+  mutate(
+    p_non = percent(p_non),
+    lwr = pwr - qnorm(0.975)*pwr_sd/sqrt(10),
+    upr = pwr + qnorm(0.975)*pwr_sd/sqrt(10),
+    `95% CI` = glue("[{round(lwr, 3)}, {round(upr, 3)}]")
+  ) %>%
+  dplyr::select(
+    `Study Participants` = n,
+    `% Non-Responders` = p_non,
+    Power = pwr,
+    `95% CI`
+  ) %>%
+  pander(
+    caption = "N = 20: Power calculations for various non-responder rates, merging values across all simulated initial KI67 values"
+  )
+```
+
+## N = 30
+
+```{r}
+res %>%
+  bind_rows() %>%
+  group_by(n, p_non) %>%
+  dplyr::filter(n == 30) %>%
+  summarise(
+    pwr_sd = sd(pwr),
+    pwr = mean(pwr)
+  ) %>%
+  mutate(
+    p_non = percent(p_non),
+    lwr = pwr - qnorm(0.975)*pwr_sd/sqrt(10),
+    upr = pwr + qnorm(0.975)*pwr_sd/sqrt(10),
+    `95% CI` = glue("[{round(lwr, 3)}, {round(upr, 3)}]")
+  ) %>%
+  dplyr::select(
+    `Study Participants` = n,
+    `% Non-Responders` = p_non,
+    Power = pwr,
+    `95% CI`
+  ) %>%
+  pander(
+    caption = "N = 30: Power calculations for various non-responder rates, merging values across all simulated initial KI67 values"
+  )
+```
+
+## N = 40
+
+```{r}
+res %>%
+  bind_rows() %>%
+  group_by(n, p_non) %>%
+  dplyr::filter(n == 40) %>%
+  summarise(
+    pwr_sd = sd(pwr),
+    pwr = mean(pwr)
+  ) %>%
+  mutate(
+    p_non = percent(p_non),
+    lwr = pwr - qnorm(0.975)*pwr_sd/sqrt(10),
+    upr = pwr + qnorm(0.975)*pwr_sd/sqrt(10),
+    `95% CI` = glue("[{round(lwr, 3)}, {round(upr, 3)}]")
+  ) %>%
+  dplyr::select(
+    `Study Participants` = n,
+    `% Non-Responders` = p_non,
+    Power = pwr,
+    `95% CI`
+  ) %>%
+  pander(
+    caption = "N = 40: Power calculations for various non-responder rates, merging values across all simulated initial KI67 values"
+  )
+```
+
+## N = 50
+
+```{r}
+res %>%
+  bind_rows() %>%
+  group_by(n, p_non) %>%
+  dplyr::filter(n == 50) %>%
+  summarise(
+    pwr_sd = sd(pwr),
+    pwr = mean(pwr)
+  ) %>%
+  mutate(
+    p_non = percent(p_non),
+    lwr = pwr - qnorm(0.975)*pwr_sd/sqrt(10),
+    upr = pwr + qnorm(0.975)*pwr_sd/sqrt(10),
+    `95% CI` = glue("[{round(lwr, 3)}, {round(upr, 3)}]")
+  ) %>%
+  dplyr::select(
+    `Study Participants` = n,
+    `% Non-Responders` = p_non,
+    Power = pwr,
+    `95% CI`
+  ) %>%
+  pander(
+    caption = "N = 50: Power calculations for various non-responder rates, merging values across all simulated initial KI67 values"
+  )
+```
+
+
+
 # Conclusion
 
 Given the above simulations truly represent the prospective data, we can see that:
 
-- A sample size of 40 still provides a power of 60% to detect a 50% reduction in Ki67 if 40% of patients are non-responders
-- Assuming a 30% non-responder rate, this rises to 80% for the same sample size.
+- A sample size of 40 still provides a power of ~60% to detect a 50% reduction in Ki67 if 40% of patients are non-responders
+- Assuming a 30% non-responder rate, this rises to ~80% for the same sample size.
 - In the worst case scenario as modelled (40% non-responders, 10% initial Ki67) a sample size of 50 is required to achieve a power of 70%.
 

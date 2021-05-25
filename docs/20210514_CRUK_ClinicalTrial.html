@@ -386,14 +386,14 @@ div.tocify {
 Dame Roma Mitchell Cancer Research Laboratories<br />
 Adelaide Medical School<br />
 University of Adelaide</div></h4>
-<h4 class="date">14 May, 2021</h4>
+<h4 class="date">25 May, 2021</h4>
 
 </div>
 
 
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
-<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
 </button>
 </p>
 <div id="workflowr-report" class="collapse">
@@ -402,7 +402,7 @@ University of Adelaide</div></h4>
 <a data-toggle="tab" href="#summary">Summary</a>
 </li>
 <li>
-<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -411,10 +411,10 @@ University of Adelaide</div></h4>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2021-05-14
+<strong>Last updated:</strong> 2021-05-25
 </p>
 <p>
-<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 1
 </p>
 <p>
 <strong>Knit directory:</strong> <code>power_calculations/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
@@ -430,12 +430,12 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges"> <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div id="strongRMarkdownfilestronguncommittedchanges" class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+<p>The R Markdown file has unstaged changes. To know which version of the R Markdown file created these results, you’ll want to first commit it to the Git repo. If you’re still working on the analysis, you can ignore this warning. When you’re finished, you can run <code>wflow_publish</code> to commit the R Markdown file and build the HTML.</p>
 </div>
 </div>
 </div>
@@ -502,30 +502,27 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrong79d0ac5"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> 79d0ac5 </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDRMCRLpowercalculationstree4da781424716a52f3488289b63bfc0dea2b55916targetblank4da7814a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/DRMCRL/power_calculations/tree/4da781424716a52f3488289b63bfc0dea2b55916" target="_blank">4da7814</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrong79d0ac5" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomDRMCRLpowercalculationstree4da781424716a52f3488289b63bfc0dea2b55916targetblank4da7814a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version 79d0ac5. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/DRMCRL/power_calculations/tree/4da781424716a52f3488289b63bfc0dea2b55916" target="_blank">4da7814</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
 </p>
 <pre><code>
 Ignored files:
+    Ignored:    .Rhistory
     Ignored:    .Rproj.user/
 
-Untracked files:
-    Untracked:  data/41591_2020_1168_MOESM3_ESM.xlsx
-
 Unstaged changes:
-    Modified:   analysis/_site.yml
-    Deleted:    analysis/license.Rmd
+    Modified:   analysis/20210514_CRUK_ClinicalTrial.Rmd
 
 </code></pre>
 <p>
@@ -566,10 +563,27 @@ Message
 <tbody>
 <tr>
 <td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/DRMCRL/power_calculations/4da781424716a52f3488289b63bfc0dea2b55916/docs/20210514_CRUK_ClinicalTrial.html" target="_blank">4da7814</a>
+</td>
+<td>
+Steve Ped
+</td>
+<td>
+2021-05-14
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
 Rmd
 </td>
 <td>
-79d0ac5
+<a href="https://github.com/DRMCRL/power_calculations/blob/79d0ac5b96a1af476610c3590b7407fb69d03e3f/analysis/20210514_CRUK_ClinicalTrial.Rmd" target="_blank">79d0ac5</a>
 </td>
 <td>
 Steve Ped
@@ -586,7 +600,7 @@ Corrected chunk labels
 html
 </td>
 <td>
-f325daa
+<a href="https://rawcdn.githack.com/DRMCRL/power_calculations/f325daaa9257ef4ac6be52d5226467880347e473/docs/20210514_CRUK_ClinicalTrial.html" target="_blank">f325daa</a>
 </td>
 <td>
 Steve Ped
@@ -603,7 +617,7 @@ Build site.
 Rmd
 </td>
 <td>
-d8842f4
+<a href="https://github.com/DRMCRL/power_calculations/blob/d8842f4adc713178d445a55dcfbb6cea33868077/analysis/20210514_CRUK_ClinicalTrial.Rmd" target="_blank">d8842f4</a>
 </td>
 <td>
 Steve Ped
@@ -620,7 +634,7 @@ Ran simulations
 html
 </td>
 <td>
-0e6d4c7
+<a href="https://rawcdn.githack.com/DRMCRL/power_calculations/0e6d4c772142c89aa1f55d33a6d4ad8b0115afa1/docs/20210514_CRUK_ClinicalTrial.html" target="_blank">0e6d4c7</a>
 </td>
 <td>
 Steve Ped
@@ -637,7 +651,7 @@ Build site.
 Rmd
 </td>
 <td>
-d2c34cf
+<a href="https://github.com/DRMCRL/power_calculations/blob/d2c34cf6bbe31664986335241fe457fd8dc974d0/analysis/20210514_CRUK_ClinicalTrial.Rmd" target="_blank">d2c34cf</a>
 </td>
 <td>
 Steve Ped
@@ -749,7 +763,7 @@ Date
 <tbody>
 <tr>
 <td>
-0e6d4c7
+<a href="https://github.com/DRMCRL/power_calculations/blob/0e6d4c772142c89aa1f55d33a6d4ad8b0115afa1/docs/figure/20210514_CRUK_ClinicalTrial.Rmd/plot_ki67-1.png" target="_blank">0e6d4c7</a>
 </td>
 <td>
 Steve Ped
@@ -876,7 +890,7 @@ Date
 <tbody>
 <tr>
 <td>
-f325daa
+<a href="https://github.com/DRMCRL/power_calculations/blob/f325daaa9257ef4ac6be52d5226467880347e473/docs/figure/20210514_CRUK_ClinicalTrial.Rmd/plot_logFC-1.png" target="_blank">f325daa</a>
 </td>
 <td>
 Steve Ped
@@ -1083,68 +1097,82 @@ sim_test &lt;- function(n, ki0, p_non, sigma_ki, alpha = 0.05){
   df &lt;- sim_data(n, ki0, p_non, sigma_ki)
   wilcox.test(x = df$pre, y = df$post, paired = TRUE)$p.value &lt; alpha
 }</code></pre>
-<pre class="r"><code>res &lt;- list(
-  tibble(n = 20, ki0 = 0.4, p_non = 0.1, sigma_ki = 0.35),
-  tibble(n = 30, ki0 = 0.4, p_non = 0.1, sigma_ki = 0.35),
-  tibble(n = 40, ki0 = 0.4, p_non = 0.1, sigma_ki = 0.35),
-  tibble(n = 50, ki0 = 0.4, p_non = 0.1, sigma_ki = 0.35),
-  tibble(n = 30, ki0 = 0.4, p_non = 0.2, sigma_ki = 0.35),
-  tibble(n = 20, ki0 = 0.4, p_non = 0.2, sigma_ki = 0.35),
-  tibble(n = 40, ki0 = 0.4, p_non = 0.2, sigma_ki = 0.35),
-  tibble(n = 50, ki0 = 0.4, p_non = 0.2, sigma_ki = 0.35),
-  tibble(n = 20, ki0 = 0.4, p_non = 0.3, sigma_ki = 0.35),
-  tibble(n = 30, ki0 = 0.4, p_non = 0.3, sigma_ki = 0.35),
-  tibble(n = 40, ki0 = 0.4, p_non = 0.3, sigma_ki = 0.35),
-  tibble(n = 50, ki0 = 0.4, p_non = 0.3, sigma_ki = 0.35),
-  tibble(n = 20, ki0 = 0.4, p_non = 0.4, sigma_ki = 0.35),
-  tibble(n = 30, ki0 = 0.4, p_non = 0.4, sigma_ki = 0.35),
-  tibble(n = 40, ki0 = 0.4, p_non = 0.4, sigma_ki = 0.35),
-  tibble(n = 50, ki0 = 0.4, p_non = 0.4, sigma_ki = 0.35),
-  tibble(n = 20, ki0 = 0.2, p_non = 0.1, sigma_ki = sqrt(0.5)*0.35),
-  tibble(n = 30, ki0 = 0.2, p_non = 0.1, sigma_ki = sqrt(0.5)*0.35),
-  tibble(n = 40, ki0 = 0.2, p_non = 0.1, sigma_ki = sqrt(0.5)*0.35),
-  tibble(n = 50, ki0 = 0.2, p_non = 0.1, sigma_ki = sqrt(0.5)*0.35),
-  tibble(n = 20, ki0 = 0.2, p_non = 0.2, sigma_ki = sqrt(0.5)*0.35),
-  tibble(n = 30, ki0 = 0.2, p_non = 0.2, sigma_ki = sqrt(0.5)*0.35),
-  tibble(n = 40, ki0 = 0.2, p_non = 0.2, sigma_ki = sqrt(0.5)*0.35),
-  tibble(n = 50, ki0 = 0.2, p_non = 0.2, sigma_ki = sqrt(0.5)*0.35),
-  tibble(n = 20, ki0 = 0.2, p_non = 0.3, sigma_ki = sqrt(0.5)*0.35),
-  tibble(n = 30, ki0 = 0.2, p_non = 0.3, sigma_ki = sqrt(0.5)*0.35),
-  tibble(n = 40, ki0 = 0.2, p_non = 0.3, sigma_ki = sqrt(0.5)*0.35),
-  tibble(n = 50, ki0 = 0.2, p_non = 0.3, sigma_ki = sqrt(0.5)*0.35),
-  tibble(n = 20, ki0 = 0.2, p_non = 0.4, sigma_ki = sqrt(0.5)*0.35),
-  tibble(n = 30, ki0 = 0.2, p_non = 0.4, sigma_ki = sqrt(0.5)*0.35),
-  tibble(n = 40, ki0 = 0.2, p_non = 0.4, sigma_ki = sqrt(0.5)*0.35),
-  tibble(n = 50, ki0 = 0.2, p_non = 0.4, sigma_ki = sqrt(0.5)*0.35),
-  tibble(n = 20, ki0 = 0.1, p_non = 0.1, sigma_ki = sqrt(0.25)*0.35),
-  tibble(n = 30, ki0 = 0.1, p_non = 0.1, sigma_ki = sqrt(0.25)*0.35),
-  tibble(n = 40, ki0 = 0.1, p_non = 0.1, sigma_ki = sqrt(0.25)*0.35),
-  tibble(n = 50, ki0 = 0.1, p_non = 0.1, sigma_ki = sqrt(0.25)*0.35),
-  tibble(n = 20, ki0 = 0.1, p_non = 0.2, sigma_ki = sqrt(0.25)*0.35),
-  tibble(n = 30, ki0 = 0.1, p_non = 0.2, sigma_ki = sqrt(0.25)*0.35),
-  tibble(n = 40, ki0 = 0.1, p_non = 0.2, sigma_ki = sqrt(0.25)*0.35),
-  tibble(n = 50, ki0 = 0.1, p_non = 0.2, sigma_ki = sqrt(0.25)*0.35),
-  tibble(n = 20, ki0 = 0.1, p_non = 0.3, sigma_ki = sqrt(0.25)*0.35),
-  tibble(n = 30, ki0 = 0.1, p_non = 0.3, sigma_ki = sqrt(0.25)*0.35),
-  tibble(n = 40, ki0 = 0.1, p_non = 0.3, sigma_ki = sqrt(0.25)*0.35),
-  tibble(n = 50, ki0 = 0.1, p_non = 0.3, sigma_ki = sqrt(0.25)*0.35),
-  tibble(n = 20, ki0 = 0.1, p_non = 0.4, sigma_ki = sqrt(0.25)*0.35),
-  tibble(n = 30, ki0 = 0.1, p_non = 0.4, sigma_ki = sqrt(0.25)*0.35),
-  tibble(n = 40, ki0 = 0.1, p_non = 0.4, sigma_ki = sqrt(0.25)*0.35),
-  tibble(n = 50, ki0 = 0.1, p_non = 0.4, sigma_ki = sqrt(0.25)*0.35)
-) %&gt;%
-  mclapply(
-    function(x){
-      res &lt;- replicate(
-        1e4,
-        sim_test(x$n, x$ki0, x$p_non, x$sigma_ki)
-      )
-      mutate(x, pwr = mean(res))
-    },
-    mc.cores = 6
+<pre class="r"><code>res &lt;- replicate(
+  10,
+  list(
+    tibble(n = 20, ki0 = 0.4, p_non = 0.1, sigma_ki = 0.35),
+    tibble(n = 30, ki0 = 0.4, p_non = 0.1, sigma_ki = 0.35),
+    tibble(n = 40, ki0 = 0.4, p_non = 0.1, sigma_ki = 0.35),
+    tibble(n = 50, ki0 = 0.4, p_non = 0.1, sigma_ki = 0.35),
+    tibble(n = 30, ki0 = 0.4, p_non = 0.2, sigma_ki = 0.35),
+    tibble(n = 20, ki0 = 0.4, p_non = 0.2, sigma_ki = 0.35),
+    tibble(n = 40, ki0 = 0.4, p_non = 0.2, sigma_ki = 0.35),
+    tibble(n = 50, ki0 = 0.4, p_non = 0.2, sigma_ki = 0.35),
+    tibble(n = 20, ki0 = 0.4, p_non = 0.3, sigma_ki = 0.35),
+    tibble(n = 30, ki0 = 0.4, p_non = 0.3, sigma_ki = 0.35),
+    tibble(n = 40, ki0 = 0.4, p_non = 0.3, sigma_ki = 0.35),
+    tibble(n = 50, ki0 = 0.4, p_non = 0.3, sigma_ki = 0.35),
+    tibble(n = 20, ki0 = 0.4, p_non = 0.4, sigma_ki = 0.35),
+    tibble(n = 30, ki0 = 0.4, p_non = 0.4, sigma_ki = 0.35),
+    tibble(n = 40, ki0 = 0.4, p_non = 0.4, sigma_ki = 0.35),
+    tibble(n = 50, ki0 = 0.4, p_non = 0.4, sigma_ki = 0.35),
+    tibble(n = 20, ki0 = 0.2, p_non = 0.1, sigma_ki = sqrt(0.5)*0.35),
+    tibble(n = 30, ki0 = 0.2, p_non = 0.1, sigma_ki = sqrt(0.5)*0.35),
+    tibble(n = 40, ki0 = 0.2, p_non = 0.1, sigma_ki = sqrt(0.5)*0.35),
+    tibble(n = 50, ki0 = 0.2, p_non = 0.1, sigma_ki = sqrt(0.5)*0.35),
+    tibble(n = 20, ki0 = 0.2, p_non = 0.2, sigma_ki = sqrt(0.5)*0.35),
+    tibble(n = 30, ki0 = 0.2, p_non = 0.2, sigma_ki = sqrt(0.5)*0.35),
+    tibble(n = 40, ki0 = 0.2, p_non = 0.2, sigma_ki = sqrt(0.5)*0.35),
+    tibble(n = 50, ki0 = 0.2, p_non = 0.2, sigma_ki = sqrt(0.5)*0.35),
+    tibble(n = 20, ki0 = 0.2, p_non = 0.3, sigma_ki = sqrt(0.5)*0.35),
+    tibble(n = 30, ki0 = 0.2, p_non = 0.3, sigma_ki = sqrt(0.5)*0.35),
+    tibble(n = 40, ki0 = 0.2, p_non = 0.3, sigma_ki = sqrt(0.5)*0.35),
+    tibble(n = 50, ki0 = 0.2, p_non = 0.3, sigma_ki = sqrt(0.5)*0.35),
+    tibble(n = 20, ki0 = 0.2, p_non = 0.4, sigma_ki = sqrt(0.5)*0.35),
+    tibble(n = 30, ki0 = 0.2, p_non = 0.4, sigma_ki = sqrt(0.5)*0.35),
+    tibble(n = 40, ki0 = 0.2, p_non = 0.4, sigma_ki = sqrt(0.5)*0.35),
+    tibble(n = 50, ki0 = 0.2, p_non = 0.4, sigma_ki = sqrt(0.5)*0.35),
+    tibble(n = 20, ki0 = 0.1, p_non = 0.1, sigma_ki = sqrt(0.25)*0.35),
+    tibble(n = 30, ki0 = 0.1, p_non = 0.1, sigma_ki = sqrt(0.25)*0.35),
+    tibble(n = 40, ki0 = 0.1, p_non = 0.1, sigma_ki = sqrt(0.25)*0.35),
+    tibble(n = 50, ki0 = 0.1, p_non = 0.1, sigma_ki = sqrt(0.25)*0.35),
+    tibble(n = 20, ki0 = 0.1, p_non = 0.2, sigma_ki = sqrt(0.25)*0.35),
+    tibble(n = 30, ki0 = 0.1, p_non = 0.2, sigma_ki = sqrt(0.25)*0.35),
+    tibble(n = 40, ki0 = 0.1, p_non = 0.2, sigma_ki = sqrt(0.25)*0.35),
+    tibble(n = 50, ki0 = 0.1, p_non = 0.2, sigma_ki = sqrt(0.25)*0.35),
+    tibble(n = 20, ki0 = 0.1, p_non = 0.3, sigma_ki = sqrt(0.25)*0.35),
+    tibble(n = 30, ki0 = 0.1, p_non = 0.3, sigma_ki = sqrt(0.25)*0.35),
+    tibble(n = 40, ki0 = 0.1, p_non = 0.3, sigma_ki = sqrt(0.25)*0.35),
+    tibble(n = 50, ki0 = 0.1, p_non = 0.3, sigma_ki = sqrt(0.25)*0.35),
+    tibble(n = 20, ki0 = 0.1, p_non = 0.4, sigma_ki = sqrt(0.25)*0.35),
+    tibble(n = 30, ki0 = 0.1, p_non = 0.4, sigma_ki = sqrt(0.25)*0.35),
+    tibble(n = 40, ki0 = 0.1, p_non = 0.4, sigma_ki = sqrt(0.25)*0.35),
+    tibble(n = 50, ki0 = 0.1, p_non = 0.4, sigma_ki = sqrt(0.25)*0.35)
   ) %&gt;%
-  bind_rows()</code></pre>
+    mclapply(
+      function(x){
+        res &lt;- replicate(
+          1e3,
+          sim_test(x$n, x$ki0, x$p_non, x$sigma_ki)
+        )
+        mutate(x, pwr = mean(res))
+      },
+      mc.cores = 6
+    ) %&gt;%
+    bind_rows(),
+  simplify = FALSE
+)</code></pre>
 <pre class="r"><code>res %&gt;%
+  bind_rows() %&gt;%
+  group_by(n, ki0, p_non, sigma_ki) %&gt;%
+  summarise(
+    pwr_sd = sd(pwr),
+    pwr = mean(pwr)
+  ) %&gt;%
+  mutate(
+    lwr = pwr - qnorm(0.975)*pwr_sd/sqrt(10),
+    upr = pwr + qnorm(0.975)*pwr_sd/sqrt(10)
+  ) %&gt;%
   ggplot(
     aes(
       x = n, y = pwr, 
@@ -1152,6 +1180,7 @@ sim_test &lt;- function(n, ki0, p_non, sigma_ki, alpha = 0.05){
       linetype = as.factor(percent(ki0)))
   ) +
   geom_point() +
+  geom_errorbar(aes(ymin = lwr, ymax = upr), width = 0.4) +
   geom_line() +
   scale_y_continuous(labels = percent) +
   labs(
@@ -1161,18 +1190,367 @@ sim_test &lt;- function(n, ki0, p_non, sigma_ki, alpha = 0.05){
     linetype = &quot;Initial Ki67 %&quot;
   )</code></pre>
 <div class="figure" style="text-align: center">
-<img src="figure/20210514_CRUK_ClinicalTrial.Rmd/plot_power_curve-1.png" alt="Power Curves for various starting Ki67% values and non-responder rates" width="672" />
+<img src="figure/20210514_CRUK_ClinicalTrial.Rmd/plot_power_curve-1.png" alt="Power Curves for various starting Ki67% values and non-responder rates. Error bars represent a 95%CI for the simulated power" width="672" />
 <p class="caption">
-Power Curves for various starting Ki67% values and non-responder rates
+Power Curves for various starting Ki67% values and non-responder rates. Error bars represent a 95%CI for the simulated power
 </p>
+</div>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plot_power_curve-1">
+Past versions of plot_power_curve-1.png
+</button>
+</p>
+<div id="fig-plot_power_curve-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/DRMCRL/power_calculations/blob/4da781424716a52f3488289b63bfc0dea2b55916/docs/figure/20210514_CRUK_ClinicalTrial.Rmd/plot_power_curve-1.png" target="_blank">4da7814</a>
+</td>
+<td>
+Steve Ped
+</td>
+<td>
+2021-05-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<pre class="r"><code>res %&gt;%
+  bind_rows() %&gt;%
+  group_by(n, p_non) %&gt;%
+  summarise(
+    pwr_sd = sd(pwr),
+    pwr = mean(pwr)
+  ) %&gt;%
+  mutate(
+    lwr = pwr - qnorm(0.975)*pwr_sd/sqrt(10),
+    upr = pwr + qnorm(0.975)*pwr_sd/sqrt(10)
+  ) %&gt;%
+  ggplot(
+    aes(
+      x = n, y = pwr, 
+      colour = as.factor(percent(p_non))
+    )
+  ) +
+  geom_point() +
+  geom_errorbar(aes(ymin = lwr, ymax = upr), width = 0.4) +
+  geom_line() +
+  scale_y_continuous(labels = percent) +
+  labs(
+    x = &quot;Sample Size&quot;,
+    y = &quot;Power&quot;,
+    colour = &quot;% Non-Responders&quot;,
+    linetype = &quot;Initial Ki67 %&quot;
+  )</code></pre>
+<div class="figure" style="text-align: center">
+<img src="figure/20210514_CRUK_ClinicalTrial.Rmd/plot_power_curve_mergedki0-1.png" alt="Power Curves for various non-responder rates merged across all simulated values for KI67%. This provides a summarised power for initial ki67 values between 10 and 40%. Error bars represent a 95%CI for the simulated power calculations" width="672" />
+<p class="caption">
+Power Curves for various non-responder rates merged across all simulated values for KI67%. This provides a summarised power for initial ki67 values between 10 and 40%. Error bars represent a 95%CI for the simulated power calculations
+</p>
+</div>
+</div>
+<div id="power-tables" class="section level1 tabset">
+<h1 class="tabset">Power Tables</h1>
+<div id="n-20" class="section level2">
+<h2>N = 20</h2>
+<pre class="r"><code>res %&gt;%
+  bind_rows() %&gt;%
+  group_by(n, p_non) %&gt;%
+  dplyr::filter(n == 20) %&gt;%
+  summarise(
+    pwr_sd = sd(pwr),
+    pwr = mean(pwr)
+  ) %&gt;%
+  mutate(
+    p_non = percent(p_non),
+    lwr = pwr - qnorm(0.975)*pwr_sd/sqrt(10),
+    upr = pwr + qnorm(0.975)*pwr_sd/sqrt(10),
+    `95% CI` = glue(&quot;[{round(lwr, 3)}, {round(upr, 3)}]&quot;)
+  ) %&gt;%
+  dplyr::select(
+    `Study Participants` = n,
+    `% Non-Responders` = p_non,
+    Power = pwr,
+    `95% CI`
+  ) %&gt;%
+  pander(
+    caption = &quot;N = 20: Power calculations for various non-responder rates, merging values across all simulated initial KI67 values&quot;
+  )</code></pre>
+<table style="width:92%;">
+<caption>N = 20: Power calculations for various non-responder rates, merging values across all simulated initial KI67 values</caption>
+<colgroup>
+<col width="29%" />
+<col width="26%" />
+<col width="12%" />
+<col width="23%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">Study Participants</th>
+<th align="center">% Non-Responders</th>
+<th align="center">Power</th>
+<th align="center">95% CI</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">20</td>
+<td align="center">10%</td>
+<td align="center">0.7888</td>
+<td align="center">[0.781, 0.797]</td>
+</tr>
+<tr class="even">
+<td align="center">20</td>
+<td align="center">20%</td>
+<td align="center">0.6461</td>
+<td align="center">[0.634, 0.658]</td>
+</tr>
+<tr class="odd">
+<td align="center">20</td>
+<td align="center">30%</td>
+<td align="center">0.496</td>
+<td align="center">[0.482, 0.51]</td>
+</tr>
+<tr class="even">
+<td align="center">20</td>
+<td align="center">40%</td>
+<td align="center">0.3635</td>
+<td align="center">[0.35, 0.377]</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="n-30" class="section level2">
+<h2>N = 30</h2>
+<pre class="r"><code>res %&gt;%
+  bind_rows() %&gt;%
+  group_by(n, p_non) %&gt;%
+  dplyr::filter(n == 30) %&gt;%
+  summarise(
+    pwr_sd = sd(pwr),
+    pwr = mean(pwr)
+  ) %&gt;%
+  mutate(
+    p_non = percent(p_non),
+    lwr = pwr - qnorm(0.975)*pwr_sd/sqrt(10),
+    upr = pwr + qnorm(0.975)*pwr_sd/sqrt(10),
+    `95% CI` = glue(&quot;[{round(lwr, 3)}, {round(upr, 3)}]&quot;)
+  ) %&gt;%
+  dplyr::select(
+    `Study Participants` = n,
+    `% Non-Responders` = p_non,
+    Power = pwr,
+    `95% CI`
+  ) %&gt;%
+  pander(
+    caption = &quot;N = 30: Power calculations for various non-responder rates, merging values across all simulated initial KI67 values&quot;
+  )</code></pre>
+<table style="width:92%;">
+<caption>N = 30: Power calculations for various non-responder rates, merging values across all simulated initial KI67 values</caption>
+<colgroup>
+<col width="29%" />
+<col width="26%" />
+<col width="12%" />
+<col width="23%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">Study Participants</th>
+<th align="center">% Non-Responders</th>
+<th align="center">Power</th>
+<th align="center">95% CI</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">30</td>
+<td align="center">10%</td>
+<td align="center">0.927</td>
+<td align="center">[0.922, 0.932]</td>
+</tr>
+<tr class="even">
+<td align="center">30</td>
+<td align="center">20%</td>
+<td align="center">0.8191</td>
+<td align="center">[0.812, 0.827]</td>
+</tr>
+<tr class="odd">
+<td align="center">30</td>
+<td align="center">30%</td>
+<td align="center">0.6767</td>
+<td align="center">[0.665, 0.689]</td>
+</tr>
+<tr class="even">
+<td align="center">30</td>
+<td align="center">40%</td>
+<td align="center">0.5141</td>
+<td align="center">[0.499, 0.53]</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="n-40" class="section level2">
+<h2>N = 40</h2>
+<pre class="r"><code>res %&gt;%
+  bind_rows() %&gt;%
+  group_by(n, p_non) %&gt;%
+  dplyr::filter(n == 40) %&gt;%
+  summarise(
+    pwr_sd = sd(pwr),
+    pwr = mean(pwr)
+  ) %&gt;%
+  mutate(
+    p_non = percent(p_non),
+    lwr = pwr - qnorm(0.975)*pwr_sd/sqrt(10),
+    upr = pwr + qnorm(0.975)*pwr_sd/sqrt(10),
+    `95% CI` = glue(&quot;[{round(lwr, 3)}, {round(upr, 3)}]&quot;)
+  ) %&gt;%
+  dplyr::select(
+    `Study Participants` = n,
+    `% Non-Responders` = p_non,
+    Power = pwr,
+    `95% CI`
+  ) %&gt;%
+  pander(
+    caption = &quot;N = 40: Power calculations for various non-responder rates, merging values across all simulated initial KI67 values&quot;
+  )</code></pre>
+<table style="width:92%;">
+<caption>N = 40: Power calculations for various non-responder rates, merging values across all simulated initial KI67 values</caption>
+<colgroup>
+<col width="29%" />
+<col width="26%" />
+<col width="12%" />
+<col width="23%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">Study Participants</th>
+<th align="center">% Non-Responders</th>
+<th align="center">Power</th>
+<th align="center">95% CI</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">40</td>
+<td align="center">10%</td>
+<td align="center">0.9782</td>
+<td align="center">[0.975, 0.981]</td>
+</tr>
+<tr class="even">
+<td align="center">40</td>
+<td align="center">20%</td>
+<td align="center">0.9156</td>
+<td align="center">[0.909, 0.922]</td>
+</tr>
+<tr class="odd">
+<td align="center">40</td>
+<td align="center">30%</td>
+<td align="center">0.7985</td>
+<td align="center">[0.788, 0.809]</td>
+</tr>
+<tr class="even">
+<td align="center">40</td>
+<td align="center">40%</td>
+<td align="center">0.6362</td>
+<td align="center">[0.621, 0.651]</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="n-50" class="section level2">
+<h2>N = 50</h2>
+<pre class="r"><code>res %&gt;%
+  bind_rows() %&gt;%
+  group_by(n, p_non) %&gt;%
+  dplyr::filter(n == 50) %&gt;%
+  summarise(
+    pwr_sd = sd(pwr),
+    pwr = mean(pwr)
+  ) %&gt;%
+  mutate(
+    p_non = percent(p_non),
+    lwr = pwr - qnorm(0.975)*pwr_sd/sqrt(10),
+    upr = pwr + qnorm(0.975)*pwr_sd/sqrt(10),
+    `95% CI` = glue(&quot;[{round(lwr, 3)}, {round(upr, 3)}]&quot;)
+  ) %&gt;%
+  dplyr::select(
+    `Study Participants` = n,
+    `% Non-Responders` = p_non,
+    Power = pwr,
+    `95% CI`
+  ) %&gt;%
+  pander(
+    caption = &quot;N = 50: Power calculations for various non-responder rates, merging values across all simulated initial KI67 values&quot;
+  )</code></pre>
+<table style="width:92%;">
+<caption>N = 50: Power calculations for various non-responder rates, merging values across all simulated initial KI67 values</caption>
+<colgroup>
+<col width="29%" />
+<col width="26%" />
+<col width="12%" />
+<col width="23%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">Study Participants</th>
+<th align="center">% Non-Responders</th>
+<th align="center">Power</th>
+<th align="center">95% CI</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">50</td>
+<td align="center">10%</td>
+<td align="center">0.9932</td>
+<td align="center">[0.992, 0.995]</td>
+</tr>
+<tr class="even">
+<td align="center">50</td>
+<td align="center">20%</td>
+<td align="center">0.9627</td>
+<td align="center">[0.958, 0.967]</td>
+</tr>
+<tr class="odd">
+<td align="center">50</td>
+<td align="center">30%</td>
+<td align="center">0.873</td>
+<td align="center">[0.864, 0.883]</td>
+</tr>
+<tr class="even">
+<td align="center">50</td>
+<td align="center">40%</td>
+<td align="center">0.7273</td>
+<td align="center">[0.716, 0.739]</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <div id="conclusion" class="section level1">
 <h1>Conclusion</h1>
 <p>Given the above simulations truly represent the prospective data, we can see that:</p>
 <ul>
-<li>A sample size of 40 still provides a power of 60% to detect a 50% reduction in Ki67 if 40% of patients are non-responders</li>
-<li>Assuming a 30% non-responder rate, this rises to 80% for the same sample size.</li>
+<li>A sample size of 40 still provides a power of ~60% to detect a 50% reduction in Ki67 if 40% of patients are non-responders</li>
+<li>Assuming a 30% non-responder rate, this rises to ~80% for the same sample size.</li>
 <li>In the worst case scenario as modelled (40% non-responders, 10% initial Ki67) a sample size of 50 is required to achieve a power of 70%.</li>
 </ul>
 <br>
@@ -1209,7 +1587,6 @@ other attached packages:
  [9] glue_1.4.2         scales_1.1.1       readxl_1.3.1       forcats_0.5.1     
 [13] stringr_1.4.0      dplyr_1.0.5        purrr_0.3.4        readr_1.4.0       
 [17] tidyr_1.1.3        tibble_3.1.1       ggplot2_3.3.3      tidyverse_1.3.1   
-[21] workflowr_1.6.2   
 
 loaded via a namespace (and not attached):
  [1] nlme_3.1-149        fs_1.5.0            lubridate_1.7.10   
@@ -1234,7 +1611,8 @@ loaded via a namespace (and not attached):
 [58] modelr_0.1.8        vctrs_0.3.7         httpuv_1.6.0       
 [61] cellranger_1.1.0    gtable_0.3.0        assertthat_0.2.1   
 [64] xfun_0.22           broom_0.7.6         later_1.2.0        
-[67] class_7.3-17        ellipsis_0.3.1      here_1.0.1         </code></pre>
+[67] class_7.3-17        workflowr_1.6.2     ellipsis_0.3.1     
+[70] here_1.0.1         </code></pre>
 </div>
 </div>
 
