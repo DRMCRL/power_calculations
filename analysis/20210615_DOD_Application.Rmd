@@ -22,14 +22,14 @@ knitr::opts_chunk$set(
 
 ```{r packages}
 pkg <- c(
-  "tidyverse", "pzfx", "pander", "glue", "cowplot",
-  "lme4", "lmerTest",
+  "tidyverse", "pzfx", "pander", "glue", "cowplot", "ggrepel", "parallel",
+  "lme4", #"lmerTest",
   "reactable", "htmltools"
 )
 pacman::p_load(char = pkg, character.only = TRUE, update = FALSE)
 ```
 
-This workflow requires the packages `r pander(c("workflowr", "pacman", "here", pkg))`
+This workflow requires the packages `r pander(c("workflowr", "pacman", "here", "lmerTest", pkg))`
 
 ```{r options}
 theme_set(
@@ -80,7 +80,7 @@ Any files specific to a single day or marked as a copy were excluded."
 
 
 Data was provided as above with most files being derived from [Hickey et al, 2021](https://www.nature.com/articles/s41591-020-01168-7).
-Filenames reflect the figures and data files from this paper.
+File names reflect the figures and data files from this paper.
 
 The models included were E418, HCI005, Gar15-13, UCD4, UCD65 and MH18 (not from the specified paper).
 Only Vehicle, SARM and P4 treated samples were of interest.
@@ -181,7 +181,7 @@ plot_grid(a, b, nrow = 1, labels = c("A", "B"))
 summary(e418_lmer)$coef %>%
   as_tibble(rownames = "Coefficient") %>%
   pander(
-    justify = "lrrrrr",
+    justify = "lrrr",
     caption = glue(
       "
       Mixed-effects output from the E418 PDX model.
@@ -290,7 +290,7 @@ plot_grid(a, b, nrow = 1, labels = c("A", "B"))
 summary(hci005_lmer)$coef %>%
   as_tibble(rownames = "Coefficient") %>%
   pander(
-    justify = "lrrrrr",
+    justify = "lrrr",
     caption = glue(
       "
       Mixed-effects output from the HCI005 PDX model.
@@ -310,8 +310,9 @@ gar15 <- here::here(
   "3f - Compilation of Gar15-13_PDX experiments.pzfx"
 ) %>%
   read_pzfx(table = "3F Combined Tumour Growth") %>%
+  rename(day = Days) %>%
   pivot_longer(
-    cols = -Days,
+    cols = -day,
     names_to = "tumour",
     values_to = "volume"
   ) %>%
@@ -338,7 +339,7 @@ gar15 %>%
   ) %>%
   droplevels() %>%
   ggplot(
-    aes(Days, volume, colour = treatment)
+    aes(day, volume, colour = treatment)
   ) +
   geom_point() +
   geom_smooth(
@@ -358,7 +359,7 @@ gar15 %>%
 
 ```{r plot_resid_gar15, fig.cap = "Residuals for Gar15-13 testing for A) linearity and B) homoscedasticity."}
 gar15_lmer <- lmer(
-  log2(volume) ~ treatment*Days + (1|tumour),
+  log2(volume) ~ treatment*day + (1|tumour),
   data = gar15,
   subset = n_points >= 8
 ) 
@@ -393,7 +394,7 @@ plot_grid(a, b, nrow = 1, labels = c("A", "B"))
 summary(gar15_lmer)$coef %>%
   as_tibble(rownames = "Coefficient") %>%
   pander(
-    justify = "lrrrrr",
+    justify = "lrrr",
     caption = glue(
       "
       Mixed-effects output from the Gar15-13 PDX model.
@@ -496,7 +497,7 @@ plot_grid(a, b, nrow = 1, labels = c("A", "B"))
 summary(gar15_lmer_4c)$coef %>%
   as_tibble(rownames = "Coefficient") %>%
   pander(
-    justify = "lrrrrr",
+    justify = "lrrr",
     caption = glue(
       "
       Mixed-effects output from the Gar15-13 PDX model.
@@ -601,7 +602,7 @@ plot_grid(a, b, nrow = 1, labels = c("A", "B"))
 summary(ucd4_lmer)$coef %>%
   as_tibble(rownames = "Coefficient") %>%
   pander(
-    justify = "lrrrrr",
+    justify = "lrrr",
     caption = glue(
       "
       Mixed-effects output from the UCD4 PDX model.
@@ -709,7 +710,7 @@ plot_grid(a, b, nrow = 1, labels = c("A", "B"))
 summary(ucd65_lmer)$coef %>%
   as_tibble(rownames = "Coefficient") %>%
   pander(
-    justify = "lrrrrr",
+    justify = "lrrr",
     caption = glue(
       "
       Mixed-effects output from the UCD65 PDX model.
@@ -816,7 +817,7 @@ plot_grid(a, b, nrow = 1, labels = c("A", "B"))
 summary(ucd65_lmer_9c)$coef %>%
   as_tibble(rownames = "Coefficient") %>%
   pander(
-    justify = "lrrrrr",
+    justify = "lrrr",
     caption = glue(
       "
       Mixed-effects output from the UCD65 PDX model.
@@ -924,7 +925,7 @@ plot_grid(a, b, nrow = 1, labels = c("A", "B"))
 summary(mh18_lmer)$coef %>%
   as_tibble(rownames = "Coefficient") %>%
   pander(
-    justify = "lrrrrr",
+    justify = "lrrr",
     caption = glue(
       "
       Mixed-effects output from the MH18 PDX model.
@@ -934,4 +935,635 @@ summary(mh18_lmer)$coef %>%
     )
   )
 ```
+
+## Relationship Between Variables {.tabset}
+
+### Control Samples
+
+```{r allControls}
+allControls <- list(
+  tibble(
+    data = list(
+      e418 %>%
+        dplyr::filter(
+          treatment == "E2+PBS",
+          n_points >= 9
+        ) %>%
+        droplevels()
+    ),
+    pdx = "E418",
+    control = "E2+PBS"
+  ),
+  tibble(
+    data = list(
+      hci005 %>%
+        dplyr::filter(
+          treatment == "Veh",
+          n_points >= 8
+        ) %>%
+        droplevels()
+    ),
+    pdx = "HCI005",
+    control = "Vehicle"
+  ),
+  tibble(
+    data = list(
+      gar15 %>%
+        dplyr::filter(
+          treatment == "Vehicle",
+          n_points >= 8
+        ) %>%
+        droplevels()
+    ),
+    pdx = "Gar15-13 (3f)",
+    control = "Vehicle"
+  ),
+  tibble(
+    data = list(
+      gar15_4c %>%
+        dplyr::filter(
+          treatment == "Con",
+          n_points >= 5
+        ) %>%
+        droplevels()
+    ),
+    pdx = "Gar15-13 (4c)",
+    control = "Vehicle"
+  ),
+  tibble(
+    data = list(
+      ucd4 %>%
+        dplyr::filter(
+          treatment == "E",
+          n_points >= 6
+        ) %>%
+        droplevels()
+    ),
+    pdx = "UCD4",
+    control = "E2"
+  ),
+  tibble(
+    data = list(
+      ucd65 %>%
+        dplyr::filter(
+          treatment == "E",
+          n_points >= 6
+        ) %>%
+        droplevels()
+    ),
+    pdx = "UCD65 (ED9b)",
+    control = "E2"
+  ),
+  tibble(
+    data = list(
+      ucd65_9c %>%
+        dplyr::filter(
+          treatment == "E2+PBS",
+          n_points >= 8
+        ) %>%
+        droplevels()
+    ),
+    pdx = "UCD65 (ED9c)",
+    control = "E2+PBS"
+  ),
+  tibble(
+    data = list(
+      mh18 %>%
+        dplyr::filter(
+          treatment == "Vehicle",
+          n_points >= 8
+        ) %>%
+        droplevels()
+    ),
+    pdx = "MH18",
+    control = "Vehicle"
+  )
+) %>%
+  bind_rows() %>%
+  mutate(
+    coef = lapply(data, function(x){
+      x %>%
+        split(f = .$replicate) %>% 
+        lapply(function(y){lm(log2(volume) ~ day, data = y)}) %>% 
+        lapply(broom::tidy) %>% 
+        bind_rows() %>% 
+        group_by(term) %>% 
+        summarise(
+          est = mean(estimate), 
+          sd = sd(estimate),
+          .groups = "drop"
+        )
+    }),
+    sigma = vapply(data, function(x){
+      lm(log2(volume) ~ day*replicate, data = x) %>%
+        resid() %>%
+        sd
+    },
+    numeric(1))
+  )
+```
+
+```{r tab_allControls}
+allControls %>%
+  unnest(coef) %>%
+  pivot_wider(id_cols = c(data, pdx, control, term), names_from = term, values_from = c(est, sd)) %>%
+  dplyr::select(
+    PDX = pdx, 
+    Control = control,
+    `Mean Volume~0~` = `est_(Intercept)`,
+    `SD Volume~0~` = `sd_(Intercept)`,
+    `Mean Daily Growth` = est_day,
+    `SD Daily Growth` = sd_day
+  ) %>%
+  arrange(desc(`Mean Daily Growth`)) %>%
+  pander(
+    justify = "llrrrr",
+    caption = "
+    Summary of values for initial tumour volume and how much this varies for each PDX replicate,
+    along with the daily growth rate (i.e. slope) and how much this varies between replicates.
+    Values are taken from the controls from each dataset, with no treated values.
+    All values are shown in the log~2~ scale.
+    "
+  )
+```
+
+```{r plot_allControls, fig.width=10, fig.height=8, fig.cap = "*Relation ship between inter-replicate variability and both the daily growth rate and the initial volume. Slower growing tumours (Vehicle controls) were more consistent in initial size and were initially larger, whilst most faster growing tumours (E2 controls) varied noticeably in initial size. No relationship was found between the varibility in growth rate and the actual growth rate*"}
+allControls %>%
+  unnest(coef) %>%
+  mutate(
+    term = str_replace(term, "\\(Intercept\\)", "Initial Volume"),
+    term = str_replace(term, "day", "Daily Growth"),
+    pdx = str_replace(pdx, "\\(", "\n(")
+  ) %>%
+  ggplot(aes(est, sd)) +
+  geom_text(
+    aes(colour = control, label = pdx)
+  ) +
+  geom_smooth(method = MASS::rlm) +
+  facet_wrap(~term, scales = "free") +
+  scale_x_continuous(expand = expansion(0.08)) +
+  labs(
+    x = "Estimate",
+    y = "Replicate SD",
+    colour = "Controls"
+  )
+  
+```
+
+Given the above, data should be simulated for E2 and Vehicle controls separately
+
+### SARM
+
+```{r allSarm}
+allSarm <- list(
+  E418 = e418 %>% 
+    mutate(pdx = "E418", control = "E2+PBS"), 
+  HCI005 = hci005 %>% 
+    mutate(pdx = "HCI005", control = "Vehicle"), 
+  Gar15_3f = gar15 %>% 
+    mutate(pdx = "Gar15-13 (3f)", control = "Vehicle"), 
+  Gar15_4c = gar15_4c %>% 
+    mutate(pdx = "Gar15-13 (4c)", control = "Vehicle"), 
+  # UCD4 = ucd4, 
+  # UCD65_9b = ucd65, 
+  UCD65_9c = ucd65_9c %>%
+    mutate(pdx = "UCD65 (ED9c)", control = "E2+PBS"), 
+  MH18 = mh18 %>% 
+    mutate(pdx = "MH18", control = "Vehicle")
+) %>%
+  lapply(
+    dplyr::filter,
+    str_detect(treatment, "(SARM|Eno)")
+  ) %>%
+  lapply(droplevels) %>%
+  lapply(nest, data = -any_of(c("pdx", "control"))) %>%
+  bind_rows() %>%
+  mutate(
+    coef = lapply(data, function(x){
+      x %>%
+        split(f = .$replicate) %>% 
+        lapply(function(y){lm(log2(volume) ~ day, data = y)}) %>% 
+        lapply(broom::tidy) %>%
+        bind_rows() %>%
+        group_by(term) %>%
+        summarise(
+          est = mean(estimate),
+          sd = sd(estimate),
+          .groups = "drop"
+        )
+    }),
+    sigma = vapply(data, function(x){
+      lm(log2(volume) ~ day*replicate, data = x) %>%
+        resid() %>%
+        sd
+    },
+    numeric(1))
+  )
+```
+
+```{r tab_allSarm}
+allSarm %>%
+  unnest(coef) %>%
+  pivot_wider(id_cols = c(data, pdx, control, term), names_from = term, values_from = c(est, sd)) %>%
+  dplyr::select(
+    PDX = pdx, 
+    Control = control,
+    `Mean Volume~0~` = `est_(Intercept)`,
+    `SD Volume~0~` = `sd_(Intercept)`,
+    `Mean Daily Growth` = est_day,
+    `SD Daily Growth` = sd_day
+  ) %>%
+  arrange(desc(`Mean Daily Growth`)) %>%
+  pander(
+    justify = "llrrrr",
+    caption = "
+    Summary of values for initial tumour volume and how much this varies for each PDX replicate,
+    along with the daily growth rate (i.e. slope) and how much this varies between replicates.
+    Values are taken from the controls from each dataset, with no treated values.
+    All values are shown in the log~2~ scale.
+    "
+  )
+```
+
+```{r plot_allSarm, fig.width=10, fig.height=8, fig.cap = "*Relation ship between inter-replicate variability and both the daily growth rate and the initial volume. Slower growing tumours (Vehicle controls) were more consistent in initial size and were initially larger, whilst most faster growing tumours (E2 controls) varied noticeably in initial size. No relationship was found between the varibility in growth rate and the actual growth rate*"}
+allSarm %>%
+  unnest(coef) %>%
+  mutate(
+    term = str_replace(term, "\\(Intercept\\)", "Initial Volume"),
+    term = str_replace(term, "day", "Daily Growth"),
+    pdx = str_replace(pdx, "\\(", "\n(")
+  ) %>%
+  ggplot(aes(est, sd)) +
+  geom_text(
+    aes(colour = control, label = pdx)
+  ) +
+  geom_smooth(method = MASS::rlm) +
+  facet_wrap(~term, scales = "free") +
+  scale_x_continuous(expand = expansion(0.08)) +
+  labs(
+    x = "Estimate",
+    y = "Replicate SD",
+    colour = "Controls"
+  )
+  
+```
+
+### Progesterone
+
+```{r allPro}
+allPro <- list(
+  # E418 = e418 %>% 
+  #   mutate(pdx = "E418", control = "E2+PBS"), 
+  # HCI005 = hci005 %>% 
+  #   mutate(pdx = "HCI005", control = "Vehicle"), 
+  # Gar15_3f = gar15 %>% 
+  #   mutate(pdx = "Gar15 (3f)", control = "Vehicle"), 
+  # Gar15_4c = gar15_4c %>% 
+  #   mutate(pdx = "Gar15 (4c)", control = "Vehicle"), 
+  UCD4 = ucd4 %>%
+    mutate(pdx = "UCD4", control = "E2"),
+  UCD65_9b = ucd65 %>%
+    mutate(pdx = "UCD65 (ED9b)", control = "E2"),
+  UCD65_9c = ucd65_9c %>%
+    mutate(pdx = "UCD65 (ED9c)", control = "E2+PBS")
+  # MH18 = mh18 %>% 
+  #   mutate(pdx = "MH18", control = "Vehicle")
+) %>%
+  lapply(
+    dplyr::filter,
+    str_detect(treatment, "P")
+  ) %>%
+  lapply(droplevels) %>%
+  lapply(nest, data = -any_of(c("pdx", "control"))) %>%
+  bind_rows() %>%
+  mutate(
+    coef = lapply(data, function(x){
+      x %>%
+        split(f = .$replicate) %>% 
+        lapply(function(y){lm(log2(volume) ~ day, data = y)}) %>% 
+        lapply(broom::tidy) %>%
+        bind_rows() %>%
+        group_by(term) %>%
+        summarise(
+          est = mean(estimate),
+          sd = sd(estimate),
+          .groups = "drop"
+        )
+    }),
+    sigma = vapply(data, function(x){
+      lm(log2(volume) ~ day*replicate, data = x) %>%
+        resid() %>%
+        sd
+    },
+    numeric(1))    
+  )
+```
+
+```{r tab_allPro}
+allPro %>%
+  unnest(coef) %>%
+  pivot_wider(id_cols = c(data, pdx, control, term), names_from = term, values_from = c(est, sd)) %>%
+  dplyr::select(
+    PDX = pdx, 
+    Control = control,
+    `Mean Volume~0~` = `est_(Intercept)`,
+    `SD Volume~0~` = `sd_(Intercept)`,
+    `Mean Daily Growth` = est_day,
+    `SD Daily Growth` = sd_day
+  ) %>%
+  arrange(desc(`Mean Daily Growth`)) %>%
+  pander(
+    justify = "llrrrr",
+    caption = "
+    Summary of values for initial tumour volume and how much this varies for each PDX replicate,
+    along with the daily growth rate (i.e. slope) and how much this varies between replicates.
+    Values are taken from the controls from each dataset, with no treated values.
+    All values are shown in the log~2~ scale.
+    "
+  )
+```
+
+```{r plot_allPro, fig.width=10, fig.height=8, fig.cap = "*Relation ship between inter-replicate variability and both the daily growth rate and the initial volume. Slower growing tumours (Vehicle controls) were more consistent in initial size and were initially larger, whilst most faster growing tumours (E2 controls) varied noticeably in initial size. No relationship was found between the varibility in growth rate and the actual growth rate*"}
+allPro %>%
+  unnest(coef) %>%
+  mutate(
+    term = str_replace(term, "\\(Intercept\\)", "Initial Volume"),
+    term = str_replace(term, "day", "Daily Growth"),
+    pdx = str_replace(pdx, "\\(", "\n(")
+  ) %>%
+  ggplot(aes(est, sd)) +
+  geom_text(
+    aes(colour = control, label = pdx)
+  ) +
+  geom_smooth(method = MASS::rlm) +
+  facet_wrap(~term, scales = "free") +
+  scale_x_continuous(expand = expansion(0.08)) +
+  labs(
+    x = "Estimate",
+    y = "Replicate SD",
+    colour = "Controls"
+  )
+```
+
+
+### Combined
+
+```{r plotCombined, fig.width=10, fig.height=8, fig.cap = "*All data combined across PDX lines, controls and treatments. NO relationship was found between variability of Growth rate and the estiamted growth rate, whilst for tumours with higher initial volumes, varibility betwene intial volumes was considerably lower.*"}
+list(
+  allControls %>% mutate(treatment = "Control"),
+  allSarm %>% mutate(treatment = "Enobosarm"),
+  allPro %>% mutate(treatment = "Progesterone")
+) %>%
+  bind_rows() %>%
+  unnest(coef) %>%
+  mutate(
+    term = str_replace(term, "\\(Intercept\\)", "Initial Volume"),
+    term = str_replace(term, "day", "Daily Growth"),
+    pdx = str_replace(pdx, "\\(", "\n(")
+  ) %>%
+  ggplot(aes(est, sd)) +
+  geom_text_repel(
+    aes(colour = control, label = pdx),
+    show.legend = FALSE
+  ) +
+  geom_point(
+    aes(colour = control, shape = treatment),
+    size = 3
+  ) +
+  geom_smooth(method = MASS::rlm) +
+  facet_wrap(~term, scales = "free") +
+  scale_x_continuous(expand = expansion(0.08)) +
+  labs(
+    x = "Estimate",
+    y = "Replicate SD",
+    colour = "Controls",
+    shape = "Treatment"
+  ) 
+```
+
+```{r plotSigma}
+list(
+  allControls %>% mutate(treatment = "Control"),
+  allSarm %>% mutate(treatment = "Enobosarm"),
+  allPro %>% mutate(treatment = "Progesterone")
+) %>%
+  bind_rows() %>% 
+  mutate(pdx = str_replace(pdx, " \\(", "\n(")) %>%
+  ggplot(aes(pdx, sigma, shape = treatment, colour = control)) + 
+  geom_point(size = 3) +
+  labs(
+    x = "PDX",
+    y = expression(sigma),
+    shape = "Treatment",
+    colour = "Controls"
+  )
+```
+
+##
+
+### Summary
+
+As such, a *variability in the growth rate* was chosen to be 0.025 as this represented the 90th percentile of the non-UCD65 (ED9c) experiments, and if including this more variable experiment, this still is approximately equivalent to the 75th percentile.
+This will also be a conservative over-estimate of the variability for the SARM-treated and highly responding lines.
+
+For *initial tumour volume*, a value of 8 with inter-replicate variability of 0.4 will be appropriately conservative for those using a Vehicle control.
+However, for those using an E2 control, an initial volume of 3 with variability of 1.2 will again provide a suitably conservative value.
+
+For overall 'noise', a value of 0.25 will be representative for control samples, whilst this should be raised to 0.4 for treated tumours
+
+## Power curves
+
+```{r}
+library(lmerTest)
+```
+
+```{r simulateData}
+simulateData <- function(n_control = 8, n_treat = 8, mn0 = 8, sd0 = 0.4, gr_control = 0.08, gr_sd = 0.025, gr_reduction = 0.3, sigma_control = 0.25, sigma_treat = 0.4, ...){
+  
+  ## Simulate the intercepts
+  int_cont <- rnorm(n_control, mn0, sd0)
+  int_treat <- rnorm(n_treat, mn0, sd0)
+  
+  ## Simulate the slopes
+  slope_cont <- rnorm(n_control, gr_control, gr_sd)
+  slope_treat <- rnorm(n_treat, (1-gr_reduction)*gr_control, gr_sd)
+  
+  ## Assume measurements every 7 days, for 8 weeks: 56 days
+  days <- seq(0, 60, by = 7)
+  
+  tibble(
+    replicate = c(seq_len(n_control), seq_len(n_treat)),
+    intercept = c(int_cont, int_treat),
+    slope = c(slope_cont, slope_treat),
+    sd = c(rep(sigma_control, n_control), rep(sigma_treat, n_treat)),
+    treatment = c(rep("control", n_control), rep("treated", n_treat)),
+    sample = paste(treatment, replicate, sep = "_"),
+    days = lapply(seq_len(n_control + n_treat), function(x){days})
+  ) %>%
+    unnest(days) %>%
+    mutate(log2_volume = rnorm(nrow(.), intercept + slope*days, sd))
+  
+}
+```
+
+```{r alpha}
+alpha <- 0.01
+```
+
+
+In all calculations below a significance threshold of &alpha; = `r alpha` was used.
+**This allows for multiple testing for up to 5 experiments using Bonferroni's adjustment**.
+Any increase in the number of experiments will require a more stringent threshold again.
+
+For simplicity, the same number of replicates were assumed to be performed in both treated and control arms of the experiments.
+
+### Vehicle Controls
+
+
+```{r veh_res}
+n_sim <- 1000
+reductions <- c(0.2, 0.25, 0.3, 0.35, 0.4, 0.5)
+veh_res <- list(
+  tibble(
+    nc = 6,
+    nt = 6,
+    reduction = reductions,
+    n_rep = n_sim
+  ),
+    tibble(
+    nc = 8,
+    nt = 8,
+    reduction = reductions,
+    n_rep = n_sim
+  ),
+    tibble(
+    nc = 10,
+    nt = 10,
+    reduction = reductions,
+    n_rep = n_sim
+  )
+) %>%
+  bind_rows() %>%
+  split(f = seq_len(nrow(.))) %>%
+  mclapply(
+    mutate,
+    n_sig = replicate(
+      n_rep,
+      {
+        mod <- suppressWarnings(
+          lmer(
+            log2_volume ~ days*treatment + (1|sample), 
+            data = simulateData(n_control = nc, n_treat = nt, gr_reduction = reduction)
+          )
+        )
+        coef(summary(mod))["days:treatmenttreated", "Pr(>|t|)"] < alpha
+      }
+    ) %>%
+      sum(),
+    power = n_sig / n_rep,
+    mc.cores = 6
+  ) %>%
+  bind_rows()
+```
+
+```{r plot_veh_res, fig.width=8, fig.height=6, fig.cap = "*Power curve for treatments using Vehicle controls. These tend to start with higher initial tumour volumes and lower varibility between replicates*"}
+veh_res %>%
+  mutate(
+    se = sqrt(power*(1-power)/n_rep)
+  ) %>%
+  ggplot(
+    aes(reduction, power, colour = as.factor(nc))
+  ) +
+  geom_point() +
+  geom_errorbar(
+    aes(ymin = power - se, ymax = power + se),
+    width = 0.01
+  ) +
+  geom_line() +
+  scale_x_continuous(labels = scales::percent) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(
+    x = "Reduction in Growth Rate",
+    y = "Power",
+    colour = "Replicates"
+  ) +
+  ggtitle("Vehicle Controls")
+```
+
+
+### E2 Controls
+
+
+```{r e2_res}
+n_sim <- 1000
+e2_res <- list(
+  tibble(
+    nc = 6,
+    nt = 6,
+    reduction = reductions,
+    n_rep = n_sim
+  ),
+    tibble(
+    nc = 8,
+    nt = 8,
+    reduction = reductions,
+    n_rep = n_sim
+  ),
+    tibble(
+    nc = 10,
+    nt = 10,
+    reduction = reductions,
+    n_rep = n_sim
+  )
+) %>%
+  bind_rows() %>%
+  split(f = seq_len(nrow(.))) %>%
+  mclapply(
+    mutate,
+    n_sig = replicate(
+      n_rep,
+      {
+        mod <- suppressWarnings(
+          lmer(
+            log2_volume ~ days*treatment + (1|sample), 
+            data = simulateData(n_control = nc, n_treat = nt, gr_reduction = reduction, mn0 = 3, sd0 = 1.2)
+          )
+        )
+        coef(summary(mod))["days:treatmenttreated", "Pr(>|t|)"] < alpha
+      }
+    ) %>%
+      sum(),
+    power = n_sig / n_rep,
+    mc.cores = 6
+  ) %>%
+  bind_rows()
+```
+
+```{r plot_e2_res, fig.width=8, fig.height=6, fig.cap = "*Power curve for treatments using E2 controls. These tend to start with lower initial tumour volumes and higher varibility between replicates*"}
+e2_res %>%
+  mutate(
+    se = sqrt(power*(1-power)/n_rep)
+  ) %>%
+  ggplot(
+    aes(reduction, power, colour = as.factor(nc))
+  ) +
+  geom_point() +
+  geom_errorbar(
+    aes(ymin = power - se, ymax = power + se),
+    width = 0.01
+  ) +
+  geom_line() +
+  scale_x_continuous(labels = scales::percent) +
+  labs(
+    x = "Reduction in Growth Rate",
+    y = "Power",
+    colour = "Replicates"
+  ) +
+  ggtitle(
+    "E2 Controls"
+  )
+```
+
+
+
 
