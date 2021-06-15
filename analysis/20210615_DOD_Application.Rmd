@@ -1371,7 +1371,7 @@ However, for those using an E2 control, an initial volume of 3 with variability 
 
 For overall 'noise', a value of 0.25 will be representative for control samples, whilst this should be raised to 0.4 for treated tumours
 
-## Power curves
+## Power Curves
 
 ```{r}
 library(lmerTest)
