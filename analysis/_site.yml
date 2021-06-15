@@ -15,6 +15,10 @@ navbar:
     menu:
       - text: Enobosarm Trial May 2021
         href: 20210514_CRUK_ClinicalTrial.html
+  - text: DOD
+    menu:
+      - text: Dept of Defense, June 2021
+        href: 20210615_DOD_Application.html
 output:
   workflowr::wflow_html:
     toc: yes

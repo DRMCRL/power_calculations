@@ -1,0 +1,937 @@
+---
+title: "Dept. Of Defense Grant Application"
+author: |
+  | Stephen Pederson
+  | Dame Roma Mitchell Cancer Research Laboratories
+  | Adelaide Medical School
+  | University of Adelaide
+date: "`r format(Sys.Date(), '%d %B, %Y')`"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+    echo = TRUE,
+    message = FALSE,
+    warning = FALSE
+)
+```
+
+```{r packages}
+pkg <- c(
+  "tidyverse", "pzfx", "pander", "glue", "cowplot",
+  "lme4", "lmerTest",
+  "reactable", "htmltools"
+)
+pacman::p_load(char = pkg, character.only = TRUE, update = FALSE)
+```
+
+This workflow requires the packages `r pander(c("workflowr", "pacman", "here", pkg))`
+
+```{r options}
+theme_set(
+  theme_bw() +
+    theme(plot.title = element_text(hjust = 0.5))
+)
+panderOptions("big.mark", ",")
+panderOptions("table.split.table", Inf)
+```
+
+
+## Introduction
+
+```{r suumarise_sheets}
+div(
+  class = "sheets",
+  div(
+    class = "sheets-hdr",
+    em(
+      class = "sheets-title",
+      "All named sheets within the provided Graphpad Prism files. 
+Any files specific to a single day or marked as a copy were excluded."
+    )
+  ),
+  here::here("data/Tumour_power_calculation_data/") %>%
+  list.files(full.names = TRUE) %>%
+  lapply(
+    function(x){
+      tibble(file = x, `possible sheets` = pzfx_tables(x))
+    }
+  ) %>%
+  bind_rows() %>%
+  mutate(file = basename(file)) %>%
+  dplyr::filter(
+    !str_detect(`possible sheets`, "[Dd]ay|[Cc]opy"),
+  ) %>%
+  rename_all(str_to_title) %>%
+  reactable::reactable(
+    groupBy = "File", 
+    columns = list(
+      File = colDef(aggregate = "unique"),
+      `Possible Sheets` = colDef(aggregate = "count")
+    ),
+    class = "sheets-tbl"
+  )
+)
+```
+
+
+Data was provided as above with most files being derived from [Hickey et al, 2021](https://www.nature.com/articles/s41591-020-01168-7).
+Filenames reflect the figures and data files from this paper.
+
+The models included were E418, HCI005, Gar15-13, UCD4, UCD65 and MH18 (not from the specified paper).
+Only Vehicle, SARM and P4 treated samples were of interest.
+
+## Assessment of Growth Rates {.tabset}
+
+Each individual model will have a variable growth rate and these were first explored in order to gain an understanding of any associated variability.
+
+### E418
+
+```{r load_e418}
+e418 <- here::here(
+  "data/Tumour_power_calculation_data/", 
+  "3b - E418 UCD4 E SARM DHT final data.pzfx"
+  ) %>%
+  read_pzfx(table = "Final growth data") %>%
+  dplyr::rename(day = Var.1) %>%
+  pivot_longer(
+    cols = -day,
+    names_to = "tumour",
+    values_to = "volume"
+  ) %>%
+  dplyr::filter(!is.na(volume), volume > 0) %>%
+  separate(
+    tumour,
+    into = c("treatment", "replicate"),
+    sep = "_", 
+    remove = FALSE
+  ) %>%
+  mutate(
+    treatment = as.factor(treatment) %>% relevel(ref = "E2+PBS"),
+    replicate = fct_inseq(replicate)
+  ) %>%
+  group_by(tumour) %>%
+  mutate(n_points = dplyr::n()) %>%
+  ungroup()
+```
+
+```{r plot_e418, fig.height=8, fig.width=10, fig.cap = "*All growth curves for individual tumours using the E418 model*"}
+e418 %>%
+  dplyr::filter(
+    n_points == 9 # Only the complete sets of values
+  ) %>%
+  droplevels() %>%
+  ggplot(
+    aes(day, volume, colour = treatment)
+  ) +
+  geom_point() +
+  geom_smooth(
+    aes(group = replicate),
+    method = "lm",
+    se = FALSE
+  ) +
+  facet_wrap(~treatment + replicate, ncol = 10) +
+  scale_y_log10() +
+  labs(
+    x = "Day",
+    y = expression(paste("Tumour Volume (", mm^3, ")")),
+    colour = "Treatment"
+  )
+```
+
+
+```{r plot_resid_e418, fig.cap = "Residuals for E418 testing for A) linearity and B) homoscedasticity. The clear non-linearity for both treatment arms reflect the plateau in growth after about day 40."}
+e418_lmer <- lmer(
+  log2(volume) ~ treatment*day + (1|tumour),
+  data = e418,
+  subset = n_points == 9
+) 
+a <- e418_lmer@frame %>%
+  mutate(
+    resid = resid(e418_lmer, type = "pearson"),
+    fitted = fitted(e418_lmer)
+  ) %>%
+  as_tibble() %>%
+  ggplot(
+    aes(fitted, resid)
+  ) +
+  geom_point() +
+  geom_smooth() +
+  facet_wrap(~treatment, ncol = 1)
+b <- e418_lmer@frame %>%
+  mutate(
+    resid = resid(e418_lmer, type = "pearson"),
+    fitted = fitted(e418_lmer)
+  ) %>%
+  as_tibble() %>%
+  ggplot(
+    aes(fitted, abs(resid))
+  ) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  facet_wrap(~treatment, ncol = 1) 
+plot_grid(a, b, nrow = 1, labels = c("A", "B"))
+```
+
+```{r summary_e418}
+summary(e418_lmer)$coef %>%
+  as_tibble(rownames = "Coefficient") %>%
+  pander(
+    justify = "lrrrrr",
+    caption = glue(
+      "
+      Mixed-effects output from the E418 PDX model.
+      Initial tumour volumes were consistently higher for both treatment.
+      Control PDX samples had a doubling time of {round(1/fixef(e418_lmer)['day'], 1)} days.
+      This was approximately 1/3 slower in both treatment arms."
+    )
+  )
+```
+
+### HCI005
+
+```{r load_hci005}
+hci005 <- here::here(
+  "data/Tumour_power_calculation_data", 
+  "3b - HCI_005 15-13D Absolute tumor volumes.pzfx"
+) %>%
+  read_pzfx(table = "HCI005 Combined DHTEno AVG plots") %>%
+  dplyr::rename(day = Var.1) %>%
+  pivot_longer(
+    cols = -day,
+    names_to = "tumour",
+    values_to = "volume"
+  ) %>%
+  dplyr::filter(!is.na(volume), volume > 0) %>%
+  separate(
+    tumour,
+    into = c("treatment", "replicate"),
+    sep = "_", 
+    remove = FALSE
+  ) %>%
+  mutate(
+    treatment = as.factor(treatment) %>% relevel(ref = "Veh"),
+    replicate = fct_inseq(replicate)
+  ) %>%
+  group_by(tumour) %>%
+  mutate(n_points = dplyr::n()) %>%
+  ungroup() %>%
+  mutate(
+    volume = case_when(
+      replicate == 3 & treatment == "DHT" & day == 28 ~ 100, # This was a clear typo
+      TRUE ~ volume
+    )
+  )
+```
+
+```{r plot_hci005, fig.height=6, fig.width=8, fig.cap = "*All growth curves for individual tumours using the HCI005 model*"}
+hci005 %>%
+  dplyr::filter(
+    n_points >= 8 # Only the complete sets of values
+  ) %>%
+  droplevels() %>%
+  ggplot(
+    aes(day, volume, colour = treatment)
+  ) +
+  geom_point() +
+  geom_smooth(
+    aes(group = replicate),
+    method = "lm",
+    se = FALSE
+  ) +
+  facet_wrap(~treatment + replicate, ncol = 7) +
+  scale_y_log10() +
+  labs(
+    x = "Day",
+    y = expression(paste("Tumour Volume (", mm^3, ")")),
+    colour = "Treatment"
+  )
+```
+
+
+```{r plot_resid_hci005, fig.cap = "Residuals for HCI005 testing for A) linearity and B) homoscedasticity. The clear non-linearity in the Vehicle arm is likely due to Replicate 5."}
+hci005_lmer <- lmer(
+  log2(volume) ~ treatment*day + (1|tumour),
+  data = hci005,
+  subset = n_points >= 8
+) 
+a <- hci005_lmer@frame %>%
+  mutate(
+    resid = resid(hci005_lmer, type = "pearson"),
+    fitted = fitted(hci005_lmer)
+  ) %>%
+  as_tibble() %>%
+  ggplot(
+    aes(fitted, resid)
+  ) +
+  geom_point() +
+  geom_smooth() +
+  facet_wrap(~treatment, ncol = 1, scales = "free_y")
+b <- hci005_lmer@frame %>%
+  mutate(
+    resid = resid(hci005_lmer, type = "pearson"),
+    fitted = fitted(hci005_lmer)
+  ) %>%
+  as_tibble() %>%
+  ggplot(
+    aes(fitted, abs(resid))
+  ) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  facet_wrap(~treatment, ncol = 1) 
+plot_grid(a, b, nrow = 1, labels = c("A", "B"))
+```
+
+```{r summary_hci005}
+summary(hci005_lmer)$coef %>%
+  as_tibble(rownames = "Coefficient") %>%
+  pander(
+    justify = "lrrrrr",
+    caption = glue(
+      "
+      Mixed-effects output from the HCI005 PDX model.
+      Initial tumour volumes were consistently higher for both treatment.
+      Control PDX samples had a doubling time of {round(1/fixef(hci005_lmer)['day'], 1)} days.
+      This was approximately zero in both treatment arms."
+    )
+  )
+```
+
+
+### Gar15-13 (NatMed 3f)
+
+```{r load_gar15}
+gar15 <- here::here(
+  "data/Tumour_power_calculation_data", 
+  "3f - Compilation of Gar15-13_PDX experiments.pzfx"
+) %>%
+  read_pzfx(table = "3F Combined Tumour Growth") %>%
+  pivot_longer(
+    cols = -Days,
+    names_to = "tumour",
+    values_to = "volume"
+  ) %>%
+  dplyr::filter(!is.na(volume), volume > 0) %>%
+  separate(
+    tumour,
+    into = c("treatment", "replicate"),
+    sep = "_", 
+    remove = FALSE
+  ) %>%
+  mutate(
+    treatment = as.factor(treatment) %>% relevel(ref = "Vehicle"),
+    replicate = fct_inseq(replicate)
+  ) %>%
+  group_by(tumour) %>%
+  mutate(n_points = dplyr::n()) %>%
+  ungroup() 
+```
+
+```{r plot_gar15, fig.height=8, fig.width=10, fig.cap = "*All growth curves for individual tumours using the Gar15-13 model*"}
+gar15 %>%
+  dplyr::filter(
+    n_points >= 8 # Only the complete sets of values
+  ) %>%
+  droplevels() %>%
+  ggplot(
+    aes(Days, volume, colour = treatment)
+  ) +
+  geom_point() +
+  geom_smooth(
+    aes(group = replicate),
+    method = "lm",
+    se = FALSE
+  ) +
+  facet_wrap(~treatment + replicate, ncol = 8) +
+  scale_y_log10() +
+  labs(
+    x = "Day",
+    y = expression(paste("Tumour Volume (", mm^3, ")")),
+    colour = "Treatment"
+  )
+```
+
+
+```{r plot_resid_gar15, fig.cap = "Residuals for Gar15-13 testing for A) linearity and B) homoscedasticity."}
+gar15_lmer <- lmer(
+  log2(volume) ~ treatment*Days + (1|tumour),
+  data = gar15,
+  subset = n_points >= 8
+) 
+a <- gar15_lmer@frame %>%
+  mutate(
+    resid = resid(gar15_lmer, type = "pearson"),
+    fitted = fitted(gar15_lmer)
+  ) %>%
+  as_tibble() %>%
+  ggplot(
+    aes(fitted, resid)
+  ) +
+  geom_point() +
+  geom_smooth() +
+  facet_wrap(~treatment, ncol = 1, scales = "free_y")
+b <- gar15_lmer@frame %>%
+  mutate(
+    resid = resid(gar15_lmer, type = "pearson"),
+    fitted = fitted(gar15_lmer)
+  ) %>%
+  as_tibble() %>%
+  ggplot(
+    aes(fitted, abs(resid))
+  ) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  facet_wrap(~treatment, ncol = 1) 
+plot_grid(a, b, nrow = 1, labels = c("A", "B"))
+```
+
+```{r summary_gar15}
+summary(gar15_lmer)$coef %>%
+  as_tibble(rownames = "Coefficient") %>%
+  pander(
+    justify = "lrrrrr",
+    caption = glue(
+      "
+      Mixed-effects output from the Gar15-13 PDX model.
+      Initial tumour volumes were consistently higher for both treatment.
+      Control PDX samples had a doubling time of {round(1/fixef(gar15_lmer)['Days'], 1)} days.
+      This was approximately doubled in DHT arm and extended by 30% in the Enobosarm arm."
+    )
+  )
+```
+
+### Gar15-13 (NatMed 4c)
+
+```{r load_gar15_4c}
+gar15_4c <- here::here(
+  "data/Tumour_power_calculation_data", 
+  "4c - CEL19-05_Gar1513 20191122.pzfx"
+) %>%
+  read_pzfx(table = "KeeMing_edited_1816_Growthcurves") %>%
+  dplyr::rename(day = Var.1) %>%
+  pivot_longer(
+    cols = -day,
+    names_to = "tumour",
+    values_to = "volume"
+  ) %>%
+  dplyr::filter(!is.na(volume), volume > 0) %>%
+  separate(
+    tumour,
+    into = c("treatment", "replicate"),
+    sep = "_", 
+    remove = FALSE
+  ) %>%
+  mutate(
+    treatment = as.factor(treatment) %>% relevel(ref = "Con"),
+    replicate = fct_inseq(replicate)
+  ) %>%
+  group_by(tumour) %>%
+  mutate(n_points = dplyr::n()) %>%
+  ungroup() 
+```
+
+```{r plot_gar15_4c, fig.height=8, fig.width=10, fig.cap = "*All growth curves for individual tumours using the Gar15-13 model*"}
+gar15_4c %>%
+  dplyr::filter(
+    n_points >= 5 # Only the complete sets of values
+  ) %>%
+  droplevels() %>%
+  ggplot(
+    aes(day, volume, colour = treatment)
+  ) +
+  geom_point() +
+  geom_smooth(
+    aes(group = replicate),
+    method = "lm",
+    se = FALSE
+  ) +
+  facet_wrap(~treatment + replicate, ncol = 8) +
+  scale_y_log10() +
+  labs(
+    x = "Day",
+    y = expression(paste("Tumour Volume (", mm^3, ")")),
+    colour = "Treatment"
+  )
+```
+
+
+```{r plot_resid_gar15_4c, fig.cap = "Residuals for Gar15-13 testing for A) linearity and B) homoscedasticity."}
+gar15_lmer_4c <- lmer(
+  log2(volume) ~ treatment*day + (1|tumour),
+  data = gar15_4c,
+  subset = n_points >= 5
+) 
+a <- gar15_lmer_4c@frame %>%
+  mutate(
+    resid = resid(gar15_lmer_4c, type = "pearson"),
+    fitted = fitted(gar15_lmer_4c)
+  ) %>%
+  as_tibble() %>%
+  ggplot(
+    aes(fitted, resid)
+  ) +
+  geom_point() +
+  geom_smooth() +
+  facet_wrap(~treatment, ncol = 1, scales = "free_y")
+b <- gar15_lmer_4c@frame %>%
+  mutate(
+    resid = resid(gar15_lmer_4c, type = "pearson"),
+    fitted = fitted(gar15_lmer_4c)
+  ) %>%
+  as_tibble() %>%
+  ggplot(
+    aes(fitted, abs(resid))
+  ) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  facet_wrap(~treatment, ncol = 1) 
+plot_grid(a, b, nrow = 1, labels = c("A", "B"))
+```
+
+```{r summary_gar15_4c}
+summary(gar15_lmer_4c)$coef %>%
+  as_tibble(rownames = "Coefficient") %>%
+  pander(
+    justify = "lrrrrr",
+    caption = glue(
+      "
+      Mixed-effects output from the Gar15-13 PDX model.
+      Control PDX samples had a doubling time of {round(1/fixef(gar15_lmer_4c)['day'], 1)} days.
+      This was increased significantly in both Enobosarm arms."
+    )
+  )
+```
+
+### UCD4
+
+```{r load_ucd4}
+ucd4 <- here::here(
+  "data/Tumour_power_calculation_data/", 
+  "ED9b - UCD4 growth and mass data compiled.pzfx"
+  ) %>%
+  read_pzfx(table = "E66,70 combined growth") %>%
+  dplyr::rename(day = days) %>%
+  pivot_longer(
+    cols = -day,
+    names_to = "tumour",
+    values_to = "volume"
+  ) %>%
+  dplyr::filter(
+    !is.na(volume), volume > 0,
+    !str_detect(tumour, "placebo")
+  ) %>%
+  separate(
+    tumour,
+    into = c("treatment", "replicate"),
+    sep = "_", 
+    remove = FALSE
+  ) %>%
+  mutate(
+    treatment = as.factor(treatment) %>% relevel(ref = "E"),
+    replicate = fct_inseq(replicate)
+  ) %>%
+  group_by(tumour) %>%
+  mutate(n_points = dplyr::n()) %>%
+  ungroup()
+```
+
+```{r plot_ucd4, fig.height=8, fig.width=10, fig.cap = "*All growth curves for individual tumours using the UCD4 model*"}
+ucd4 %>%
+  dplyr::filter(
+    n_points >= 6 # Only the complete sets of values
+  ) %>%
+  droplevels() %>%
+  ggplot(
+    aes(day, volume, colour = treatment)
+  ) +
+  geom_point() +
+  geom_smooth(
+    aes(group = replicate),
+    method = "lm",
+    se = FALSE
+  ) +
+  facet_wrap(~treatment + replicate, ncol = 9) +
+  scale_y_log10() +
+  labs(
+    x = "Day",
+    y = expression(paste("Tumour Volume (", mm^3, ")")),
+    colour = "Treatment"
+  )
+```
+
+
+```{r plot_resid_ucd4, fig.cap = "Residuals for UCD4 testing for A) linearity and B) homoscedasticity."}
+ucd4_lmer <- lmer(
+  log2(volume) ~ treatment*day + (1|tumour),
+  data = ucd4,
+  subset = n_points >= 6
+) 
+a <- ucd4_lmer@frame %>%
+  mutate(
+    resid = resid(ucd4_lmer, type = "pearson"),
+    fitted = fitted(ucd4_lmer)
+  ) %>%
+  as_tibble() %>%
+  ggplot(
+    aes(fitted, resid)
+  ) +
+  geom_point() +
+  geom_smooth() +
+  facet_wrap(~treatment, ncol = 1)
+b <- ucd4_lmer@frame %>%
+  mutate(
+    resid = resid(ucd4_lmer, type = "pearson"),
+    fitted = fitted(ucd4_lmer)
+  ) %>%
+  as_tibble() %>%
+  ggplot(
+    aes(fitted, abs(resid))
+  ) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  facet_wrap(~treatment, ncol = 1) 
+plot_grid(a, b, nrow = 1, labels = c("A", "B"))
+```
+
+```{r summary_ucd4}
+summary(ucd4_lmer)$coef %>%
+  as_tibble(rownames = "Coefficient") %>%
+  pander(
+    justify = "lrrrrr",
+    caption = glue(
+      "
+      Mixed-effects output from the UCD4 PDX model.
+      Initial tumour volumes were consistently higher for both treatment.
+      Control PDX samples had a doubling time of {round(1/fixef(ucd4_lmer)['day'], 1)} days.
+      This was approximately 1/3 slower in both treatment arms."
+    )
+  )
+```
+
+### UCD65 (ED9b)
+
+```{r load_ucd65}
+ucd65 <- here::here(
+  "data/Tumour_power_calculation_data", 
+  "ED9b - UCD65 growth and mass data compiled.pzfx"
+) %>%
+  read_pzfx(
+    table = "Tumor volume E E+P plac P"
+  ) %>%
+  dplyr::rename(day = Var.1) %>%
+  pivot_longer(
+    cols = -day,
+    names_to = "tumour",
+    values_to = "volume"
+  ) %>%
+  dplyr::filter(
+    !is.na(volume), volume > 0,
+    !str_detect(tumour, "placebo")
+  ) %>%
+  separate(
+    tumour,
+    into = c("treatment", "replicate"),
+    sep = "_", 
+    remove = FALSE
+  ) %>%
+  mutate(
+    treatment = as.factor(treatment) %>% relevel(ref = "E"),
+    replicate = fct_inseq(replicate)
+  ) %>%
+  group_by(tumour) %>%
+  mutate(n_points = dplyr::n()) %>%
+  ungroup()
+```
+
+```{r plot_ucd65, fig.height=6, fig.width=8, fig.cap = "*All growth curves for individual tumours using the UCD65 model*"}
+ucd65 %>%
+  dplyr::filter(
+    n_points >= 6 # Only the complete sets of values
+  ) %>%
+  droplevels() %>%
+  ggplot(
+    aes(day, volume, colour = treatment)
+  ) +
+  geom_point() +
+  geom_smooth(
+    aes(group = replicate),
+    method = "lm",
+    se = FALSE
+  ) +
+  facet_wrap(~treatment + replicate, ncol = 5) +
+  scale_y_log10() +
+  labs(
+    x = "Day",
+    y = expression(paste("Tumour Volume (", mm^3, ")")),
+    colour = "Treatment"
+  )
+```
+
+
+```{r plot_resid_ucd65, fig.cap = "Residuals for UCD65 testing for A) linearity and B) homoscedasticity."}
+ucd65_lmer <- lmer(
+  log2(volume) ~ treatment*day + (1|tumour),
+  data = ucd65,
+  subset = n_points >= 6
+) 
+a <- ucd65_lmer@frame %>%
+  mutate(
+    resid = resid(ucd65_lmer, type = "pearson"),
+    fitted = fitted(ucd65_lmer)
+  ) %>%
+  as_tibble() %>%
+  ggplot(
+    aes(fitted, resid)
+  ) +
+  geom_point() +
+  geom_smooth() +
+  facet_wrap(~treatment, ncol = 1)
+b <- ucd65_lmer@frame %>%
+  mutate(
+    resid = resid(ucd65_lmer, type = "pearson"),
+    fitted = fitted(ucd65_lmer)
+  ) %>%
+  as_tibble() %>%
+  ggplot(
+    aes(fitted, abs(resid))
+  ) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  facet_wrap(~treatment, ncol = 1) 
+plot_grid(a, b, nrow = 1, labels = c("A", "B"))
+```
+
+```{r summary_ucd65}
+summary(ucd65_lmer)$coef %>%
+  as_tibble(rownames = "Coefficient") %>%
+  pander(
+    justify = "lrrrrr",
+    caption = glue(
+      "
+      Mixed-effects output from the UCD65 PDX model.
+      Initial tumour volumes were consistently higher for both treatment.
+      Control PDX samples had a doubling time of {round(1/fixef(ucd65_lmer)['day'], 1)} days.
+      This was one day slower in both treatment arms."
+    )
+  )
+```
+
+### UCD65 (ED9c)
+
+```{r load_ucd65_9c}
+ucd65_9c <- here::here(
+  "data/Tumour_power_calculation_data", 
+  "ED9c - E434 UCD65 E SARM P4 final data.pzfx"
+) %>%
+  read_pzfx(
+    table = "Final groups volume"
+  ) %>%
+  dplyr::rename(day = Var.1) %>%
+  pivot_longer(
+    cols = -day,
+    names_to = "tumour",
+    values_to = "volume"
+  ) %>%
+  dplyr::filter(
+    !is.na(volume), volume > 0
+  ) %>%
+  separate(
+    tumour,
+    into = c("treatment", "replicate"),
+    sep = "_", 
+    remove = FALSE
+  ) %>%
+  mutate(
+    treatment = as.factor(treatment) %>% relevel(ref = "E2+PBS"),
+    replicate = fct_inseq(replicate)
+  ) %>%
+  group_by(tumour) %>%
+  mutate(n_points = dplyr::n()) %>%
+  ungroup()
+```
+
+```{r plot_ucd65_9c, fig.height=6, fig.width=8, fig.cap = "*All growth curves for individual tumours using the UCD65 model*"}
+ucd65_9c %>%
+  dplyr::filter(
+    n_points >= 8 # Only the complete sets of values
+  ) %>%
+  droplevels() %>%
+  ggplot(
+    aes(day, volume, colour = treatment)
+  ) +
+  geom_point() +
+  geom_smooth(
+    aes(group = replicate),
+    method = "lm",
+    se = FALSE
+  ) +
+  facet_wrap(~treatment + replicate, ncol = 5) +
+  scale_y_log10() +
+  labs(
+    x = "Day",
+    y = expression(paste("Tumour Volume (", mm^3, ")")),
+    colour = "Treatment"
+  )
+```
+
+
+```{r plot_resid_ucd65_9c, fig.cap = "Residuals for UCD65 testing for A) linearity and B) homoscedasticity."}
+ucd65_lmer_9c <- lmer(
+  log2(volume) ~ treatment*day + (1|tumour),
+  data = ucd65_9c,
+  subset = n_points >= 8
+) 
+a <- ucd65_lmer_9c@frame %>%
+  mutate(
+    resid = resid(ucd65_lmer_9c, type = "pearson"),
+    fitted = fitted(ucd65_lmer_9c)
+  ) %>%
+  as_tibble() %>%
+  ggplot(
+    aes(fitted, resid)
+  ) +
+  geom_point() +
+  geom_smooth() +
+  facet_wrap(~treatment, ncol = 1)
+b <- ucd65_lmer_9c@frame %>%
+  mutate(
+    resid = resid(ucd65_lmer_9c, type = "pearson"),
+    fitted = fitted(ucd65_lmer_9c)
+  ) %>%
+  as_tibble() %>%
+  ggplot(
+    aes(fitted, abs(resid))
+  ) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  facet_wrap(~treatment, ncol = 1) 
+plot_grid(a, b, nrow = 1, labels = c("A", "B"))
+```
+
+```{r summary_ucd65_9c}
+summary(ucd65_lmer_9c)$coef %>%
+  as_tibble(rownames = "Coefficient") %>%
+  pander(
+    justify = "lrrrrr",
+    caption = glue(
+      "
+      Mixed-effects output from the UCD65 PDX model.
+      Initial tumour volumes were consistently higher for both treatment.
+      Control PDX samples had a doubling time of {round(1/fixef(ucd65_lmer)['day'], 1)} days.
+      This was slower in both treatment arms."
+    )
+  )
+```
+
+### MH18
+
+```{r load_mh18}
+mh18 <- here::here(
+  "data/Tumour_power_calculation_data", 
+  "MH18 tumour growth curves.pzfx"
+) %>%
+  read_pzfx(
+    table = "Raw tumour volumes"
+  ) %>%
+  dplyr::rename(day = `Days from treatment commencement`) %>%
+  pivot_longer(
+    cols = -day,
+    names_to = "tumour",
+    values_to = "volume"
+  ) %>%
+  dplyr::filter(
+    !is.na(volume), volume > 0,
+    !str_detect(tumour, "Enzalutamide")
+  ) %>%
+  separate(
+    tumour,
+    into = c("treatment", "replicate"),
+    sep = "_", 
+    remove = FALSE
+  ) %>%
+  mutate(
+    treatment = as.factor(treatment) %>% relevel(ref = "Vehicle"),
+    replicate = fct_inseq(replicate)
+  ) %>%
+  group_by(tumour) %>%
+  mutate(n_points = dplyr::n()) %>%
+  ungroup()
+```
+
+```{r plot_mh18, fig.height=6, fig.width=8, fig.cap = "*All growth curves for individual tumours using the MH18 model*"}
+mh18 %>%
+  dplyr::filter(
+    n_points >= 8 # Only the complete sets of values
+  ) %>%
+  droplevels() %>%
+  ggplot(
+    aes(day, volume, colour = treatment)
+  ) +
+  geom_point() +
+  geom_smooth(
+    aes(group = replicate),
+    method = "lm",
+    se = FALSE
+  ) +
+  facet_wrap(~treatment + replicate, ncol = 5) +
+  scale_y_log10() +
+  labs(
+    x = "Day",
+    y = expression(paste("Tumour Volume (", mm^3, ")")),
+    colour = "Treatment"
+  )
+```
+
+
+```{r plot_resid_mh18, fig.cap = "Residuals for MH18 testing for A) linearity and B) homoscedasticity."}
+mh18_lmer <- lmer(
+  log2(volume) ~ treatment*day + (1|tumour),
+  data = mh18,
+  subset = n_points >= 8
+) 
+a <- mh18_lmer@frame %>%
+  mutate(
+    resid = resid(mh18_lmer, type = "pearson"),
+    fitted = fitted(mh18_lmer)
+  ) %>%
+  as_tibble() %>%
+  ggplot(
+    aes(fitted, resid)
+  ) +
+  geom_point() +
+  geom_smooth() +
+  facet_wrap(~treatment, ncol = 1)
+b <- mh18_lmer@frame %>%
+  mutate(
+    resid = resid(mh18_lmer, type = "pearson"),
+    fitted = fitted(mh18_lmer)
+  ) %>%
+  as_tibble() %>%
+  ggplot(
+    aes(fitted, abs(resid))
+  ) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  facet_wrap(~treatment, ncol = 1) 
+plot_grid(a, b, nrow = 1, labels = c("A", "B"))
+```
+
+```{r summary_mh18}
+summary(mh18_lmer)$coef %>%
+  as_tibble(rownames = "Coefficient") %>%
+  pander(
+    justify = "lrrrrr",
+    caption = glue(
+      "
+      Mixed-effects output from the MH18 PDX model.
+      Initial tumour volumes were consistently higher for both treatment.
+      Control PDX samples had a doubling time of {round(1/fixef(mh18_lmer)['day'], 1)} days.
+      A near infinite doubling time was observed in the DHT and Enobosarm treatment arms."
+    )
+  )
+```
+

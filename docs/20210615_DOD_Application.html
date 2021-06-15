@@ -1,0 +1,2222 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Dept. Of Defense Grant Application</title>
+
+<script src="site_libs/header-attrs-2.8/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/core-js-2.5.3/shim.min.js"></script>
+<script src="site_libs/react-17.0.0/react.min.js"></script>
+<script src="site_libs/react-17.0.0/react-dom.min.js"></script>
+<script src="site_libs/reactwidget-1.0.0/react-tools.js"></script>
+<script src="site_libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
+<script src="site_libs/reactable-binding-0.2.3/reactable.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Power Calculations</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    NHMRC
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="202105_NHMRC_IdeasGrant.html">Ideas Grant May 2021</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    CRUK
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="20210514_CRUK_ClinicalTrial.html">Enobosarm Trial May 2021</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    DOD
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="20210615_DOD_Application.html">Dept of Defense, June 2021</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Dept. Of Defense Grant Application</h1>
+<h4 class="author"><div class="line-block">Stephen Pederson<br />
+Dame Roma Mitchell Cancer Research Laboratories<br />
+Adelaide Medical School<br />
+University of Adelaide</div></h4>
+<h4 class="date">15 June, 2021</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2021-06-15
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 1
+</p>
+<p>
+<strong>Knit directory:</strong> <code>power_calculations/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges"> <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted changes </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguncommittedchanges" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The R Markdown file has staged changes. To know which version of the R Markdown file created these results, you’ll want to first commit it to the Git repo. If you’re still working on the analysis, you can ignore this warning. When you’re finished, you can run <code>wflow_publish</code> to commit the R Markdown file and build the HTML.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20210514code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20210514)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20210514code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20210514)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDRMCRLpowercalculationstree742b7a3fbca88d76e30277524f2c77cb004aff0btargetblank742b7a3a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/DRMCRL/power_calculations/tree/742b7a3fbca88d76e30277524f2c77cb004aff0b" target="_blank">742b7a3</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomDRMCRLpowercalculationstree742b7a3fbca88d76e30277524f2c77cb004aff0btargetblank742b7a3a" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/DRMCRL/power_calculations/tree/742b7a3fbca88d76e30277524f2c77cb004aff0b" target="_blank">742b7a3</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+
+Untracked files:
+    Untracked:  data/Tumour_power_calculation_data/3e - HCI-005 CEL19-03_Luke.pzfx
+    Untracked:  data/Tumour_power_calculation_data/ED9c - E434 UCD65 E SARM P4 final data.pzfx
+
+Unstaged changes:
+    Modified:   analysis/20210615_DOD_Application.Rmd
+    Modified:   analysis/_site.yml
+    Modified:   power_calculations.Rproj
+
+Staged changes:
+    New:        analysis/20210615_DOD_Application.Rmd
+    New:        data/Tumour_power_calculation_data/3b - E418 UCD4 E SARM DHT final data.pzfx
+    New:        data/Tumour_power_calculation_data/3b - HCI_005 15-13D Absolute tumor volumes.pzfx
+    New:        data/Tumour_power_calculation_data/3f - Compilation of Gar15-13_PDX experiments.pzfx
+    New:        data/Tumour_power_calculation_data/4c - CEL19-05_Gar1513 20191122.pzfx
+    New:        data/Tumour_power_calculation_data/ED9b - UCD4 growth and mass data compiled.pzfx
+    New:        data/Tumour_power_calculation_data/ED9b - UCD65 growth and mass data compiled.pzfx
+    New:        data/Tumour_power_calculation_data/MH18 tumour growth curves.pzfx
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+<p>
+There are no past versions. Publish this analysis with <code>wflow_publish()</code> to start tracking its development.
+</p>
+<hr>
+</div>
+</div>
+</div>
+<pre class="r"><code>pkg &lt;- c(
+  &quot;tidyverse&quot;, &quot;pzfx&quot;, &quot;pander&quot;, &quot;glue&quot;, &quot;cowplot&quot;,
+  &quot;lme4&quot;, &quot;lmerTest&quot;,
+  &quot;reactable&quot;, &quot;htmltools&quot;
+)
+pacman::p_load(char = pkg, character.only = TRUE, update = FALSE)</code></pre>
+<p>This workflow requires the packages <em>workflowr</em>, <em>pacman</em>, <em>here</em>, <em>tidyverse</em>, <em>pzfx</em>, <em>pander</em>, <em>glue</em>, <em>cowplot</em>, <em>lme4</em>, <em>lmerTest</em>, <em>reactable</em> and <em>htmltools</em></p>
+<pre class="r"><code>theme_set(
+  theme_bw() +
+    theme(plot.title = element_text(hjust = 0.5))
+)
+panderOptions(&quot;big.mark&quot;, &quot;,&quot;)
+panderOptions(&quot;table.split.table&quot;, Inf)</code></pre>
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<pre class="r"><code>div(
+  class = &quot;sheets&quot;,
+  div(
+    class = &quot;sheets-hdr&quot;,
+    em(
+      class = &quot;sheets-title&quot;,
+      &quot;All named sheets within the provided Graphpad Prism files. 
+Any files specific to a single day or marked as a copy were excluded.&quot;
+    )
+  ),
+  here::here(&quot;data/Tumour_power_calculation_data/&quot;) %&gt;%
+  list.files(full.names = TRUE) %&gt;%
+  lapply(
+    function(x){
+      tibble(file = x, `possible sheets` = pzfx_tables(x))
+    }
+  ) %&gt;%
+  bind_rows() %&gt;%
+  mutate(file = basename(file)) %&gt;%
+  dplyr::filter(
+    !str_detect(`possible sheets`, &quot;[Dd]ay|[Cc]opy&quot;),
+  ) %&gt;%
+  rename_all(str_to_title) %&gt;%
+  reactable::reactable(
+    groupBy = &quot;File&quot;, 
+    columns = list(
+      File = colDef(aggregate = &quot;unique&quot;),
+      `Possible Sheets` = colDef(aggregate = &quot;count&quot;)
+    ),
+    class = &quot;sheets-tbl&quot;
+  )
+)</code></pre>
+<div class="sheets">
+<div class="sheets-hdr">
+<em class="sheets-title">All named sheets within the provided Graphpad Prism files. 
+Any files specific to a single day or marked as a copy were excluded.</em>
+</div>
+<div id="htmlwidget-fcb7ef3f2c4d3e6080e8" class="reactable html-widget" style="width:auto;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-fcb7ef3f2c4d3e6080e8">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"File":["3b - E418 UCD4 E SARM DHT final data.pzfx","3b - E418 UCD4 E SARM DHT final data.pzfx","3b - HCI_005 15-13D Absolute tumor volumes.pzfx","3b - HCI_005 15-13D Absolute tumor volumes.pzfx","3e - HCI-005 CEL19-03_Luke.pzfx","3e - HCI-005 CEL19-03_Luke.pzfx","3f - Compilation of Gar15-13_PDX experiments.pzfx","3f - Compilation of Gar15-13_PDX experiments.pzfx","4c - CEL19-05_Gar1513 20191122.pzfx","4c - CEL19-05_Gar1513 20191122.pzfx","ED9b - UCD4 growth and mass data compiled.pzfx","ED9b - UCD4 growth and mass data compiled.pzfx","ED9b - UCD4 growth and mass data compiled.pzfx","ED9b - UCD4 growth and mass data compiled.pzfx","ED9b - UCD65 growth and mass data compiled.pzfx","ED9b - UCD65 growth and mass data compiled.pzfx","ED9b - UCD65 growth and mass data compiled.pzfx","ED9b - UCD65 growth and mass data compiled.pzfx","ED9b - UCD65 growth and mass data compiled.pzfx","ED9b - UCD65 growth and mass data compiled.pzfx","ED9c - E434 UCD65 E SARM P4 final data.pzfx","ED9c - E434 UCD65 E SARM P4 final data.pzfx","MH18 tumour growth curves.pzfx","MH18 tumour growth curves.pzfx"],"Possible Sheets":["Final growth data","Final mass data","HCI005 Combined DHTEno AVG plots","Gar15-13 Combined DHTEno AVG plots","3e lhs HCI005 DHT Enz","3e rhs HCI005 DHT Tam","3F Combined Tumour Growth","Combined survival","KeeMing_edited_1816_Growthcurves","R.F.C","E66,70 mass combined","E66,70 plus JFS DHT mass combined","E66,70 combined growth","E66,70 plus JFS DHT combined growth","Tumor volume E E+P plac P","Tumor mass E E+P plac P","Tumor volume E E+DHT","Tumor mass E E+DHT","Tumor volume E E+MPA E+TAM","Tumor mass E E+MPA E+TAM","Final groups volume","Final groups mass","Raw tumour volumes","Raw tumour volumes for figure"]},"columns":[{"accessor":"File","name":"File","type":"character","aggregate":"unique"},{"accessor":"Possible Sheets","name":"Possible Sheets","type":"character","aggregate":"count"}],"pivotBy":["File"],"defaultPageSize":10,"paginationType":"numbers","showPageInfo":true,"minRows":1,"className":"sheets-tbl","dataKey":"52add9d304d22d44eab6985df9aad4ee","key":"52add9d304d22d44eab6985df9aad4ee"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
+</div>
+<p>Data was provided as above with most files being derived from <a href="https://www.nature.com/articles/s41591-020-01168-7">Hickey et al, 2021</a>. Filenames reflect the figures and data files from this paper.</p>
+<p>The models included were E418, HCI005, Gar15-13, UCD4, UCD65 and MH18 (not from the specified paper). Only Vehicle, SARM and P4 treated samples were of interest.</p>
+</div>
+<div id="assessment-of-growth-rates" class="section level2 tabset">
+<h2 class="tabset">Assessment of Growth Rates</h2>
+<p>Each individual model will have a variable growth rate and these were first explored in order to gain an understanding of any associated variability.</p>
+<div id="e418" class="section level3">
+<h3>E418</h3>
+<pre class="r"><code>e418 &lt;- here::here(
+  &quot;data/Tumour_power_calculation_data/&quot;, 
+  &quot;3b - E418 UCD4 E SARM DHT final data.pzfx&quot;
+  ) %&gt;%
+  read_pzfx(table = &quot;Final growth data&quot;) %&gt;%
+  dplyr::rename(day = Var.1) %&gt;%
+  pivot_longer(
+    cols = -day,
+    names_to = &quot;tumour&quot;,
+    values_to = &quot;volume&quot;
+  ) %&gt;%
+  dplyr::filter(!is.na(volume), volume &gt; 0) %&gt;%
+  separate(
+    tumour,
+    into = c(&quot;treatment&quot;, &quot;replicate&quot;),
+    sep = &quot;_&quot;, 
+    remove = FALSE
+  ) %&gt;%
+  mutate(
+    treatment = as.factor(treatment) %&gt;% relevel(ref = &quot;E2+PBS&quot;),
+    replicate = fct_inseq(replicate)
+  ) %&gt;%
+  group_by(tumour) %&gt;%
+  mutate(n_points = dplyr::n()) %&gt;%
+  ungroup()</code></pre>
+<pre class="r"><code>e418 %&gt;%
+  dplyr::filter(
+    n_points == 9 # Only the complete sets of values
+  ) %&gt;%
+  droplevels() %&gt;%
+  ggplot(
+    aes(day, volume, colour = treatment)
+  ) +
+  geom_point() +
+  geom_smooth(
+    aes(group = replicate),
+    method = &quot;lm&quot;,
+    se = FALSE
+  ) +
+  facet_wrap(~treatment + replicate, ncol = 10) +
+  scale_y_log10() +
+  labs(
+    x = &quot;Day&quot;,
+    y = expression(paste(&quot;Tumour Volume (&quot;, mm^3, &quot;)&quot;)),
+    colour = &quot;Treatment&quot;
+  )</code></pre>
+<div class="figure" style="text-align: center">
+<img src="figure/20210615_DOD_Application.Rmd/plot_e418-1.png" alt="*All growth curves for individual tumours using the E418 model*" width="960" />
+<p class="caption">
+<em>All growth curves for individual tumours using the E418 model</em>
+</p>
+</div>
+<pre class="r"><code>e418_lmer &lt;- lmer(
+  log2(volume) ~ treatment*day + (1|tumour),
+  data = e418,
+  subset = n_points == 9
+) 
+a &lt;- e418_lmer@frame %&gt;%
+  mutate(
+    resid = resid(e418_lmer, type = &quot;pearson&quot;),
+    fitted = fitted(e418_lmer)
+  ) %&gt;%
+  as_tibble() %&gt;%
+  ggplot(
+    aes(fitted, resid)
+  ) +
+  geom_point() +
+  geom_smooth() +
+  facet_wrap(~treatment, ncol = 1)
+b &lt;- e418_lmer@frame %&gt;%
+  mutate(
+    resid = resid(e418_lmer, type = &quot;pearson&quot;),
+    fitted = fitted(e418_lmer)
+  ) %&gt;%
+  as_tibble() %&gt;%
+  ggplot(
+    aes(fitted, abs(resid))
+  ) +
+  geom_point() +
+  geom_smooth(method = &quot;lm&quot;) +
+  facet_wrap(~treatment, ncol = 1) 
+plot_grid(a, b, nrow = 1, labels = c(&quot;A&quot;, &quot;B&quot;))</code></pre>
+<div class="figure" style="text-align: center">
+<img src="figure/20210615_DOD_Application.Rmd/plot_resid_e418-1.png" alt="Residuals for E418 testing for A) linearity and B) homoscedasticity. The clear non-linearity for both treatment arms reflect the plateau in growth after about day 40." width="672" />
+<p class="caption">
+Residuals for E418 testing for A) linearity and B) homoscedasticity. The clear non-linearity for both treatment arms reflect the plateau in growth after about day 40.
+</p>
+</div>
+<pre class="r"><code>summary(e418_lmer)$coef %&gt;%
+  as_tibble(rownames = &quot;Coefficient&quot;) %&gt;%
+  pander(
+    justify = &quot;lrrrrr&quot;,
+    caption = glue(
+      &quot;
+      Mixed-effects output from the E418 PDX model.
+      Initial tumour volumes were consistently higher for both treatment.
+      Control PDX samples had a doubling time of {round(1/fixef(e418_lmer)[&#39;day&#39;], 1)} days.
+      This was approximately 1/3 slower in both treatment arms.&quot;
+    )
+  )</code></pre>
+<table style="width:100%;">
+<caption>Mixed-effects output from the E418 PDX model. Initial tumour volumes were consistently higher for both treatment. Control PDX samples had a doubling time of 11.1 days. This was approximately 1/3 slower in both treatment arms.</caption>
+<colgroup>
+<col width="29%" />
+<col width="14%" />
+<col width="16%" />
+<col width="10%" />
+<col width="12%" />
+<col width="16%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Coefficient</th>
+<th align="right">Estimate</th>
+<th align="right">Std. Error</th>
+<th align="right">df</th>
+<th align="right">t value</th>
+<th align="right">Pr(&gt;|t|)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">3.536</td>
+<td align="right">0.171</td>
+<td align="right">111.7</td>
+<td align="right">20.68</td>
+<td align="right">5.493e-40</td>
+</tr>
+<tr class="even">
+<td align="left">treatmentE2+DHT</td>
+<td align="right">1.104</td>
+<td align="right">0.233</td>
+<td align="right">111.7</td>
+<td align="right">4.736</td>
+<td align="right">6.455e-06</td>
+</tr>
+<tr class="odd">
+<td align="left">treatmentE2+SARM</td>
+<td align="right">1.106</td>
+<td align="right">0.233</td>
+<td align="right">111.7</td>
+<td align="right">4.747</td>
+<td align="right">6.172e-06</td>
+</tr>
+<tr class="even">
+<td align="left">day</td>
+<td align="right">0.08982</td>
+<td align="right">0.002381</td>
+<td align="right">317</td>
+<td align="right">37.72</td>
+<td align="right">3.088e-119</td>
+</tr>
+<tr class="odd">
+<td align="left">treatmentE2+DHT:day</td>
+<td align="right">-0.03281</td>
+<td align="right">0.003245</td>
+<td align="right">317</td>
+<td align="right">-10.11</td>
+<td align="right">5.093e-21</td>
+</tr>
+<tr class="even">
+<td align="left">treatmentE2+SARM:day</td>
+<td align="right">-0.02881</td>
+<td align="right">0.003245</td>
+<td align="right">317</td>
+<td align="right">-8.878</td>
+<td align="right">5.141e-17</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="hci005" class="section level3">
+<h3>HCI005</h3>
+<pre class="r"><code>hci005 &lt;- here::here(
+  &quot;data/Tumour_power_calculation_data&quot;, 
+  &quot;3b - HCI_005 15-13D Absolute tumor volumes.pzfx&quot;
+) %&gt;%
+  read_pzfx(table = &quot;HCI005 Combined DHTEno AVG plots&quot;) %&gt;%
+  dplyr::rename(day = Var.1) %&gt;%
+  pivot_longer(
+    cols = -day,
+    names_to = &quot;tumour&quot;,
+    values_to = &quot;volume&quot;
+  ) %&gt;%
+  dplyr::filter(!is.na(volume), volume &gt; 0) %&gt;%
+  separate(
+    tumour,
+    into = c(&quot;treatment&quot;, &quot;replicate&quot;),
+    sep = &quot;_&quot;, 
+    remove = FALSE
+  ) %&gt;%
+  mutate(
+    treatment = as.factor(treatment) %&gt;% relevel(ref = &quot;Veh&quot;),
+    replicate = fct_inseq(replicate)
+  ) %&gt;%
+  group_by(tumour) %&gt;%
+  mutate(n_points = dplyr::n()) %&gt;%
+  ungroup() %&gt;%
+  mutate(
+    volume = case_when(
+      replicate == 3 &amp; treatment == &quot;DHT&quot; &amp; day == 28 ~ 100, # This was a clear typo
+      TRUE ~ volume
+    )
+  )</code></pre>
+<pre class="r"><code>hci005 %&gt;%
+  dplyr::filter(
+    n_points &gt;= 8 # Only the complete sets of values
+  ) %&gt;%
+  droplevels() %&gt;%
+  ggplot(
+    aes(day, volume, colour = treatment)
+  ) +
+  geom_point() +
+  geom_smooth(
+    aes(group = replicate),
+    method = &quot;lm&quot;,
+    se = FALSE
+  ) +
+  facet_wrap(~treatment + replicate, ncol = 7) +
+  scale_y_log10() +
+  labs(
+    x = &quot;Day&quot;,
+    y = expression(paste(&quot;Tumour Volume (&quot;, mm^3, &quot;)&quot;)),
+    colour = &quot;Treatment&quot;
+  )</code></pre>
+<div class="figure" style="text-align: center">
+<img src="figure/20210615_DOD_Application.Rmd/plot_hci005-1.png" alt="*All growth curves for individual tumours using the HCI005 model*" width="768" />
+<p class="caption">
+<em>All growth curves for individual tumours using the HCI005 model</em>
+</p>
+</div>
+<pre class="r"><code>hci005_lmer &lt;- lmer(
+  log2(volume) ~ treatment*day + (1|tumour),
+  data = hci005,
+  subset = n_points &gt;= 8
+) 
+a &lt;- hci005_lmer@frame %&gt;%
+  mutate(
+    resid = resid(hci005_lmer, type = &quot;pearson&quot;),
+    fitted = fitted(hci005_lmer)
+  ) %&gt;%
+  as_tibble() %&gt;%
+  ggplot(
+    aes(fitted, resid)
+  ) +
+  geom_point() +
+  geom_smooth() +
+  facet_wrap(~treatment, ncol = 1, scales = &quot;free_y&quot;)
+b &lt;- hci005_lmer@frame %&gt;%
+  mutate(
+    resid = resid(hci005_lmer, type = &quot;pearson&quot;),
+    fitted = fitted(hci005_lmer)
+  ) %&gt;%
+  as_tibble() %&gt;%
+  ggplot(
+    aes(fitted, abs(resid))
+  ) +
+  geom_point() +
+  geom_smooth(method = &quot;lm&quot;) +
+  facet_wrap(~treatment, ncol = 1) 
+plot_grid(a, b, nrow = 1, labels = c(&quot;A&quot;, &quot;B&quot;))</code></pre>
+<div class="figure" style="text-align: center">
+<img src="figure/20210615_DOD_Application.Rmd/plot_resid_hci005-1.png" alt="Residuals for HCI005 testing for A) linearity and B) homoscedasticity. The clear non-linearity in the Vehicle arm is likely due to Replicate 5." width="672" />
+<p class="caption">
+Residuals for HCI005 testing for A) linearity and B) homoscedasticity. The clear non-linearity in the Vehicle arm is likely due to Replicate 5.
+</p>
+</div>
+<pre class="r"><code>summary(hci005_lmer)$coef %&gt;%
+  as_tibble(rownames = &quot;Coefficient&quot;) %&gt;%
+  pander(
+    justify = &quot;lrrrrr&quot;,
+    caption = glue(
+      &quot;
+      Mixed-effects output from the HCI005 PDX model.
+      Initial tumour volumes were consistently higher for both treatment.
+      Control PDX samples had a doubling time of {round(1/fixef(hci005_lmer)[&#39;day&#39;], 1)} days.
+      This was approximately zero in both treatment arms.&quot;
+    )
+  )</code></pre>
+<table style="width:100%;">
+<caption>Mixed-effects output from the HCI005 PDX model. Initial tumour volumes were consistently higher for both treatment. Control PDX samples had a doubling time of 18.9 days. This was approximately zero in both treatment arms.</caption>
+<colgroup>
+<col width="26%" />
+<col width="15%" />
+<col width="17%" />
+<col width="10%" />
+<col width="13%" />
+<col width="16%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Coefficient</th>
+<th align="right">Estimate</th>
+<th align="right">Std. Error</th>
+<th align="right">df</th>
+<th align="right">t value</th>
+<th align="right">Pr(&gt;|t|)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">7.147</td>
+<td align="right">0.2077</td>
+<td align="right">21.98</td>
+<td align="right">34.4</td>
+<td align="right">1.31e-20</td>
+</tr>
+<tr class="even">
+<td align="left">treatmentDHT</td>
+<td align="right">0.3212</td>
+<td align="right">0.2919</td>
+<td align="right">21.42</td>
+<td align="right">1.101</td>
+<td align="right">0.2833</td>
+</tr>
+<tr class="odd">
+<td align="left">treatmentEno</td>
+<td align="right">0.3932</td>
+<td align="right">0.2919</td>
+<td align="right">21.42</td>
+<td align="right">1.347</td>
+<td align="right">0.192</td>
+</tr>
+<tr class="even">
+<td align="left">day</td>
+<td align="right">0.05278</td>
+<td align="right">0.002638</td>
+<td align="right">186.1</td>
+<td align="right">20.01</td>
+<td align="right">2.959e-48</td>
+</tr>
+<tr class="odd">
+<td align="left">treatmentDHT:day</td>
+<td align="right">-0.05678</td>
+<td align="right">0.003158</td>
+<td align="right">186.1</td>
+<td align="right">-17.98</td>
+<td align="right">1.494e-42</td>
+</tr>
+<tr class="even">
+<td align="left">treatmentEno:day</td>
+<td align="right">-0.0487</td>
+<td align="right">0.003158</td>
+<td align="right">186.1</td>
+<td align="right">-15.42</td>
+<td align="right">4.156e-35</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="gar15-13-natmed-3f" class="section level3">
+<h3>Gar15-13 (NatMed 3f)</h3>
+<pre class="r"><code>gar15 &lt;- here::here(
+  &quot;data/Tumour_power_calculation_data&quot;, 
+  &quot;3f - Compilation of Gar15-13_PDX experiments.pzfx&quot;
+) %&gt;%
+  read_pzfx(table = &quot;3F Combined Tumour Growth&quot;) %&gt;%
+  pivot_longer(
+    cols = -Days,
+    names_to = &quot;tumour&quot;,
+    values_to = &quot;volume&quot;
+  ) %&gt;%
+  dplyr::filter(!is.na(volume), volume &gt; 0) %&gt;%
+  separate(
+    tumour,
+    into = c(&quot;treatment&quot;, &quot;replicate&quot;),
+    sep = &quot;_&quot;, 
+    remove = FALSE
+  ) %&gt;%
+  mutate(
+    treatment = as.factor(treatment) %&gt;% relevel(ref = &quot;Vehicle&quot;),
+    replicate = fct_inseq(replicate)
+  ) %&gt;%
+  group_by(tumour) %&gt;%
+  mutate(n_points = dplyr::n()) %&gt;%
+  ungroup() </code></pre>
+<pre class="r"><code>gar15 %&gt;%
+  dplyr::filter(
+    n_points &gt;= 8 # Only the complete sets of values
+  ) %&gt;%
+  droplevels() %&gt;%
+  ggplot(
+    aes(Days, volume, colour = treatment)
+  ) +
+  geom_point() +
+  geom_smooth(
+    aes(group = replicate),
+    method = &quot;lm&quot;,
+    se = FALSE
+  ) +
+  facet_wrap(~treatment + replicate, ncol = 8) +
+  scale_y_log10() +
+  labs(
+    x = &quot;Day&quot;,
+    y = expression(paste(&quot;Tumour Volume (&quot;, mm^3, &quot;)&quot;)),
+    colour = &quot;Treatment&quot;
+  )</code></pre>
+<div class="figure" style="text-align: center">
+<img src="figure/20210615_DOD_Application.Rmd/plot_gar15-1.png" alt="*All growth curves for individual tumours using the Gar15-13 model*" width="960" />
+<p class="caption">
+<em>All growth curves for individual tumours using the Gar15-13 model</em>
+</p>
+</div>
+<pre class="r"><code>gar15_lmer &lt;- lmer(
+  log2(volume) ~ treatment*Days + (1|tumour),
+  data = gar15,
+  subset = n_points &gt;= 8
+) 
+a &lt;- gar15_lmer@frame %&gt;%
+  mutate(
+    resid = resid(gar15_lmer, type = &quot;pearson&quot;),
+    fitted = fitted(gar15_lmer)
+  ) %&gt;%
+  as_tibble() %&gt;%
+  ggplot(
+    aes(fitted, resid)
+  ) +
+  geom_point() +
+  geom_smooth() +
+  facet_wrap(~treatment, ncol = 1, scales = &quot;free_y&quot;)
+b &lt;- gar15_lmer@frame %&gt;%
+  mutate(
+    resid = resid(gar15_lmer, type = &quot;pearson&quot;),
+    fitted = fitted(gar15_lmer)
+  ) %&gt;%
+  as_tibble() %&gt;%
+  ggplot(
+    aes(fitted, abs(resid))
+  ) +
+  geom_point() +
+  geom_smooth(method = &quot;lm&quot;) +
+  facet_wrap(~treatment, ncol = 1) 
+plot_grid(a, b, nrow = 1, labels = c(&quot;A&quot;, &quot;B&quot;))</code></pre>
+<div class="figure" style="text-align: center">
+<img src="figure/20210615_DOD_Application.Rmd/plot_resid_gar15-1.png" alt="Residuals for Gar15-13 testing for A) linearity and B) homoscedasticity." width="672" />
+<p class="caption">
+Residuals for Gar15-13 testing for A) linearity and B) homoscedasticity.
+</p>
+</div>
+<pre class="r"><code>summary(gar15_lmer)$coef %&gt;%
+  as_tibble(rownames = &quot;Coefficient&quot;) %&gt;%
+  pander(
+    justify = &quot;lrrrrr&quot;,
+    caption = glue(
+      &quot;
+      Mixed-effects output from the Gar15-13 PDX model.
+      Initial tumour volumes were consistently higher for both treatment.
+      Control PDX samples had a doubling time of {round(1/fixef(gar15_lmer)[&#39;Days&#39;], 1)} days.
+      This was approximately doubled in DHT arm and extended by 30% in the Enobosarm arm.&quot;
+    )
+  )</code></pre>
+<table>
+<caption>Mixed-effects output from the Gar15-13 PDX model. Initial tumour volumes were consistently higher for both treatment. Control PDX samples had a doubling time of 12.5 days. This was approximately doubled in DHT arm and extended by 30% in the Enobosarm arm.</caption>
+<colgroup>
+<col width="33%" />
+<col width="15%" />
+<col width="15%" />
+<col width="9%" />
+<col width="12%" />
+<col width="13%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Coefficient</th>
+<th align="right">Estimate</th>
+<th align="right">Std. Error</th>
+<th align="right">df</th>
+<th align="right">t value</th>
+<th align="right">Pr(&gt;|t|)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">7.117</td>
+<td align="right">0.1303</td>
+<td align="right">44.87</td>
+<td align="right">54.63</td>
+<td align="right">1.072e-42</td>
+</tr>
+<tr class="even">
+<td align="left">treatmentDHT</td>
+<td align="right">-0.01918</td>
+<td align="right">0.2098</td>
+<td align="right">46.17</td>
+<td align="right">-0.09143</td>
+<td align="right">0.9275</td>
+</tr>
+<tr class="odd">
+<td align="left">treatmentEnobosarm</td>
+<td align="right">0.1086</td>
+<td align="right">0.1843</td>
+<td align="right">44.98</td>
+<td align="right">0.5892</td>
+<td align="right">0.5587</td>
+</tr>
+<tr class="even">
+<td align="left">treatmentEnzalutamide</td>
+<td align="right">-0.2105</td>
+<td align="right">0.3101</td>
+<td align="right">44.88</td>
+<td align="right">-0.6787</td>
+<td align="right">0.5008</td>
+</tr>
+<tr class="odd">
+<td align="left">Days</td>
+<td align="right">0.0802</td>
+<td align="right">0.002701</td>
+<td align="right">347.9</td>
+<td align="right">29.7</td>
+<td align="right">2.032e-97</td>
+</tr>
+<tr class="even">
+<td align="left">treatmentDHT:Days</td>
+<td align="right">-0.04191</td>
+<td align="right">0.004439</td>
+<td align="right">348.1</td>
+<td align="right">-9.443</td>
+<td align="right">5.388e-19</td>
+</tr>
+<tr class="odd">
+<td align="left">treatmentEnobosarm:Days</td>
+<td align="right">-0.01946</td>
+<td align="right">0.003823</td>
+<td align="right">348</td>
+<td align="right">-5.091</td>
+<td align="right">5.857e-07</td>
+</tr>
+<tr class="even">
+<td align="left">treatmentEnzalutamide:Days</td>
+<td align="right">-0.0002974</td>
+<td align="right">0.006456</td>
+<td align="right">348</td>
+<td align="right">-0.04607</td>
+<td align="right">0.9633</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="gar15-13-natmed-4c" class="section level3">
+<h3>Gar15-13 (NatMed 4c)</h3>
+<pre class="r"><code>gar15_4c &lt;- here::here(
+  &quot;data/Tumour_power_calculation_data&quot;, 
+  &quot;4c - CEL19-05_Gar1513 20191122.pzfx&quot;
+) %&gt;%
+  read_pzfx(table = &quot;KeeMing_edited_1816_Growthcurves&quot;) %&gt;%
+  dplyr::rename(day = Var.1) %&gt;%
+  pivot_longer(
+    cols = -day,
+    names_to = &quot;tumour&quot;,
+    values_to = &quot;volume&quot;
+  ) %&gt;%
+  dplyr::filter(!is.na(volume), volume &gt; 0) %&gt;%
+  separate(
+    tumour,
+    into = c(&quot;treatment&quot;, &quot;replicate&quot;),
+    sep = &quot;_&quot;, 
+    remove = FALSE
+  ) %&gt;%
+  mutate(
+    treatment = as.factor(treatment) %&gt;% relevel(ref = &quot;Con&quot;),
+    replicate = fct_inseq(replicate)
+  ) %&gt;%
+  group_by(tumour) %&gt;%
+  mutate(n_points = dplyr::n()) %&gt;%
+  ungroup() </code></pre>
+<pre class="r"><code>gar15_4c %&gt;%
+  dplyr::filter(
+    n_points &gt;= 5 # Only the complete sets of values
+  ) %&gt;%
+  droplevels() %&gt;%
+  ggplot(
+    aes(day, volume, colour = treatment)
+  ) +
+  geom_point() +
+  geom_smooth(
+    aes(group = replicate),
+    method = &quot;lm&quot;,
+    se = FALSE
+  ) +
+  facet_wrap(~treatment + replicate, ncol = 8) +
+  scale_y_log10() +
+  labs(
+    x = &quot;Day&quot;,
+    y = expression(paste(&quot;Tumour Volume (&quot;, mm^3, &quot;)&quot;)),
+    colour = &quot;Treatment&quot;
+  )</code></pre>
+<div class="figure" style="text-align: center">
+<img src="figure/20210615_DOD_Application.Rmd/plot_gar15_4c-1.png" alt="*All growth curves for individual tumours using the Gar15-13 model*" width="960" />
+<p class="caption">
+<em>All growth curves for individual tumours using the Gar15-13 model</em>
+</p>
+</div>
+<pre class="r"><code>gar15_lmer_4c &lt;- lmer(
+  log2(volume) ~ treatment*day + (1|tumour),
+  data = gar15_4c,
+  subset = n_points &gt;= 5
+) 
+a &lt;- gar15_lmer_4c@frame %&gt;%
+  mutate(
+    resid = resid(gar15_lmer_4c, type = &quot;pearson&quot;),
+    fitted = fitted(gar15_lmer_4c)
+  ) %&gt;%
+  as_tibble() %&gt;%
+  ggplot(
+    aes(fitted, resid)
+  ) +
+  geom_point() +
+  geom_smooth() +
+  facet_wrap(~treatment, ncol = 1, scales = &quot;free_y&quot;)
+b &lt;- gar15_lmer_4c@frame %&gt;%
+  mutate(
+    resid = resid(gar15_lmer_4c, type = &quot;pearson&quot;),
+    fitted = fitted(gar15_lmer_4c)
+  ) %&gt;%
+  as_tibble() %&gt;%
+  ggplot(
+    aes(fitted, abs(resid))
+  ) +
+  geom_point() +
+  geom_smooth(method = &quot;lm&quot;) +
+  facet_wrap(~treatment, ncol = 1) 
+plot_grid(a, b, nrow = 1, labels = c(&quot;A&quot;, &quot;B&quot;))</code></pre>
+<div class="figure" style="text-align: center">
+<img src="figure/20210615_DOD_Application.Rmd/plot_resid_gar15_4c-1.png" alt="Residuals for Gar15-13 testing for A) linearity and B) homoscedasticity." width="672" />
+<p class="caption">
+Residuals for Gar15-13 testing for A) linearity and B) homoscedasticity.
+</p>
+</div>
+<pre class="r"><code>summary(gar15_lmer_4c)$coef %&gt;%
+  as_tibble(rownames = &quot;Coefficient&quot;) %&gt;%
+  pander(
+    justify = &quot;lrrrrr&quot;,
+    caption = glue(
+      &quot;
+      Mixed-effects output from the Gar15-13 PDX model.
+      Control PDX samples had a doubling time of {round(1/fixef(gar15_lmer_4c)[&#39;day&#39;], 1)} days.
+      This was increased significantly in both Enobosarm arms.&quot;
+    )
+  )</code></pre>
+<table style="width:100%;">
+<caption>Mixed-effects output from the Gar15-13 PDX model. Control PDX samples had a doubling time of 13.4 days. This was increased significantly in both Enobosarm arms.</caption>
+<colgroup>
+<col width="33%" />
+<col width="13%" />
+<col width="16%" />
+<col width="9%" />
+<col width="12%" />
+<col width="14%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Coefficient</th>
+<th align="right">Estimate</th>
+<th align="right">Std. Error</th>
+<th align="right">df</th>
+<th align="right">t value</th>
+<th align="right">Pr(&gt;|t|)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">7.453</td>
+<td align="right">0.1629</td>
+<td align="right">45.96</td>
+<td align="right">45.76</td>
+<td align="right">5.517e-40</td>
+</tr>
+<tr class="even">
+<td align="left">treatmentEno</td>
+<td align="right">0.01735</td>
+<td align="right">0.2184</td>
+<td align="right">42.42</td>
+<td align="right">0.07945</td>
+<td align="right">0.9371</td>
+</tr>
+<tr class="odd">
+<td align="left">treatmentEno + Palbo</td>
+<td align="right">0.2829</td>
+<td align="right">0.2087</td>
+<td align="right">42.98</td>
+<td align="right">1.356</td>
+<td align="right">0.1822</td>
+</tr>
+<tr class="even">
+<td align="left">treatmentPalbo</td>
+<td align="right">0.1327</td>
+<td align="right">0.2252</td>
+<td align="right">42.19</td>
+<td align="right">0.5892</td>
+<td align="right">0.5588</td>
+</tr>
+<tr class="odd">
+<td align="left">day</td>
+<td align="right">0.07473</td>
+<td align="right">0.005193</td>
+<td align="right">186.1</td>
+<td align="right">14.39</td>
+<td align="right">4.739e-32</td>
+</tr>
+<tr class="even">
+<td align="left">treatmentEno:day</td>
+<td align="right">-0.05077</td>
+<td align="right">0.005758</td>
+<td align="right">186.3</td>
+<td align="right">-8.818</td>
+<td align="right">8.229e-16</td>
+</tr>
+<tr class="odd">
+<td align="left">treatmentEno + Palbo:day</td>
+<td align="right">-0.0683</td>
+<td align="right">0.005697</td>
+<td align="right">186.5</td>
+<td align="right">-11.99</td>
+<td align="right">6.381e-25</td>
+</tr>
+<tr class="even">
+<td align="left">treatmentPalbo:day</td>
+<td align="right">-0.04246</td>
+<td align="right">0.005843</td>
+<td align="right">186.4</td>
+<td align="right">-7.267</td>
+<td align="right">9.756e-12</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="ucd4" class="section level3">
+<h3>UCD4</h3>
+<pre class="r"><code>ucd4 &lt;- here::here(
+  &quot;data/Tumour_power_calculation_data/&quot;, 
+  &quot;ED9b - UCD4 growth and mass data compiled.pzfx&quot;
+  ) %&gt;%
+  read_pzfx(table = &quot;E66,70 combined growth&quot;) %&gt;%
+  dplyr::rename(day = days) %&gt;%
+  pivot_longer(
+    cols = -day,
+    names_to = &quot;tumour&quot;,
+    values_to = &quot;volume&quot;
+  ) %&gt;%
+  dplyr::filter(
+    !is.na(volume), volume &gt; 0,
+    !str_detect(tumour, &quot;placebo&quot;)
+  ) %&gt;%
+  separate(
+    tumour,
+    into = c(&quot;treatment&quot;, &quot;replicate&quot;),
+    sep = &quot;_&quot;, 
+    remove = FALSE
+  ) %&gt;%
+  mutate(
+    treatment = as.factor(treatment) %&gt;% relevel(ref = &quot;E&quot;),
+    replicate = fct_inseq(replicate)
+  ) %&gt;%
+  group_by(tumour) %&gt;%
+  mutate(n_points = dplyr::n()) %&gt;%
+  ungroup()</code></pre>
+<pre class="r"><code>ucd4 %&gt;%
+  dplyr::filter(
+    n_points &gt;= 6 # Only the complete sets of values
+  ) %&gt;%
+  droplevels() %&gt;%
+  ggplot(
+    aes(day, volume, colour = treatment)
+  ) +
+  geom_point() +
+  geom_smooth(
+    aes(group = replicate),
+    method = &quot;lm&quot;,
+    se = FALSE
+  ) +
+  facet_wrap(~treatment + replicate, ncol = 9) +
+  scale_y_log10() +
+  labs(
+    x = &quot;Day&quot;,
+    y = expression(paste(&quot;Tumour Volume (&quot;, mm^3, &quot;)&quot;)),
+    colour = &quot;Treatment&quot;
+  )</code></pre>
+<div class="figure" style="text-align: center">
+<img src="figure/20210615_DOD_Application.Rmd/plot_ucd4-1.png" alt="*All growth curves for individual tumours using the UCD4 model*" width="960" />
+<p class="caption">
+<em>All growth curves for individual tumours using the UCD4 model</em>
+</p>
+</div>
+<pre class="r"><code>ucd4_lmer &lt;- lmer(
+  log2(volume) ~ treatment*day + (1|tumour),
+  data = ucd4,
+  subset = n_points &gt;= 6
+) 
+a &lt;- ucd4_lmer@frame %&gt;%
+  mutate(
+    resid = resid(ucd4_lmer, type = &quot;pearson&quot;),
+    fitted = fitted(ucd4_lmer)
+  ) %&gt;%
+  as_tibble() %&gt;%
+  ggplot(
+    aes(fitted, resid)
+  ) +
+  geom_point() +
+  geom_smooth() +
+  facet_wrap(~treatment, ncol = 1)
+b &lt;- ucd4_lmer@frame %&gt;%
+  mutate(
+    resid = resid(ucd4_lmer, type = &quot;pearson&quot;),
+    fitted = fitted(ucd4_lmer)
+  ) %&gt;%
+  as_tibble() %&gt;%
+  ggplot(
+    aes(fitted, abs(resid))
+  ) +
+  geom_point() +
+  geom_smooth(method = &quot;lm&quot;) +
+  facet_wrap(~treatment, ncol = 1) 
+plot_grid(a, b, nrow = 1, labels = c(&quot;A&quot;, &quot;B&quot;))</code></pre>
+<div class="figure" style="text-align: center">
+<img src="figure/20210615_DOD_Application.Rmd/plot_resid_ucd4-1.png" alt="Residuals for UCD4 testing for A) linearity and B) homoscedasticity." width="672" />
+<p class="caption">
+Residuals for UCD4 testing for A) linearity and B) homoscedasticity.
+</p>
+</div>
+<pre class="r"><code>summary(ucd4_lmer)$coef %&gt;%
+  as_tibble(rownames = &quot;Coefficient&quot;) %&gt;%
+  pander(
+    justify = &quot;lrrrrr&quot;,
+    caption = glue(
+      &quot;
+      Mixed-effects output from the UCD4 PDX model.
+      Initial tumour volumes were consistently higher for both treatment.
+      Control PDX samples had a doubling time of {round(1/fixef(ucd4_lmer)[&#39;day&#39;], 1)} days.
+      This was approximately 1/3 slower in both treatment arms.&quot;
+    )
+  )</code></pre>
+<table>
+<caption>Mixed-effects output from the UCD4 PDX model. Initial tumour volumes were consistently higher for both treatment. Control PDX samples had a doubling time of 15.1 days. This was approximately 1/3 slower in both treatment arms.</caption>
+<colgroup>
+<col width="27%" />
+<col width="14%" />
+<col width="17%" />
+<col width="10%" />
+<col width="14%" />
+<col width="15%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Coefficient</th>
+<th align="right">Estimate</th>
+<th align="right">Std. Error</th>
+<th align="right">df</th>
+<th align="right">t value</th>
+<th align="right">Pr(&gt;|t|)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">4.378</td>
+<td align="right">0.2161</td>
+<td align="right">61.97</td>
+<td align="right">20.26</td>
+<td align="right">4.958e-29</td>
+</tr>
+<tr class="even">
+<td align="left">treatmentE+MPA</td>
+<td align="right">-0.01597</td>
+<td align="right">0.4151</td>
+<td align="right">73.41</td>
+<td align="right">-0.03848</td>
+<td align="right">0.9694</td>
+</tr>
+<tr class="odd">
+<td align="left">treatmentE+P</td>
+<td align="right">-0.3196</td>
+<td align="right">0.3574</td>
+<td align="right">43.63</td>
+<td align="right">-0.8944</td>
+<td align="right">0.376</td>
+</tr>
+<tr class="even">
+<td align="left">day</td>
+<td align="right">0.06609</td>
+<td align="right">0.002435</td>
+<td align="right">168.3</td>
+<td align="right">27.15</td>
+<td align="right">2.222e-63</td>
+</tr>
+<tr class="odd">
+<td align="left">treatmentE+MPA:day</td>
+<td align="right">-0.01716</td>
+<td align="right">0.004746</td>
+<td align="right">168</td>
+<td align="right">-3.615</td>
+<td align="right">0.0003968</td>
+</tr>
+<tr class="even">
+<td align="left">treatmentE+P:day</td>
+<td align="right">-0.01235</td>
+<td align="right">0.00353</td>
+<td align="right">168.3</td>
+<td align="right">-3.499</td>
+<td align="right">0.0005974</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="ucd65-ed9b" class="section level3">
+<h3>UCD65 (ED9b)</h3>
+<pre class="r"><code>ucd65 &lt;- here::here(
+  &quot;data/Tumour_power_calculation_data&quot;, 
+  &quot;ED9b - UCD65 growth and mass data compiled.pzfx&quot;
+) %&gt;%
+  read_pzfx(
+    table = &quot;Tumor volume E E+P plac P&quot;
+  ) %&gt;%
+  dplyr::rename(day = Var.1) %&gt;%
+  pivot_longer(
+    cols = -day,
+    names_to = &quot;tumour&quot;,
+    values_to = &quot;volume&quot;
+  ) %&gt;%
+  dplyr::filter(
+    !is.na(volume), volume &gt; 0,
+    !str_detect(tumour, &quot;placebo&quot;)
+  ) %&gt;%
+  separate(
+    tumour,
+    into = c(&quot;treatment&quot;, &quot;replicate&quot;),
+    sep = &quot;_&quot;, 
+    remove = FALSE
+  ) %&gt;%
+  mutate(
+    treatment = as.factor(treatment) %&gt;% relevel(ref = &quot;E&quot;),
+    replicate = fct_inseq(replicate)
+  ) %&gt;%
+  group_by(tumour) %&gt;%
+  mutate(n_points = dplyr::n()) %&gt;%
+  ungroup()</code></pre>
+<pre class="r"><code>ucd65 %&gt;%
+  dplyr::filter(
+    n_points &gt;= 6 # Only the complete sets of values
+  ) %&gt;%
+  droplevels() %&gt;%
+  ggplot(
+    aes(day, volume, colour = treatment)
+  ) +
+  geom_point() +
+  geom_smooth(
+    aes(group = replicate),
+    method = &quot;lm&quot;,
+    se = FALSE
+  ) +
+  facet_wrap(~treatment + replicate, ncol = 5) +
+  scale_y_log10() +
+  labs(
+    x = &quot;Day&quot;,
+    y = expression(paste(&quot;Tumour Volume (&quot;, mm^3, &quot;)&quot;)),
+    colour = &quot;Treatment&quot;
+  )</code></pre>
+<div class="figure" style="text-align: center">
+<img src="figure/20210615_DOD_Application.Rmd/plot_ucd65-1.png" alt="*All growth curves for individual tumours using the UCD65 model*" width="768" />
+<p class="caption">
+<em>All growth curves for individual tumours using the UCD65 model</em>
+</p>
+</div>
+<pre class="r"><code>ucd65_lmer &lt;- lmer(
+  log2(volume) ~ treatment*day + (1|tumour),
+  data = ucd65,
+  subset = n_points &gt;= 6
+) 
+a &lt;- ucd65_lmer@frame %&gt;%
+  mutate(
+    resid = resid(ucd65_lmer, type = &quot;pearson&quot;),
+    fitted = fitted(ucd65_lmer)
+  ) %&gt;%
+  as_tibble() %&gt;%
+  ggplot(
+    aes(fitted, resid)
+  ) +
+  geom_point() +
+  geom_smooth() +
+  facet_wrap(~treatment, ncol = 1)
+b &lt;- ucd65_lmer@frame %&gt;%
+  mutate(
+    resid = resid(ucd65_lmer, type = &quot;pearson&quot;),
+    fitted = fitted(ucd65_lmer)
+  ) %&gt;%
+  as_tibble() %&gt;%
+  ggplot(
+    aes(fitted, abs(resid))
+  ) +
+  geom_point() +
+  geom_smooth(method = &quot;lm&quot;) +
+  facet_wrap(~treatment, ncol = 1) 
+plot_grid(a, b, nrow = 1, labels = c(&quot;A&quot;, &quot;B&quot;))</code></pre>
+<div class="figure" style="text-align: center">
+<img src="figure/20210615_DOD_Application.Rmd/plot_resid_ucd65-1.png" alt="Residuals for UCD65 testing for A) linearity and B) homoscedasticity." width="672" />
+<p class="caption">
+Residuals for UCD65 testing for A) linearity and B) homoscedasticity.
+</p>
+</div>
+<pre class="r"><code>summary(ucd65_lmer)$coef %&gt;%
+  as_tibble(rownames = &quot;Coefficient&quot;) %&gt;%
+  pander(
+    justify = &quot;lrrrrr&quot;,
+    caption = glue(
+      &quot;
+      Mixed-effects output from the UCD65 PDX model.
+      Initial tumour volumes were consistently higher for both treatment.
+      Control PDX samples had a doubling time of {round(1/fixef(ucd65_lmer)[&#39;day&#39;], 1)} days.
+      This was one day slower in both treatment arms.&quot;
+    )
+  )</code></pre>
+<table style="width:97%;">
+<caption>Mixed-effects output from the UCD65 PDX model. Initial tumour volumes were consistently higher for both treatment. Control PDX samples had a doubling time of 7.4 days. This was one day slower in both treatment arms.</caption>
+<colgroup>
+<col width="26%" />
+<col width="15%" />
+<col width="18%" />
+<col width="6%" />
+<col width="13%" />
+<col width="16%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Coefficient</th>
+<th align="right">Estimate</th>
+<th align="right">Std. Error</th>
+<th align="right">df</th>
+<th align="right">t value</th>
+<th align="right">Pr(&gt;|t|)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">2.291</td>
+<td align="right">0.3076</td>
+<td align="right">50</td>
+<td align="right">7.446</td>
+<td align="right">1.208e-09</td>
+</tr>
+<tr class="even">
+<td align="left">treatmentE+P</td>
+<td align="right">-0.06093</td>
+<td align="right">0.3972</td>
+<td align="right">50</td>
+<td align="right">-0.1534</td>
+<td align="right">0.8787</td>
+</tr>
+<tr class="odd">
+<td align="left">day</td>
+<td align="right">0.1356</td>
+<td align="right">0.006767</td>
+<td align="right">48</td>
+<td align="right">20.04</td>
+<td align="right">5.842e-25</td>
+</tr>
+<tr class="even">
+<td align="left">treatmentE+P:day</td>
+<td align="right">-0.01653</td>
+<td align="right">0.008736</td>
+<td align="right">48</td>
+<td align="right">-1.892</td>
+<td align="right">0.06456</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="ucd65-ed9c" class="section level3">
+<h3>UCD65 (ED9c)</h3>
+<pre class="r"><code>ucd65_9c &lt;- here::here(
+  &quot;data/Tumour_power_calculation_data&quot;, 
+  &quot;ED9c - E434 UCD65 E SARM P4 final data.pzfx&quot;
+) %&gt;%
+  read_pzfx(
+    table = &quot;Final groups volume&quot;
+  ) %&gt;%
+  dplyr::rename(day = Var.1) %&gt;%
+  pivot_longer(
+    cols = -day,
+    names_to = &quot;tumour&quot;,
+    values_to = &quot;volume&quot;
+  ) %&gt;%
+  dplyr::filter(
+    !is.na(volume), volume &gt; 0
+  ) %&gt;%
+  separate(
+    tumour,
+    into = c(&quot;treatment&quot;, &quot;replicate&quot;),
+    sep = &quot;_&quot;, 
+    remove = FALSE
+  ) %&gt;%
+  mutate(
+    treatment = as.factor(treatment) %&gt;% relevel(ref = &quot;E2+PBS&quot;),
+    replicate = fct_inseq(replicate)
+  ) %&gt;%
+  group_by(tumour) %&gt;%
+  mutate(n_points = dplyr::n()) %&gt;%
+  ungroup()</code></pre>
+<pre class="r"><code>ucd65_9c %&gt;%
+  dplyr::filter(
+    n_points &gt;= 8 # Only the complete sets of values
+  ) %&gt;%
+  droplevels() %&gt;%
+  ggplot(
+    aes(day, volume, colour = treatment)
+  ) +
+  geom_point() +
+  geom_smooth(
+    aes(group = replicate),
+    method = &quot;lm&quot;,
+    se = FALSE
+  ) +
+  facet_wrap(~treatment + replicate, ncol = 5) +
+  scale_y_log10() +
+  labs(
+    x = &quot;Day&quot;,
+    y = expression(paste(&quot;Tumour Volume (&quot;, mm^3, &quot;)&quot;)),
+    colour = &quot;Treatment&quot;
+  )</code></pre>
+<div class="figure" style="text-align: center">
+<img src="figure/20210615_DOD_Application.Rmd/plot_ucd65_9c-1.png" alt="*All growth curves for individual tumours using the UCD65 model*" width="768" />
+<p class="caption">
+<em>All growth curves for individual tumours using the UCD65 model</em>
+</p>
+</div>
+<pre class="r"><code>ucd65_lmer_9c &lt;- lmer(
+  log2(volume) ~ treatment*day + (1|tumour),
+  data = ucd65_9c,
+  subset = n_points &gt;= 8
+) 
+a &lt;- ucd65_lmer_9c@frame %&gt;%
+  mutate(
+    resid = resid(ucd65_lmer_9c, type = &quot;pearson&quot;),
+    fitted = fitted(ucd65_lmer_9c)
+  ) %&gt;%
+  as_tibble() %&gt;%
+  ggplot(
+    aes(fitted, resid)
+  ) +
+  geom_point() +
+  geom_smooth() +
+  facet_wrap(~treatment, ncol = 1)
+b &lt;- ucd65_lmer_9c@frame %&gt;%
+  mutate(
+    resid = resid(ucd65_lmer_9c, type = &quot;pearson&quot;),
+    fitted = fitted(ucd65_lmer_9c)
+  ) %&gt;%
+  as_tibble() %&gt;%
+  ggplot(
+    aes(fitted, abs(resid))
+  ) +
+  geom_point() +
+  geom_smooth(method = &quot;lm&quot;) +
+  facet_wrap(~treatment, ncol = 1) 
+plot_grid(a, b, nrow = 1, labels = c(&quot;A&quot;, &quot;B&quot;))</code></pre>
+<div class="figure" style="text-align: center">
+<img src="figure/20210615_DOD_Application.Rmd/plot_resid_ucd65_9c-1.png" alt="Residuals for UCD65 testing for A) linearity and B) homoscedasticity." width="672" />
+<p class="caption">
+Residuals for UCD65 testing for A) linearity and B) homoscedasticity.
+</p>
+</div>
+<pre class="r"><code>summary(ucd65_lmer_9c)$coef %&gt;%
+  as_tibble(rownames = &quot;Coefficient&quot;) %&gt;%
+  pander(
+    justify = &quot;lrrrrr&quot;,
+    caption = glue(
+      &quot;
+      Mixed-effects output from the UCD65 PDX model.
+      Initial tumour volumes were consistently higher for both treatment.
+      Control PDX samples had a doubling time of {round(1/fixef(ucd65_lmer)[&#39;day&#39;], 1)} days.
+      This was slower in both treatment arms.&quot;
+    )
+  )</code></pre>
+<table>
+<caption>Mixed-effects output from the UCD65 PDX model. Initial tumour volumes were consistently higher for both treatment. Control PDX samples had a doubling time of 7.4 days. This was slower in both treatment arms.</caption>
+<colgroup>
+<col width="29%" />
+<col width="14%" />
+<col width="16%" />
+<col width="10%" />
+<col width="12%" />
+<col width="15%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Coefficient</th>
+<th align="right">Estimate</th>
+<th align="right">Std. Error</th>
+<th align="right">df</th>
+<th align="right">t value</th>
+<th align="right">Pr(&gt;|t|)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">2.3</td>
+<td align="right">0.3872</td>
+<td align="right">67.49</td>
+<td align="right">5.94</td>
+<td align="right">1.104e-07</td>
+</tr>
+<tr class="even">
+<td align="left">treatmentE2+P4</td>
+<td align="right">1.246</td>
+<td align="right">0.5699</td>
+<td align="right">67.49</td>
+<td align="right">2.187</td>
+<td align="right">0.03225</td>
+</tr>
+<tr class="odd">
+<td align="left">treatmentE2+SARM</td>
+<td align="right">0.9042</td>
+<td align="right">0.5699</td>
+<td align="right">67.49</td>
+<td align="right">1.587</td>
+<td align="right">0.1173</td>
+</tr>
+<tr class="even">
+<td align="left">day</td>
+<td align="right">0.0903</td>
+<td align="right">0.00558</td>
+<td align="right">130</td>
+<td align="right">16.18</td>
+<td align="right">6.024e-33</td>
+</tr>
+<tr class="odd">
+<td align="left">treatmentE2+P4:day</td>
+<td align="right">-0.03041</td>
+<td align="right">0.008213</td>
+<td align="right">130</td>
+<td align="right">-3.703</td>
+<td align="right">0.000314</td>
+</tr>
+<tr class="even">
+<td align="left">treatmentE2+SARM:day</td>
+<td align="right">-0.02384</td>
+<td align="right">0.008213</td>
+<td align="right">130</td>
+<td align="right">-2.902</td>
+<td align="right">0.004354</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="mh18" class="section level3">
+<h3>MH18</h3>
+<pre class="r"><code>mh18 &lt;- here::here(
+  &quot;data/Tumour_power_calculation_data&quot;, 
+  &quot;MH18 tumour growth curves.pzfx&quot;
+) %&gt;%
+  read_pzfx(
+    table = &quot;Raw tumour volumes&quot;
+  ) %&gt;%
+  dplyr::rename(day = `Days from treatment commencement`) %&gt;%
+  pivot_longer(
+    cols = -day,
+    names_to = &quot;tumour&quot;,
+    values_to = &quot;volume&quot;
+  ) %&gt;%
+  dplyr::filter(
+    !is.na(volume), volume &gt; 0,
+    !str_detect(tumour, &quot;Enzalutamide&quot;)
+  ) %&gt;%
+  separate(
+    tumour,
+    into = c(&quot;treatment&quot;, &quot;replicate&quot;),
+    sep = &quot;_&quot;, 
+    remove = FALSE
+  ) %&gt;%
+  mutate(
+    treatment = as.factor(treatment) %&gt;% relevel(ref = &quot;Vehicle&quot;),
+    replicate = fct_inseq(replicate)
+  ) %&gt;%
+  group_by(tumour) %&gt;%
+  mutate(n_points = dplyr::n()) %&gt;%
+  ungroup()</code></pre>
+<pre class="r"><code>mh18 %&gt;%
+  dplyr::filter(
+    n_points &gt;= 8 # Only the complete sets of values
+  ) %&gt;%
+  droplevels() %&gt;%
+  ggplot(
+    aes(day, volume, colour = treatment)
+  ) +
+  geom_point() +
+  geom_smooth(
+    aes(group = replicate),
+    method = &quot;lm&quot;,
+    se = FALSE
+  ) +
+  facet_wrap(~treatment + replicate, ncol = 5) +
+  scale_y_log10() +
+  labs(
+    x = &quot;Day&quot;,
+    y = expression(paste(&quot;Tumour Volume (&quot;, mm^3, &quot;)&quot;)),
+    colour = &quot;Treatment&quot;
+  )</code></pre>
+<div class="figure" style="text-align: center">
+<img src="figure/20210615_DOD_Application.Rmd/plot_mh18-1.png" alt="*All growth curves for individual tumours using the MH18 model*" width="768" />
+<p class="caption">
+<em>All growth curves for individual tumours using the MH18 model</em>
+</p>
+</div>
+<pre class="r"><code>mh18_lmer &lt;- lmer(
+  log2(volume) ~ treatment*day + (1|tumour),
+  data = mh18,
+  subset = n_points &gt;= 8
+) 
+a &lt;- mh18_lmer@frame %&gt;%
+  mutate(
+    resid = resid(mh18_lmer, type = &quot;pearson&quot;),
+    fitted = fitted(mh18_lmer)
+  ) %&gt;%
+  as_tibble() %&gt;%
+  ggplot(
+    aes(fitted, resid)
+  ) +
+  geom_point() +
+  geom_smooth() +
+  facet_wrap(~treatment, ncol = 1)
+b &lt;- mh18_lmer@frame %&gt;%
+  mutate(
+    resid = resid(mh18_lmer, type = &quot;pearson&quot;),
+    fitted = fitted(mh18_lmer)
+  ) %&gt;%
+  as_tibble() %&gt;%
+  ggplot(
+    aes(fitted, abs(resid))
+  ) +
+  geom_point() +
+  geom_smooth(method = &quot;lm&quot;) +
+  facet_wrap(~treatment, ncol = 1) 
+plot_grid(a, b, nrow = 1, labels = c(&quot;A&quot;, &quot;B&quot;))</code></pre>
+<div class="figure" style="text-align: center">
+<img src="figure/20210615_DOD_Application.Rmd/plot_resid_mh18-1.png" alt="Residuals for MH18 testing for A) linearity and B) homoscedasticity." width="672" />
+<p class="caption">
+Residuals for MH18 testing for A) linearity and B) homoscedasticity.
+</p>
+</div>
+<pre class="r"><code>summary(mh18_lmer)$coef %&gt;%
+  as_tibble(rownames = &quot;Coefficient&quot;) %&gt;%
+  pander(
+    justify = &quot;lrrrrr&quot;,
+    caption = glue(
+      &quot;
+      Mixed-effects output from the MH18 PDX model.
+      Initial tumour volumes were consistently higher for both treatment.
+      Control PDX samples had a doubling time of {round(1/fixef(mh18_lmer)[&#39;day&#39;], 1)} days.
+      A near infinite doubling time was observed in the DHT and Enobosarm treatment arms.&quot;
+    )
+  )</code></pre>
+<table>
+<caption>Mixed-effects output from the MH18 PDX model. Initial tumour volumes were consistently higher for both treatment. Control PDX samples had a doubling time of 36.3 days. A near infinite doubling time was observed in the DHT and Enobosarm treatment arms.</caption>
+<colgroup>
+<col width="31%" />
+<col width="13%" />
+<col width="16%" />
+<col width="10%" />
+<col width="12%" />
+<col width="15%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Coefficient</th>
+<th align="right">Estimate</th>
+<th align="right">Std. Error</th>
+<th align="right">df</th>
+<th align="right">t value</th>
+<th align="right">Pr(&gt;|t|)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">8.756</td>
+<td align="right">0.2296</td>
+<td align="right">16.43</td>
+<td align="right">38.13</td>
+<td align="right">1.789e-17</td>
+</tr>
+<tr class="even">
+<td align="left">treatmentDHT</td>
+<td align="right">-0.5779</td>
+<td align="right">0.3237</td>
+<td align="right">16.22</td>
+<td align="right">-1.785</td>
+<td align="right">0.0929</td>
+</tr>
+<tr class="odd">
+<td align="left">treatmentEnobosarm</td>
+<td align="right">-0.2433</td>
+<td align="right">0.3237</td>
+<td align="right">16.21</td>
+<td align="right">-0.7518</td>
+<td align="right">0.463</td>
+</tr>
+<tr class="even">
+<td align="left">day</td>
+<td align="right">0.02753</td>
+<td align="right">0.00192</td>
+<td align="right">333.1</td>
+<td align="right">14.34</td>
+<td align="right">1.172e-36</td>
+</tr>
+<tr class="odd">
+<td align="left">treatmentDHT:day</td>
+<td align="right">-0.02102</td>
+<td align="right">0.002267</td>
+<td align="right">332.2</td>
+<td align="right">-9.272</td>
+<td align="right">2.381e-18</td>
+</tr>
+<tr class="even">
+<td align="left">treatmentEnobosarm:day</td>
+<td align="right">-0.02385</td>
+<td align="right">0.002299</td>
+<td align="right">332.8</td>
+<td align="right">-10.37</td>
+<td align="right">4.932e-22</td>
+</tr>
+</tbody>
+</table>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.0.2 (2020-06-22)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 19042)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_United States.1252 
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] htmltools_0.5.1.1 reactable_0.2.3   lmerTest_3.1-3    lme4_1.1-27      
+ [5] Matrix_1.3-4      cowplot_1.1.1     glue_1.4.2        pander_0.6.4     
+ [9] pzfx_0.3.0        forcats_0.5.1     stringr_1.4.0     dplyr_1.0.6      
+[13] purrr_0.3.4       readr_1.4.0       tidyr_1.1.3       tibble_3.1.2     
+[17] ggplot2_3.3.3     tidyverse_1.3.1   workflowr_1.6.2  
+
+loaded via a namespace (and not attached):
+ [1] nlme_3.1-152        fs_1.5.0            lubridate_1.7.10   
+ [4] httr_1.4.2          rprojroot_2.0.2     numDeriv_2016.8-1.1
+ [7] tools_4.0.2         backports_1.2.1     bslib_0.2.5.1      
+[10] utf8_1.2.1          R6_2.5.0            DBI_1.1.1          
+[13] mgcv_1.8-36         colorspace_2.0-1    withr_2.4.2        
+[16] tidyselect_1.1.1    compiler_4.0.2      git2r_0.28.0       
+[19] cli_2.5.0           rvest_1.0.0         pacman_0.5.1       
+[22] xml2_1.3.2          labeling_0.4.2      sass_0.4.0         
+[25] scales_1.1.1        digest_0.6.27       minqa_1.2.4        
+[28] rmarkdown_2.8       pkgconfig_2.0.3     highr_0.9          
+[31] dbplyr_2.1.1        htmlwidgets_1.5.3   rlang_0.4.11       
+[34] readxl_1.3.1        rstudioapi_0.13     farver_2.1.0       
+[37] jquerylib_0.1.4     generics_0.1.0      jsonlite_1.7.2     
+[40] crosstalk_1.1.1     magrittr_2.0.1      Rcpp_1.0.6         
+[43] munsell_0.5.0       fansi_0.4.2         lifecycle_1.0.0    
+[46] stringi_1.6.2       yaml_2.2.1          MASS_7.3-54        
+[49] grid_4.0.2          promises_1.2.0.1    crayon_1.4.1       
+[52] lattice_0.20-44     haven_2.4.1         splines_4.0.2      
+[55] hms_1.1.0           knitr_1.33          ps_1.6.0           
+[58] pillar_1.6.1        boot_1.3-28         reprex_2.0.0       
+[61] evaluate_0.14       modelr_0.1.8        vctrs_0.3.8        
+[64] nloptr_1.2.2.2      httpuv_1.5.5        cellranger_1.1.0   
+[67] gtable_0.3.0        reactR_0.4.4        assertthat_0.2.1   
+[70] xfun_0.23           broom_0.7.7         later_1.1.0.1      
+[73] ellipsis_0.3.2      here_1.0.1         </code></pre>
+</div>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
