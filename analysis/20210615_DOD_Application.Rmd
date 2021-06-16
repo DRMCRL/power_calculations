@@ -1373,7 +1373,7 @@ For overall 'noise', a value of 0.25 will be representative for control samples,
 
 ## Power Curves
 
-```{r}
+```{r lmerTest}
 library(lmerTest)
 ```
 
@@ -1417,6 +1417,10 @@ Any increase in the number of experiments will require a more stringent threshol
 
 For simplicity, the same number of replicates were assumed to be performed in both treated and control arms of the experiments.
 
+Fixed values for all simulations were defined as:
+
+- General variability: &sigma; = 0.25 for controls and &sigma; = 0.4 for treated samples
+
 ### Vehicle Controls
 
 
@@ -1453,7 +1457,15 @@ veh_res <- list(
         mod <- suppressWarnings(
           lmer(
             log2_volume ~ days*treatment + (1|sample), 
-            data = simulateData(n_control = nc, n_treat = nt, gr_reduction = reduction)
+            data = simulateData(
+              n_control = nc, 
+              n_treat = nt, 
+              mn0 = runif(1, 7, 8.5),
+              sd0 = runif(1, 0.11, 0.4),
+              gr_control = runif(1, .04, 0.08),
+              gr_sd =  runif(1, 0.007, 0.03),
+              gr_reduction = reduction
+            )
           )
         )
         coef(summary(mod))["days:treatmenttreated", "Pr(>|t|)"] < alpha
@@ -1465,6 +1477,15 @@ veh_res <- list(
   ) %>%
   bind_rows()
 ```
+
+Based on the observed data, simulations for experiments using a *Vehicle control* used Uniform distributions to sample values for the control experiments:
+
+- Initial Tumour Volume: $\mathcal{U}(7, 8.5)$
+- Variability in Initial Tumour Volume: $\mathcal{U}(0.11, 0.4)$
+- Growth Rate: $\mathcal{U}(0.04, 0.08)$
+- Variability In Growth Rate: $\mathcal{U}(0.007, 0.03)$
+
+This effectively allowed sampling from a square encompassing the observed values for Vehicle controls in the above plots
 
 ```{r plot_veh_res, fig.width=8, fig.height=6, fig.cap = "*Power curve for treatments using Vehicle controls. These tend to start with higher initial tumour volumes and lower varibility between replicates*"}
 veh_res %>%
@@ -1526,7 +1547,15 @@ e2_res <- list(
         mod <- suppressWarnings(
           lmer(
             log2_volume ~ days*treatment + (1|sample), 
-            data = simulateData(n_control = nc, n_treat = nt, gr_reduction = reduction, mn0 = 3, sd0 = 1.2)
+            data = simulateData(
+              n_control = nc, 
+              n_treat = nt, 
+              gr_reduction = reduction, 
+              mn0 = runif(1, 2.3, 4.7), 
+              sd0 = runif(1, 0.52, 1.3),
+              gr_control = runif(1, 0.06, 0.13),
+              gr_sd = runif(1, 0.011, 0.032)
+            )
           )
         )
         coef(summary(mod))["days:treatmenttreated", "Pr(>|t|)"] < alpha
@@ -1538,6 +1567,16 @@ e2_res <- list(
   ) %>%
   bind_rows()
 ```
+
+Based on the observed data, simulations for experiments using a *E2 control* used Uniform distributions to sample values for the control experiments:
+
+- Initial Tumour Volume: $\mathcal{U}(2.3, 4.7)$
+- Variability in Initial Tumour Volume: $\mathcal{U}(0.52, 1.3)$
+- Growth Rate: $\mathcal{U}(0.06, 0.13)$
+- Variability In Growth Rate: $\mathcal{U}(0.011, 0.032)$
+
+This effectively allowed sampling from a square encompassing the observed values for E2 controls in the above plots
+
 
 ```{r plot_e2_res, fig.width=8, fig.height=6, fig.cap = "*Power curve for treatments using E2 controls. These tend to start with lower initial tumour volumes and higher varibility between replicates*"}
 e2_res %>%
