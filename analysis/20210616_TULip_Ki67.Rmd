@@ -146,7 +146,7 @@ sim_res <- list(
   ) 
 ```
 
-```{r plot_curves, fig.height=8, fig.width=10, fig.cap = "*Power curves for detection of an additional 20% reduction in Ki67 due to a combination treatment of L+TU in comparison to Letrazole alone. Panels represent equal samples sizes in both treatment groups (L+TU=L), having an extra 50% of participants in the combination group (L+TU = 1.5L), or having double the number of particiapnts in the combined treatment group (L+TU = 2L). Error bars indicate a 95% confidence interval around the power estimates*"}
+```{r plot_curves, fig.height=8, fig.width=10, fig.cap = "*Power curves for detection of an additional 20% reduction in Ki67 due to a combination treatment of L+TU in comparison to Letrazole alone. Panels represent equal samples sizes in both treatment groups (n~L+TU~=n~L~), having an extra 50% of participants in the combination group (n~L+TU~ = 1.5n~L~), or having double the number of particiapnts in the combined treatment group (n~L+TU~ = 2n~L~). Error bars indicate a 95% confidence interval around the power estimates*"}
 sim_res %>% 
   mutate(
     `n1/n0` = paste0("n[L+TU] == ",round(n1/n0, 1), "%*%n[L]") %>%
@@ -181,3 +181,5 @@ Using 20% non-responders from the above power curves:
 - *Including an additional 50% of participants in the combined treatment group* is able to achieve a power > 90% at N = 100 (n1 = 40; n2 = 60)
 - *Including double the number of participants in the combined treatment group* is able to achieve a power of 90% at N > 81 (n1 = 27; n2 = 54)
 
+Importantly a *sample size of 100 participants* exceeds a power of 80% for all combinations of n~L+TU~ and n~L~ and all non-response rates, with the sole exception of equal sample sizes and 30% non-responders.
+Allowing for drop-outs, a recommended total sample size for the study should be 100-110 participants.
