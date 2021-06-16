@@ -176,11 +176,13 @@ sim_res %>%
   )
 ```
 
+## Conclusion
+
 Using 20% non-responders from the above power curves:
 
 - *Keeping group sizes equal* requires N = 120 (n1 = 60; n2 = 60) to achieve a 90% power (in the presence of 20% non-responders)
 - *Including an additional 50% of participants in the combined treatment group* is able to achieve a power > 90% at N = 100 (n1 = 40; n2 = 60)
-- *Including double the number of participants in the combined treatment group* is able to achieve a power of 90% at N > 81 (n1 = 27; n2 = 54)
+- *Including double the number of participants in the combined treatment group* is able to achieve a power of 90% at N &#8776; 90 (n1 = 30; n2 = 60)
 
 Importantly a *sample size of 100 participants* exceeds a power of 80% for all combinations of n~L+TU~ and n~L~ and all non-response rates, with the sole exception of equal sample sizes and 30% non-responders.
 Allowing for drop-outs, a recommended total sample size for the study should be 100-110 participants.
