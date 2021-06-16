@@ -52,7 +52,7 @@ The common measurement of Ki67 data is as a percentage of cells staining +ve for
 In this study a comparison of an Aromatase Inhibitor treated arm (Letrazole) with a double-treated arm (Letrazole + Testosterone Undecanoate).
 The desired reduction in Ki67 for double-treated (L+TU) samples is an additional 20% beyond that seen by Letrazole alone.
 
-Based on the values observed in [*Long-term outcome and prognostic value of Ki67 after perioperative endocrine therapy in postmenopausal women with hormone-sensitive early breast cancer (POETIC): an open-label, multicentre, parallel-group, randomised, phase 3 trial* (The Lancet, 2020)](https://www.thelancet.com/journals/lanonc/article/PIIS1470-2045(20)30458-7/fulltext), untreated samples were simulated using a truncated normal distribution with location &mu; = 0.086 and scale %sigma; = 0.18.
+Based on the values observed in [*Long-term outcome and prognostic value of Ki67 after perioperative endocrine therapy in postmenopausal women with hormone-sensitive early breast cancer (POETIC): an open-label, multicentre, parallel-group, randomised, phase 3 trial* (The Lancet, 2020)](https://www.thelancet.com/journals/lanonc/article/PIIS1470-2045(20)30458-7/fulltext), untreated samples were simulated using a truncated normal distribution with location &mu; = 0.086 and scale &sigma; = 0.18.
 Truncation points were the values 0 & 1, and this gave distributions which provided broadly similar values for median and the IQR as obtained by this study.
 
 Whilst a non-responder rate to both compounds was simulated between 10% to 30%, it may of note that in [one early study](https://cancerres.aacrjournals.org/content/63/19/6523.long) up to 25% of patients failed to respond to Letrazole.
@@ -103,28 +103,25 @@ sim_data <- function(n0, n1, ki0 = 0.086, sigma0 = 0.18, delta1 = 0.75, delta2 =
 ```{r sim_params}
 n_sim <- 1000
 alpha <- 0.05
-n0 <- c(20, 30, 40, 50, 60)
-n1 <- c(
-  n0,
-  1.5*n0,
-  2*n0
-)
+N <- seq(40, 140, by = 20)
+n0 <- floor(c(N/2, N/2.5, N/3))
+n1 <- rep(N, 3) - n0
 ```
 
 ```{r sim_res}
 sim_res <- list(
   tibble(
-    n0 = rep(n0, 3),
+    n0 = n0,
     n1 = n1,
     p_non = 0.1
   ),
   tibble(
-    n0 = rep(n0, 3),
+    n0 = n0,
     n1 = n1,
     p_non = 0.20
   ),
   tibble(
-    n0 = rep(n0, 3),
+    n0 = n0,
     n1 = n1,
     p_non = 0.30
   )
@@ -149,22 +146,27 @@ sim_res <- list(
   ) 
 ```
 
-```{r plot_curves, fig.cap = "_Power curves for detection of an additional 20% reduction in Ki67 due to a combination treatment of L+TU in comparison to Letrazole alone. Panels represent equal samples sizes in both treatment groups (L+TU=1*L), having an extra 50% of participants in the combination group (L+TU = 1.5*L), or having double the number of particiapnts in the combined treatment group (L+TU = 2*L). Error bars indicate a 95% confidence interval around the power estimates_"}
+```{r plot_curves, fig.height=8, fig.width=10, fig.cap = "*Power curves for detection of an additional 20% reduction in Ki67 due to a combination treatment of L+TU in comparison to Letrazole alone. Panels represent equal samples sizes in both treatment groups (L+TU=L), having an extra 50% of participants in the combination group (L+TU = 1.5L), or having double the number of particiapnts in the combined treatment group (L+TU = 2L). Error bars indicate a 95% confidence interval around the power estimates*"}
 sim_res %>% 
   mutate(
-    `n1/n0` = paste0("L+TU = ", n1/n0, "*L") %>% fct_inorder(),
+    `n1/n0` = paste0("n[L+TU] == ",round(n1/n0, 1), "%*%n[L]") %>%
+      str_remove_all("1%\\*%") %>%
+      str_replace_all("2\\.", "2%*%") %>%
+      fct_inorder(),
     se = sqrt(power*(1-power)/n_sim)
-  ) %>%
-  ggplot(aes(n0, power, colour = as.factor(p_non))) +
+  ) %>% 
+  ggplot(aes(N, power, colour = as.factor(p_non))) +
   geom_point() + 
   geom_line() +
   geom_errorbar(
     aes(ymin = power - 1.96*se, ymax = power + 1.96*se),
-    width = 1
+    width = 2
   ) +
-  facet_wrap(~`n1/n0`) +
+  facet_wrap(~`n1/n0`, labeller = label_parsed) +
+  scale_x_continuous(breaks = seq(40, 200, by = 40)) +
+  scale_y_continuous(labels = scales::percent) +
   labs(
-    x = "Sample Size (Letrazole)",
+    x = "Total Sample Size",
     y = "Power",
     colour = "% Non-Responders"
   ) +
@@ -173,9 +175,9 @@ sim_res %>%
   )
 ```
 
-From the above power curves:
+Using 20% non-responders from the above power curves:
 
-- *Keeping group sizes equal* requires N = 120 (n1 = 60; n2 = 60) to achieve a 90% power in the presence of 20% non-responders
+- *Keeping group sizes equal* requires N = 120 (n1 = 60; n2 = 60) to achieve a 90% power (in the presence of 20% non-responders)
 - *Including an additional 50% of participants in the combined treatment group* is able to achieve a power > 90% at N = 100 (n1 = 40; n2 = 60)
-- *Including double the number of participants in the combined treatment group* is able to achieve a power of 90% at N = 90 (n1 = 30; n2 = 60)
+- *Including double the number of participants in the combined treatment group* is able to achieve a power of 90% at N > 81 (n1 = 27; n2 = 54)
 
