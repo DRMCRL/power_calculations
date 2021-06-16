@@ -101,7 +101,7 @@ sim_data <- function(n0, n1, ki0 = 0.086, sigma0 = 0.18, delta1 = 0.75, delta2 =
 ```
 
 ```{r sim_params}
-n_sim <- 1000
+n_sim <- 1500
 alpha <- 0.05
 N <- seq(40, 140, by = 20)
 n0 <- floor(c(N/2, N/2.5, N/3))
@@ -109,6 +109,7 @@ n1 <- rep(N, 3) - n0
 ```
 
 ```{r sim_res}
+set.seed(1000)
 sim_res <- list(
   tibble(
     n0 = n0,
