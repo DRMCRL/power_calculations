@@ -514,16 +514,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDRMCRLpowercalculationstreed0d24f5ec8c0511378119be4419ab741ef14977btargetblankd0d24f5a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/DRMCRL/power_calculations/tree/d0d24f5ec8c0511378119be4419ab741ef14977b" target="_blank">d0d24f5</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDRMCRLpowercalculationstreeef266292d230057ffc48c673455520dd60aa3602targetblankef26629a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/DRMCRL/power_calculations/tree/ef266292d230057ffc48c673455520dd60aa3602" target="_blank">ef26629</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomDRMCRLpowercalculationstreed0d24f5ec8c0511378119be4419ab741ef14977btargetblankd0d24f5a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomDRMCRLpowercalculationstreeef266292d230057ffc48c673455520dd60aa3602targetblankef26629a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/DRMCRL/power_calculations/tree/d0d24f5ec8c0511378119be4419ab741ef14977b" target="_blank">d0d24f5</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/DRMCRL/power_calculations/tree/ef266292d230057ffc48c673455520dd60aa3602" target="_blank">ef26629</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -532,7 +532,6 @@ Note that you need to be careful to ensure that all relevant files for the analy
 Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
-    Ignored:    analysis/figure/
 
 </code></pre>
 <p>
@@ -571,6 +570,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/DRMCRL/power_calculations/blob/ef266292d230057ffc48c673455520dd60aa3602/analysis/20210616_TULip_Ki67.Rmd" target="_blank">ef26629</a>
+</td>
+<td>
+Steve Ped
+</td>
+<td>
+2021-06-17
+</td>
+<td>
+Revised methodology for total sample size
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/DRMCRL/power_calculations/06d95e69ef474c75da1b57ff61a7814cb894d85a/docs/20210616_TULip_Ki67.html" target="_blank">06d95e6</a>
+</td>
+<td>
+Steve Ped
+</td>
+<td>
+2021-06-17
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -652,7 +685,7 @@ geom_mean &lt;- function(x, ...){
 <div id="power-calculations" class="section level2">
 <h2>Power Calculations</h2>
 <p>In this study a comparison of an Aromatase Inhibitor treated arm (Letrazole) with a double-treated arm (Letrazole + Testosterone Undecanoate). The desired reduction in Ki67 for double-treated (L+TU) samples is an additional 20% beyond that seen by Letrazole alone.</p>
-<p>Based on the values observed in <a href="https://www.thelancet.com/journals/lanonc/article/PIIS1470-2045(20)30458-7/fulltext"><em>Long-term outcome and prognostic value of Ki67 after perioperative endocrine therapy in postmenopausal women with hormone-sensitive early breast cancer (POETIC): an open-label, multicentre, parallel-group, randomised, phase 3 trial</em> (The Lancet, 2020)</a>, untreated samples were simulated using a truncated normal distribution with location μ = 0.086 and scale %sigma; = 0.18. Truncation points were the values 0 &amp; 1, and this gave distributions which provided broadly similar values for median and the IQR as obtained by this study.</p>
+<p>Based on the values observed in <a href="https://www.thelancet.com/journals/lanonc/article/PIIS1470-2045(20)30458-7/fulltext"><em>Long-term outcome and prognostic value of Ki67 after perioperative endocrine therapy in postmenopausal women with hormone-sensitive early breast cancer (POETIC): an open-label, multicentre, parallel-group, randomised, phase 3 trial</em> (The Lancet, 2020)</a>, untreated samples were simulated using a truncated normal distribution with location μ = 0.086 and scale σ = 0.18. Truncation points were the values 0 &amp; 1, and this gave distributions which provided broadly similar values for median and the IQR as obtained by this study.</p>
 <p>Whilst a non-responder rate to both compounds was simulated between 10% to 30%, it may of note that in <a href="https://cancerres.aacrjournals.org/content/63/19/6523.long">one early study</a> up to 25% of patients failed to respond to Letrazole. Given the significant advances since 2003, the non-responder range as used here was considered suitable. However, it should be noted that as part of the simulation process some non-responders may appear to be responders just by having low Ki67 values prior to intervention. This is relatively representative of the true data where some non-responders will not be able to be identified unless matched Ki67 values are obtained pre/post intervention.</p>
 <pre class="r"><code>sim_data &lt;- function(n0, n1, ki0 = 0.086, sigma0 = 0.18, delta1 = 0.75, delta2 = 0.2, p_non = 0.1, ...){
   
@@ -692,25 +725,22 @@ geom_mean &lt;- function(x, ...){
 }</code></pre>
 <pre class="r"><code>n_sim &lt;- 1000
 alpha &lt;- 0.05
-n0 &lt;- c(20, 30, 40, 50, 60)
-n1 &lt;- c(
-  n0,
-  1.5*n0,
-  2*n0
-)</code></pre>
+N &lt;- seq(40, 140, by = 20)
+n0 &lt;- floor(c(N/2, N/2.5, N/3))
+n1 &lt;- rep(N, 3) - n0</code></pre>
 <pre class="r"><code>sim_res &lt;- list(
   tibble(
-    n0 = rep(n0, 3),
+    n0 = n0,
     n1 = n1,
     p_non = 0.1
   ),
   tibble(
-    n0 = rep(n0, 3),
+    n0 = n0,
     n1 = n1,
     p_non = 0.20
   ),
   tibble(
-    n0 = rep(n0, 3),
+    n0 = n0,
     n1 = n1,
     p_non = 0.30
   )
@@ -735,19 +765,24 @@ n1 &lt;- c(
   ) </code></pre>
 <pre class="r"><code>sim_res %&gt;% 
   mutate(
-    `n1/n0` = paste0(&quot;L+TU = &quot;, n1/n0, &quot;*L&quot;) %&gt;% fct_inorder(),
+    `n1/n0` = paste0(&quot;n[L+TU] == &quot;,round(n1/n0, 1), &quot;%*%n[L]&quot;) %&gt;%
+      str_remove_all(&quot;1%\\*%&quot;) %&gt;%
+      str_replace_all(&quot;2\\.&quot;, &quot;2%*%&quot;) %&gt;%
+      fct_inorder(),
     se = sqrt(power*(1-power)/n_sim)
-  ) %&gt;%
-  ggplot(aes(n0, power, colour = as.factor(p_non))) +
+  ) %&gt;% 
+  ggplot(aes(N, power, colour = as.factor(p_non))) +
   geom_point() + 
   geom_line() +
   geom_errorbar(
     aes(ymin = power - 1.96*se, ymax = power + 1.96*se),
-    width = 1
+    width = 2
   ) +
-  facet_wrap(~`n1/n0`) +
+  facet_wrap(~`n1/n0`, labeller = label_parsed) +
+  scale_x_continuous(breaks = seq(40, 200, by = 40)) +
+  scale_y_continuous(labels = scales::percent) +
   labs(
-    x = &quot;Sample Size (Letrazole)&quot;,
+    x = &quot;Total Sample Size&quot;,
     y = &quot;Power&quot;,
     colour = &quot;% Non-Responders&quot;
   ) +
@@ -755,16 +790,53 @@ n1 &lt;- c(
     legend.position = c(0.9, 0.1)
   )</code></pre>
 <div class="figure" style="text-align: center">
-<img src="figure/20210616_TULip_Ki67.Rmd/plot_curves-1.png" alt="_Power curves for detection of an additional 20% reduction in Ki67 due to a combination treatment of L+TU in comparison to Letrazole alone. Panels represent equal samples sizes in both treatment groups (L+TU=1*L), having an extra 50% of participants in the combination group (L+TU = 1.5*L), or having double the number of particiapnts in the combined treatment group (L+TU = 2*L). Error bars indicate a 95% confidence interval around the power estimates_" width="672" />
+<img src="figure/20210616_TULip_Ki67.Rmd/plot_curves-1.png" alt="*Power curves for detection of an additional 20% reduction in Ki67 due to a combination treatment of L+TU in comparison to Letrazole alone. Panels represent equal samples sizes in both treatment groups (L+TU=L), having an extra 50% of participants in the combination group (L+TU = 1.5L), or having double the number of particiapnts in the combined treatment group (L+TU = 2L). Error bars indicate a 95% confidence interval around the power estimates*" width="960" />
 <p class="caption">
-_Power curves for detection of an additional 20% reduction in Ki67 due to a combination treatment of L+TU in comparison to Letrazole alone. Panels represent equal samples sizes in both treatment groups (L+TU=1<em>L), having an extra 50% of participants in the combination group (L+TU = 1.5</em>L), or having double the number of particiapnts in the combined treatment group (L+TU = 2*L). Error bars indicate a 95% confidence interval around the power estimates_
+<em>Power curves for detection of an additional 20% reduction in Ki67 due to a combination treatment of L+TU in comparison to Letrazole alone. Panels represent equal samples sizes in both treatment groups (L+TU=L), having an extra 50% of participants in the combination group (L+TU = 1.5L), or having double the number of particiapnts in the combined treatment group (L+TU = 2L). Error bars indicate a 95% confidence interval around the power estimates</em>
 </p>
 </div>
-<p>From the above power curves:</p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plot_curves-1">
+Past versions of plot_curves-1.png
+</button>
+</p>
+<div id="fig-plot_curves-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/DRMCRL/power_calculations/blob/06d95e69ef474c75da1b57ff61a7814cb894d85a/docs/figure/20210616_TULip_Ki67.Rmd/plot_curves-1.png" target="_blank">06d95e6</a>
+</td>
+<td>
+Steve Ped
+</td>
+<td>
+2021-06-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Using 20% non-responders from the above power curves:</p>
 <ul>
-<li><em>Keeping group sizes equal</em> requires N = 120 (n1 = 60; n2 = 60) to achieve a 90% power in the presence of 20% non-responders</li>
+<li><em>Keeping group sizes equal</em> requires N = 120 (n1 = 60; n2 = 60) to achieve a 90% power (in the presence of 20% non-responders)</li>
 <li><em>Including an additional 50% of participants in the combined treatment group</em> is able to achieve a power &gt; 90% at N = 100 (n1 = 40; n2 = 60)</li>
-<li><em>Including double the number of participants in the combined treatment group</em> is able to achieve a power of 90% at N = 90 (n1 = 30; n2 = 60)</li>
+<li><em>Including double the number of participants in the combined treatment group</em> is able to achieve a power of 90% at N &gt; 81 (n1 = 27; n2 = 54)</li>
 </ul>
 <br>
 <p>
