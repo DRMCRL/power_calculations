@@ -1,0 +1,184 @@
+---
+title: "TULip Ki67 Study"
+author: |
+  | Stephen Pederson
+  | Dame Roma Mitchell Cancer Research Laboratories
+  | Adelaide Medical School
+  | University of Adelaide
+date: "`r format(Sys.Date(), '%d %B, %Y')`"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+    echo = TRUE,
+    message = FALSE,
+    warning = FALSE
+)
+```
+
+```{r packages}
+library(tidyverse)
+library(readxl)
+library(scales)
+library(glue)
+library(magrittr)
+library(pander)
+library(cowplot)
+library(matrixStats)
+library(e1071)
+library(sn)
+library(zoo)
+library(truncnorm)
+library(parallel)
+```
+
+```{r options}
+theme_set(theme_bw())
+```
+
+# Introduction
+
+The common measurement of Ki67 data is as a percentage of cells staining +ve for Ki67.
+Example data is taken from PDX samples in the Nature Medicine paper.
+
+```{r load_ki67}
+ki67_natmed <- here::here("data/41591_2020_1168_MOESM3_ESM.xlsx") %>%
+  read_excel(sheet = "S1d") %>%
+  setNames(
+    tibble(
+      names = colnames(.),
+      r1 = unlist(.[1,])
+    ) %>%
+      mutate(
+        names = str_replace_all(names, "\\.\\.\\.+", NA_character_),
+        names = na.locf(names)
+      ) %>%
+      unite(names, names, r1, sep = " ") %>%
+      pull(names) %>%
+      str_remove_all(" NA$")
+  ) %>%
+  dplyr::slice(-1) %>%
+  dplyr::filter(!str_detect(Diagnosis, "Normal")) %>%
+  mutate(
+    across(
+      .fns = function(x){
+        if (!any(is.na(suppressWarnings(as.numeric(x))))){
+          x <- as.numeric(x)
+        }
+        x
+      }
+    ),
+    diff = `Ki67-positive epithelial cells (%) E2+DHT` - `Ki67-positive epithelial cells (%) E2`,
+    logFC = log2(`Ki67-positive epithelial cells (%) E2+DHT` / `Ki67-positive epithelial cells (%) E2`)
+  )
+```
+
+```{r plot_ki67}
+ki67_natmed %>%
+    dplyr::select(`Sample ID`, contains("Ki67")) %>%
+    pivot_longer(
+        cols = contains("E2"),
+        names_to = "treat",
+        values_to = "ki67"
+    ) %>%
+    mutate(
+        treat = str_remove_all(treat, "Ki67.+\\(%\\) "),
+        ki67 = as.numeric(ki67)/100,
+        # ki67 = binomial()$linkfun(ki67)
+        # ki67 = log(ki67)
+    ) %>%
+    ggplot(
+        aes(treat, ki67)
+    ) +
+    geom_violin(
+        draw_quantiles = 0.5,
+        trim = FALSE
+    ) +
+    geom_jitter(width = 0.05) +
+    scale_y_continuous(limits = c(0, 1), labels = percent)
+```
+
+[Previous work](20210514_CRUK_ClinicalTrial.html) used a truncated normal distribution with &mu;~0~ = 0.4, &sigma;~0~ = 0.35 and limits of [0, 1] for the untreated samples
+For changes in Ki67 after treatment (i.e. &mu;~1~ = k&mu;~0~), the value of &sigma;~1~ was set as &sigma;~0~&#8730;k.
+
+In this study a comparison of an Aromatase Inhibitor treated arm (Letrazole) with a double-treated arm (Letrazole + Testosterone Undecanoate).
+Letrazole is expected to reduce Ki67 by ~75% and as such, for simulations the values &mu;~0~ = 0.1, &sigma;~0~ = 0.175 should be used.
+The desired reduction in Ki67 for double-treated (L+TU) samples is an additional 20% (i.e. k = 0.8) beyond that seen by Letrazole alone.
+
+## Power Calculations
+
+```{r sim_data}
+sim_data <- function(n0, n1, ki0 = 0.4, sigma0 = 0.35, delta = 0.2, p_non, ...){
+  
+  ## Given that the mean of a truncated normal is not the location parameter,
+  ## we need to recalculate the location parameter such that the mean is reduced
+  ## by delta as desired
+  m <- (pnorm(0) - pnorm(1)) / (dnorm(1) - dnorm(0))
+  k <- 1 - delta
+  ## For some scalar a^2 such that a^2mu0 + amsigma0 = k(mu0 + m sigma0),
+  ## i.e. X1 ~ N(mu0*a^2, sigma0*a)[0, 1]
+  a <- sqrt(k + k*m*sigma0/ki0 + (0.5*m*sigma0/ki0)^2) - 0.5*m*sigma0/ki0
+  
+  # return(list(mean = ki0*a^2, sd = a*sigma0, a = a, a2 = a^2))
+  
+  ## Simulate initial values
+  pre <- rtruncnorm(n0, a = 0, b = 1, mean = ki0, sd = sigma0)
+  post <- rtruncnorm(n1, a = 0, b = 1, mean = ki0*a^2, sd = a*sigma0)
+  
+  ## Add non-responders & resample
+  non <- as.logical(rbinom(n1, 1, p_non))
+  post[non] <- rtruncnorm(sum(non), a = 0, b = 1, mean = ki0, sd = sigma0)
+  
+  ## Run the Wilcoxon test
+  wilcox.test(pre, post)$p.value
+}
+```
+
+```{r sim_params}
+n_sim <- 1000
+alpha <- 0.05
+n0 <- c(50, 60 , 70 , 80, 90, 100)
+n1 <- c(
+  n0,
+  1.5*n0,
+  2*n0
+)
+```
+
+```{r sim_res}
+sim_res <- list(
+  tibble(
+    n0 = rep(n0, 3),
+    n1 = n1,
+    p_non = 0.05
+  ),
+  tibble(
+    n0 = rep(n0, 3),
+    n1 = n1,
+    p_non = 0.1
+  )
+) %>%
+  bind_rows() %>%
+  split(f = seq_len(nrow(.))) %>%
+  mclapply(
+    function(x){
+      p <- replicate(
+        n_sim,
+        {
+          sim_data(n0 = x$n0, n1 = x$n1, p_non = x$p_non)
+        }
+      )
+      mutate(x, power = mean(p < alpha))
+    },
+    mc.cores = 6
+  ) %>%
+  bind_rows() %>%
+  mutate(
+    N = n0 + n1
+  ) 
+```
+
