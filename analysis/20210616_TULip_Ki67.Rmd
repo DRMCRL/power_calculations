@@ -29,8 +29,6 @@ library(magrittr)
 library(pander)
 library(cowplot)
 library(matrixStats)
-library(e1071)
-library(sn)
 library(zoo)
 library(truncnorm)
 library(parallel)
@@ -62,48 +60,145 @@ This is relatively representative of the true data where some non-responders wil
 
 
 ```{r sim_data}
-sim_data <- function(n0, n1, ki0 = 0.086, sigma0 = 0.18, delta1 = 0.75, delta2 = 0.2, p_non = 0.1, ...){
+sim_data <- function(n0, n1, ki0 = 0.065, sigma0 = 0.19, delta1 = 0.923, delta2 = 0.997, p_non = 0.1, dropout = 0.05, ...){
   
-  ## Refine delta2
-  delta2 <- (1+delta2)*delta1
-  
-  ## Given that the mean of a truncated normal is not the location parameter,
-  ## we need to recalculate the location parameter such that the mean is reduced
-  ## by delta as desired
-  ## For alpha/beta just use the first scaled distribution as an approximation
-  ## Checking has revealed these values to be relatively consistent with the 
-  ## simulated reduvction in Ki67
-  alpha <- -(1-delta1)*ki0/(sqrt(1-delta1)*sigma0)
-  beta <- (1-(1-delta1)*ki0)/(sqrt(1-delta1)*sigma0)
-  m <- (dnorm(alpha) - dnorm(beta)) / (pnorm(beta) - pnorm(alpha))
-  k1 <- 1 - delta1
-  k2 <- 1 - delta2
-  
-  ## For some scalar a^2 such that a^2*mu0 + a*m*sigma0 = k(mu0 + m*sigma0),
-  ## i.e. X1 ~ N(mu0*a^2, sigma0*a)[0, 1]
-  a1 <- sqrt(k1 + k1*m*sigma0/ki0 + (0.5*m*sigma0/ki0)^2) - 0.5*m*sigma0/ki0
-  a2 <- sqrt(k2 + k2*m*sigma0/ki0 + (0.5*m*sigma0/ki0)^2) - 0.5*m*sigma0/ki0
+  ## Here n0 represents the letrazole arm, whilst n1 represents the combined arm
+  ## The pre-treatment data is designed to replicate the POETIC data, with 
+  ## reductions in either arm including a non-responder rate. Location and 
+  ## scale parameters are designed to reduce in accordance with the desired 
+  ## reduction
+  a1 <- 1-delta1
+  a2 <- 1-delta2
   
   ## Simulate initial values
-  pre <- rtruncnorm(n0, a = 0, b = 1, mean = ki0*a1^2, sd = sigma0*a1)
-  post <- rtruncnorm(n1, a = 0, b = 1, mean = ki0*a2^2, sd = sigma0*a2)
+  pre <- rtruncnorm(n0, a = 0, b = 1, mean = ki0, sd = sigma0)
+  let <- rtruncnorm(n0, a = 0, b = 1, mean = ki0*a1, sd = sigma0*sqrt(a1))
+  ltu <- rtruncnorm(n1, a = 0, b = 1, mean = ki0*a2, sd = sigma0*sqrt(a2))
   
   ## Add non-responders & resample
+  non <- as.logical(rbinom(n0, 1, p_non))
+  let[non] <- rtruncnorm(sum(non), a = 0, b = 1, mean = ki0, sd = sigma0)
   non <- as.logical(rbinom(n1, 1, p_non))
-  post[non] <- rtruncnorm(sum(non), a = 0, b = 1, mean = ki0, sd = sigma0)
-  ## Repeat for pre
-  non <- as.logical(rbinom(n1, 1, p_non))
-  pre[non] <- rtruncnorm(sum(non), a = 0, b = 1, mean = ki0, sd = sigma0)
+  ltu[non] <- rtruncnorm(sum(non), a = 0, b = 1, mean = ki0, sd = sigma0)
   
-  ## Run the Wilcoxon test
-  wilcox.test(pre, post)$p.value
+  ## Add dropouts
+  d1 <- as.logical(rbinom(n0, 1, dropout))
+  d2 <- as.logical(rbinom(n1, 1, dropout))
+  let <- let[!d1]
+  ltu <- ltu[!d2]
+
+  list(pre = pre, let = let, ltu = ltu)
 }
 ```
 
+```{r default_params}
+ki0 <- 0.065
+sigma0 <- 0.19
+delta1 <- 0.923
+delta2 <- 0.997
+const <- function(mu, sigma, a, b){
+  alpha <- (a - mu)/sigma
+  beta <- (b - mu)/sigma
+  qnorm(0.5*(pnorm(alpha) + pnorm(beta)))
+}
+expected <- list(
+ Pre = ki0 + const(ki0, sigma0, 0, 1)*sigma0, 
+ Let = (1-delta1)*ki0 + const((1-delta1)*ki0, sqrt(1-delta1)*sigma0, 0, 1)*sqrt(1 - delta1)*sigma0, 
+ `L+TU` = (1-delta2)*ki0 + const((1-delta2)*ki0, sqrt(1-delta2)*sigma0, 0, 1)*sqrt(1 - delta2)*sigma0
+)
+```
+
+```{r tab_expected}
+expected %>%
+  as_tibble() %>%
+  pivot_longer(
+    cols = everything(),
+    names_to = "Treatment",
+    values_to = "Ki67"
+  ) %>%
+  mutate(
+    `Expected Reduction` = percent(1 - Ki67 / dplyr::filter(., Treatment == "Pre")$Ki67, accuracy = 0.1),
+    Ki67 = percent(Ki67, accuracy = 0.1)
+  ) %>%
+  pander(
+    justify = "lrr",
+    caption = "
+    Expected median Ki67% and the expected reduction in Ki67% using the default simulation parameters.
+    Values were set to show a slight overestimate of change, given that a proportion of non-responders were to be included in the simulations
+    "
+  )
+```
+
+
+
+```{r example_data}
+set.seed(123)
+example_data <- sim_data(
+  n0 = 1000, n1 =1000, 
+  ki0 = 0.065, sigma0 = 0.19, 
+  delta1 = 0.923, delta2 = 0.997
+) %>%
+  lapply(list) %>%
+  as_tibble()
+```
+
+```{r example_boxplot, fig.width=10, fig.height=8, fig.cap = "Boxplot of example simulated data showing the strong recapitulation of the observed Ki67% distributions from the POETIC study."}
+example_data %>%
+  pivot_longer(
+    cols = everything(),
+    names_to = "treatment",
+    values_to = "Ki67"
+  ) %>%
+  unnest(Ki67) %>%
+  mutate(
+    treatment = c(pre = "Pre", let = "Let", ltu = "L+TU")[treatment],
+    treatment = factor(treatment, levels = c("Pre", "Let", "L+TU"))
+  ) %>%
+  ggplot(aes(treatment, Ki67)) +
+  geom_boxplot() +
+  scale_y_continuous(labels = scales::percent) +
+  labs(
+    x = "Treatment",
+    y = "Ki67 %"
+  )
+```
+
+```{r example_table}
+example_data %>%
+  pivot_longer(
+    cols = everything(),
+    names_to = "treatment",
+    values_to = "Ki67"
+  ) %>%
+  unnest(Ki67) %>%
+  mutate(
+    treatment = c(pre = "Pre", let = "Let", ltu = "L+TU")[treatment],
+    treatment = factor(treatment, levels = c("Pre", "Let", "L+TU"))
+  ) %>%
+  group_by(treatment) %>%
+  summarise(
+    Median = median(Ki67),
+    IQR = glue("[{percent(quantile(Ki67, 0.25), accuracy = 0.1)}, {percent(quantile(Ki67, 0.75), accuracy = 0.1)}]")
+  ) %>%
+  mutate(
+    Reduction = 1 - Median / dplyr::filter(., treatment == "Pre")$Median,
+    Reduction = percent(Reduction, accuracy = 0.1),
+    Median = percent(Median, accuracy = 0.1)
+  ) %>%
+  rename(Treatment = treatment) %>%
+  pander(
+    caption = "
+    Example simulated data showing an approximate recapitulation of the untreated samples in the POETIC study, along with reductions in the median Ki67% of 75% and 95%.
+    The 75% reduction simulated for Letrazole again recapitulates the POETIC dataset well where this reduction was also observed.
+    "
+  )
+```
+
+
 ```{r sim_params}
-n_sim <- 1500
-alpha <- 0.05
-N <- seq(40, 140, by = 20)
+n_sim <- 5000
+alpha <- 0.025
+N <- seq(60, 120, by = 10)
 n0 <- floor(c(N/2, N/2.5, N/3))
 n1 <- rep(N, 3) - n0
 ```
@@ -131,13 +226,27 @@ sim_res <- list(
   split(f = seq_len(nrow(.))) %>%
   mclapply(
     function(x){
-      p <- replicate(
+      data <- replicate(
         n_sim,
         {
           sim_data(n0 = x$n0, n1 = x$n1, p_non = x$p_non)
         }
       )
-      mutate(x, power = mean(p < alpha))
+      p <- apply(
+        data, 
+        MARGIN = 2, 
+        function(x){wilcox.test(x$let, x$ltu)$p.value}
+      )
+      median_pre <- apply(data, MARGIN = 2, function(x){median(x$pre)})
+      median_let <- apply(data, MARGIN = 2, function(x){median(x$let)})
+      median_ltu <- apply(data, MARGIN = 2, function(x){median(x$ltu)})
+      mutate(
+        x, 
+        power = mean(p < alpha),
+        median_pre = median(median_pre),
+        median_let = median(median_let),
+        median_ltu = median(median_ltu)
+        )
     },
     mc.cores = 6
   ) %>%
@@ -147,7 +256,7 @@ sim_res <- list(
   ) 
 ```
 
-```{r plot_curves, fig.height=8, fig.width=10, fig.cap = "*Power curves for detection of an additional 20% reduction in Ki67 due to a combination treatment of L+TU in comparison to Letrazole alone. Panels represent equal samples sizes in both treatment groups (n~L+TU~=n~L~), having an extra 50% of participants in the combination group (n~L+TU~ = 1.5n~L~), or having double the number of particiapnts in the combined treatment group (n~L+TU~ = 2n~L~). Error bars indicate a 95% confidence interval around the power estimates*"}
+```{r plot_curves, fig.height=8, fig.width=10, fig.cap = "*Power curves for detection of an additional 20% reduction in Ki67 due to a combination treatment of L+TU in comparison to Letrazole alone. Panels represent equal samples sizes in both treatment groups (n~L+TU~=n~L~), having an extra 50% of participants in the combination group (n~L+TU~ = 1.5n~L~), or having double the number of particiapnts in the combined treatment group (n~L+TU~ = 2n~L~). Error bars indicate a 95% confidence interval around the power estimates. A dropout rate of 5% has been incorporated into the simulations.*"}
 sim_res %>% 
   mutate(
     `n1/n0` = paste0("n[L+TU] == ",round(n1/n0, 1), "%*%n[L]") %>%
@@ -164,7 +273,7 @@ sim_res %>%
     width = 2
   ) +
   facet_wrap(~`n1/n0`, labeller = label_parsed) +
-  scale_x_continuous(breaks = seq(40, 200, by = 40)) +
+  # scale_x_continuous(breaks = seq(40, 200, by = 40)) +
   scale_y_continuous(labels = scales::percent) +
   labs(
     x = "Total Sample Size",
@@ -178,11 +287,11 @@ sim_res %>%
 
 ## Conclusion
 
-Using 20% non-responders from the above power curves:
+Using 30% non-responders from the above power curves:
 
-- *Keeping group sizes equal* requires N = 120 (n1 = 60; n2 = 60) to achieve a 90% power (in the presence of 20% non-responders)
+- *Keeping group sizes equal* requires N = 100 (n1 = 60; n2 = 60) to achieve a 90% power (in the presence of 30% non-responders)
 - *Including an additional 50% of participants in the combined treatment group* is able to achieve a power > 90% at N = 100 (n1 = 40; n2 = 60)
-- *Including double the number of participants in the combined treatment group* is able to achieve a power of 90% at N &#8776; 90 (n1 = 30; n2 = 60)
+- *Including double the number of participants in the combined treatment group* is able to achieve a power of 90% at N > 100 (n1 = 35; n2 = 70)
 
-Importantly a *sample size of 100 participants* exceeds a power of 80% for all combinations of n~L+TU~ and n~L~ and all non-response rates, with the sole exception of equal sample sizes and 30% non-responders.
+Importantly a *sample size of 100 participants* exceeds a power of 80% for all combinations of n~L+TU~ and n~L~ and all non-response rates.
 Allowing for drop-outs, a recommended total sample size for the study should be 100-110 participants.
