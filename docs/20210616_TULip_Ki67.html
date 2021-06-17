@@ -517,16 +517,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDRMCRLpowercalculationstree895085c42fc2f8a8987829bc5ed7d4af22ef6bf8targetblank895085ca"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/DRMCRL/power_calculations/tree/895085c42fc2f8a8987829bc5ed7d4af22ef6bf8" target="_blank">895085c</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDRMCRLpowercalculationstree0f1fe7fbb6962393ad46cff53998d45d7e3277d7targetblank0f1fe7fa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/DRMCRL/power_calculations/tree/0f1fe7fbb6962393ad46cff53998d45d7e3277d7" target="_blank">0f1fe7f</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomDRMCRLpowercalculationstree895085c42fc2f8a8987829bc5ed7d4af22ef6bf8targetblank895085ca" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomDRMCRLpowercalculationstree0f1fe7fbb6962393ad46cff53998d45d7e3277d7targetblank0f1fe7fa" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/DRMCRL/power_calculations/tree/895085c42fc2f8a8987829bc5ed7d4af22ef6bf8" target="_blank">895085c</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/DRMCRL/power_calculations/tree/0f1fe7fbb6962393ad46cff53998d45d7e3277d7" target="_blank">0f1fe7f</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -576,6 +576,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/DRMCRL/power_calculations/blob/0f1fe7fbb6962393ad46cff53998d45d7e3277d7/analysis/20210616_TULip_Ki67.Rmd" target="_blank">0f1fe7f</a>
+</td>
+<td>
+Steve Ped
+</td>
+<td>
+2021-06-17
+</td>
+<td>
+Changed alpha and reduced % to 75/91
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/DRMCRL/power_calculations/9c74750c83f5b1950b68faef2843eba50573b1c1/docs/20210616_TULip_Ki67.html" target="_blank">9c74750</a>
+</td>
+<td>
+Steve Ped
+</td>
+<td>
+2021-06-17
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -869,6 +903,7 @@ library(parallel)</code></pre>
 <pre class="r"><code>theme_set(theme_bw())
 panderOptions(&quot;big.mark&quot;, &quot;,&quot;)
 panderOptions(&quot;table.split.table&quot;, Inf)
+panderOptions(&quot;digits&quot;, 3)
 geom_mean &lt;- function(x, ...){
   exp(mean(log(x), ...))
 }</code></pre>
@@ -877,11 +912,18 @@ geom_mean &lt;- function(x, ...){
 <p>The common measurement of Ki67 data is as a percentage of cells staining +ve for Ki67.</p>
 <div id="power-calculations" class="section level2">
 <h2>Power Calculations</h2>
+<div id="explanatory-notes" class="section level3">
+<h3>Explanatory Notes</h3>
 <p>In this study a comparison of an Aromatase Inhibitor treated arm (Letrazole) with a double-treated arm (Letrazole + Testosterone Undecanoate). The desired reduction in Ki67 for double-treated (L+TU) samples is an additional 20% beyond that seen by Letrazole alone.</p>
 <p>Based on the values observed in <a href="https://www.thelancet.com/journals/lanonc/article/PIIS1470-2045(20)30458-7/fulltext"><em>Long-term outcome and prognostic value of Ki67 after perioperative endocrine therapy in postmenopausal women with hormone-sensitive early breast cancer (POETIC): an open-label, multicentre, parallel-group, randomised, phase 3 trial</em> (The Lancet, 2020)</a>, untreated samples were simulated using a truncated normal distribution with location μ = 0.065 and scale σ = 0.19. Truncation points were the values 0 &amp; 1, and this gave distributions which provided broadly similar values for median and the IQR as obtained by this study.</p>
-<p>For simulations, data were assumed to be drawn from a Truncated Normal Distribution bounded at a = 0 and b = 1. Untreated Ki67 values were simulated from the Truncated Normal <span class="math inline">\(\mathcal{N}\)</span>(μ<sub>0</sub>, σ<sub>0</sub>) such that the resultant distribution strongly resembled those from <em>untreated samples</em> in the POETIC study. For both treatments, values were simulated by specifying values <em>a<sub>Let</sub></em> or <em>a<sub>L+TU</sub></em> such that data could be simulated from the Truncated distribution <span class="math inline">\(\mathcal{N}\)</span>(aμ<sub>0</sub>, √aσ<sub>0</sub>). This follows the principles of linear transformation of random variables. However, it is important to note that a 75% reduction in μ<sub>0</sub> (i.e. a = 0.25) will not result in a 75% reduction in either the mean or median values drawn from the transformed distribution.</p>
-<p>Whilst a non-responder rate to both compounds was simulated between 10% to 30%, it may of note that in <a href="https://cancerres.aacrjournals.org/content/63/19/6523.long">one early study</a> up to 25% of patients failed to respond to Letrazole. However, it should be noted that as part of the simulation process some non-responders may appear to be responders just by having low Ki67 values prior to intervention. This is relatively representative of the true data where some non-responders will not be able to be identified unless matched Ki67 values are obtained pre/post intervention.</p>
-<pre class="r"><code>sim_data &lt;- function(n0, n1, ki0 = 0.065, sigma0 = 0.19, delta1 = 0.95, delta2 = 0.998, p_non = 0.1, dropout = 0.05, ...){
+<p>For simulations, data were assumed to be drawn from a Truncated Normal Distribution bounded at a = 0 and b = 1. Untreated Ki67 values were simulated from the Truncated Normal <span class="math inline">\(\mathcal{N}\)</span>(μ<sub>0</sub>, σ<sub>0</sub>) such that the resultant distribution strongly resembled those from <em>untreated samples</em> in the POETIC study.</p>
+<p>For both treatments, values were simulated by specifying values <em>a<sub>Let</sub></em> or <em>a<sub>L+TU</sub></em> such that data could be simulated from the Truncated distribution <span class="math inline">\(\mathcal{N}\)</span>(aμ<sub>0</sub>, √aσ<sub>0</sub>). This follows the principles of linear transformation of random variables. However, it is important to note that a 75% reduction in the location parameter μ<sub>0</sub> (i.e. a = 0.25) will <em>not result in a 75% reduction in either the mean or median values drawn from the transformed distribution.</em></p>
+<p>Whilst a non-responder rate to both compounds was simulated between 10% to 30%, it may of note that in <a href="https://cancerres.aacrjournals.org/content/63/19/6523.long">one early study</a> up to 25% of patients failed to respond to Letrazole. However, it should be noted that as part of the simulation process some non-responders may appear to be responders just by having low Ki67 values prior to intervention. This is relatively representative of the true data where some non-responders will not be able to be identified unless matched Ki67 values are obtained pre/post intervention. Importantly, <strong>the non-responder rate was assumed to be equal between treatment groups</strong></p>
+<p>In addition to non-responders, a <em>participant dropout rate of 5%</em> was included into simulations.</p>
+</div>
+<div id="calculations" class="section level3">
+<h3>Calculations</h3>
+<pre class="r"><code>sim_data &lt;- function(n0, n1, ki0 = 0.065, sigma0 = 0.19, delta1 = 0.95, delta2 = 0.993, p_non = 0.1, dropout = 0.05, ...){
   
   ## Here n0 represents the letrazole arm, whilst n1 represents the combined arm
   ## The pre-treatment data is designed to replicate the POETIC data, with 
@@ -910,10 +952,10 @@ geom_mean &lt;- function(x, ...){
 
   list(pre = pre, let = let, ltu = ltu)
 }</code></pre>
-<pre class="r"><code>ki0 &lt;- 0.065
-sigma0 &lt;- 0.19
-delta1 &lt;- 0.95
-delta2 &lt;- 0.998
+<pre class="r"><code>ki0 &lt;- formals(sim_data)$ki0
+sigma0 &lt;- formals(sim_data)$sigma0
+delta1 &lt;- formals(sim_data)$delta1
+delta2 &lt;- formals(sim_data)$delta2
 const &lt;- function(mu, sigma, a, b){
   alpha &lt;- (a - mu)/sigma
   beta &lt;- (b - mu)/sigma
@@ -944,11 +986,12 @@ expected &lt;- list(
     justify = &quot;lrrrr&quot;,
     caption = &quot;
     Theoretical expected median Ki67% and the expected reduction in Ki67% using the default simulation parameters.
-    Values were set to show a slight overestimate of change, given that a proportion of non-responders were to be included in the simulations.
+    Values were set to show a slight overestimate of reduction, given that a varying proportion of non-responders were to be included in the simulations.
+    Reductions obtained below in simulations were more reflective of the intended values.
     &quot;
   )</code></pre>
 <table>
-<caption>Theoretical expected median Ki67% and the expected reduction in Ki67% using the default simulation parameters. Values were set to show a slight overestimate of change, given that a proportion of non-responders were to be included in the simulations.</caption>
+<caption>Theoretical expected median Ki67% and the expected reduction in Ki67% using the default simulation parameters. Values were set to show a slight overestimate of reduction, given that a varying proportion of non-responders were to be included in the simulations. Reductions obtained below in simulations were more reflective of the intended values.</caption>
 <colgroup>
 <col width="12%" />
 <col width="25%" />
@@ -978,22 +1021,20 @@ expected &lt;- list(
 <td align="right">3.0%</td>
 <td align="right">80.8%</td>
 <td align="right">0.00325</td>
-<td align="right">0.04249</td>
+<td align="right">0.0425</td>
 </tr>
 <tr class="odd">
 <td align="left">L+TU</td>
-<td align="right">0.6%</td>
-<td align="right">96.3%</td>
-<td align="right">0.00013</td>
-<td align="right">0.008497</td>
+<td align="right">1.1%</td>
+<td align="right">93.0%</td>
+<td align="right">0.000455</td>
+<td align="right">0.0159</td>
 </tr>
 </tbody>
 </table>
 <pre class="r"><code>set.seed(123)
 example_data &lt;- sim_data(
-  n0 = 1000, n1 =1000, 
-  ki0 = 0.065, sigma0 = 0.19, 
-  delta1 = 0.95, delta2 = 0.998
+  n0 = 1000, n1 =1000
 ) %&gt;%
   lapply(list) %&gt;%
   as_tibble()</code></pre>
@@ -1045,6 +1086,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/DRMCRL/power_calculations/blob/9c74750c83f5b1950b68faef2843eba50573b1c1/docs/figure/20210616_TULip_Ki67.Rmd/example_boxplot-1.png" target="_blank">9c74750</a>
+</td>
+<td>
+Steve Ped
+</td>
+<td>
+2021-06-17
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/DRMCRL/power_calculations/blob/5a6e4351ab01994a2fd2f9eb8f4e1ec317098621/docs/figure/20210616_TULip_Ki67.Rmd/example_boxplot-1.png" target="_blank">5a6e435</a>
 </td>
 <td>
@@ -1083,11 +1135,11 @@ Steve Ped
   pander(
     caption = &quot;
     Example simulated data showing an approximate recapitulation of the untreated samples in the POETIC study, along with reductions in the median Ki67% of 75% and 95%.
-    The 75% reduction simulated for Letrazole again recapitulates the POETIC dataset well where this reduction was also observed.
+    The 75% reduction simulated for Letrazole closely recapitulates the POETIC dataset where this reduction was also observed.
     &quot;
   )</code></pre>
 <table style="width:68%;">
-<caption>Example simulated data showing an approximate recapitulation of the untreated samples in the POETIC study, along with reductions in the median Ki67% of 75% and 95%. The 75% reduction simulated for Letrazole again recapitulates the POETIC dataset well where this reduction was also observed.</caption>
+<caption>Example simulated data showing an approximate recapitulation of the untreated samples in the POETIC study, along with reductions in the median Ki67% of 75% and 95%. The 75% reduction simulated for Letrazole closely recapitulates the POETIC dataset where this reduction was also observed.</caption>
 <colgroup>
 <col width="16%" />
 <col width="12%" />
@@ -1111,20 +1163,21 @@ Steve Ped
 </tr>
 <tr class="even">
 <td align="center">Let</td>
-<td align="center">3.4%</td>
+<td align="center">3.3%</td>
 <td align="center">[1.5%, 5.8%]</td>
-<td align="center">77.7%</td>
+<td align="center">78.5%</td>
 </tr>
 <tr class="odd">
 <td align="center">L+TU</td>
-<td align="center">0.6%</td>
-<td align="center">[0.3%, 1.2%]</td>
-<td align="center">95.9%</td>
+<td align="center">1.2%</td>
+<td align="center">[0.5%, 2.1%]</td>
+<td align="center">92.2%</td>
 </tr>
 </tbody>
 </table>
 <pre class="r"><code>n_sim &lt;- 5000
-alpha &lt;- 0.025
+if (interactive()) n_sim &lt;- 1000 # For faster working interactively
+alpha &lt;- 0.05
 N &lt;- seq(60, 120, by = 10)
 n0 &lt;- floor(c(N/2, N/2.5, N/3))
 n1 &lt;- rep(N, 3) - n0</code></pre>
@@ -1240,6 +1293,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/DRMCRL/power_calculations/blob/9c74750c83f5b1950b68faef2843eba50573b1c1/docs/figure/20210616_TULip_Ki67.Rmd/plot_curves-1.png" target="_blank">9c74750</a>
+</td>
+<td>
+Steve Ped
+</td>
+<td>
+2021-06-17
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/DRMCRL/power_calculations/blob/5a6e4351ab01994a2fd2f9eb8f4e1ec317098621/docs/figure/20210616_TULip_Ki67.Rmd/plot_curves-1.png" target="_blank">5a6e435</a>
 </td>
 <td>
@@ -1331,10 +1395,10 @@ Steve Ped
       .fns = median
     )
   ) %&gt;%
-  mutate(diff = red_ltu - red_let) %&gt;%
+  mutate(diff = 1 - red_ltu / red_let) %&gt;%
   mutate_all(percent, accuracy = 0.1) %&gt;%
   rename(
-    `% Non-Responser` = p_non,
+    `% Non-Responder` = p_non,
     Difference = diff
   ) %&gt;%
   rename_all(
@@ -1384,7 +1448,7 @@ Steve Ped
 </colgroup>
 <thead>
 <tr class="header">
-<th align="right">% Non-Responser</th>
+<th align="right">% Non-Responder</th>
 <th align="right">Median Ki67 (Untreated)</th>
 <th align="right">Median Ki67 (Let)</th>
 <th align="right">Median Ki67 (L+TU)</th>
@@ -1398,40 +1462,41 @@ Steve Ped
 <td align="right">10.0%</td>
 <td align="right">15.6%</td>
 <td align="right">3.3%</td>
-<td align="right">0.7%</td>
+<td align="right">1.2%</td>
 <td align="right">78.8%</td>
-<td align="right">95.8%</td>
-<td align="right">17.0%</td>
+<td align="right">92.1%</td>
+<td align="right">-16.9%</td>
 </tr>
 <tr class="even">
 <td align="right">20.0%</td>
 <td align="right">15.6%</td>
 <td align="right">3.7%</td>
-<td align="right">0.7%</td>
+<td align="right">1.4%</td>
 <td align="right">76.3%</td>
-<td align="right">95.2%</td>
-<td align="right">18.9%</td>
+<td align="right">91.0%</td>
+<td align="right">-19.3%</td>
 </tr>
 <tr class="odd">
 <td align="right">25.0%</td>
-<td align="right">15.6%</td>
+<td align="right">15.5%</td>
 <td align="right">3.9%</td>
-<td align="right">0.8%</td>
+<td align="right">1.5%</td>
 <td align="right">74.8%</td>
-<td align="right">94.8%</td>
-<td align="right">19.9%</td>
+<td align="right">90.3%</td>
+<td align="right">-20.7%</td>
 </tr>
 <tr class="even">
 <td align="right">30.0%</td>
 <td align="right">15.5%</td>
 <td align="right">4.2%</td>
-<td align="right">0.9%</td>
+<td align="right">1.6%</td>
 <td align="right">73.1%</td>
-<td align="right">94.3%</td>
-<td align="right">21.2%</td>
+<td align="right">89.4%</td>
+<td align="right">-22.3%</td>
 </tr>
 </tbody>
 </table>
+</div>
 </div>
 <div id="conclusion" class="section level2">
 <h2>Conclusion</h2>
@@ -1441,7 +1506,7 @@ Steve Ped
 <li><em>Including an additional 50% of participants in the combined treatment group</em> is able to achieve a power &gt; 90% at N = 100 (n<sub>Let</sub> = 40; n<sub>L+TU</sub> = 60)</li>
 <li><em>Including double the number of participants in the combined treatment group</em> is able to achieve a power of 90% at N &gt; 100 (n<sub>Let</sub> = 35; n<sub>L+TU</sub> = 70)</li>
 </ul>
-<p>Importantly a <em>sample size of 100 participants</em> exceeds a power of 80% for all combinations of n<sub>L+TU</sub> and n<sub>L</sub> and all non-response rates. Allowing for drop-outs, a recommended total sample size for the study should be 100-110 participants.</p>
+<p>Importantly a <em>sample size of 100 participants</em> exceeds a power of 80% for all combinations of n<sub>L+TU</sub> and n<sub>L</sub> and all non-response rates. All simulations included a dropout rate of 5%</p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
