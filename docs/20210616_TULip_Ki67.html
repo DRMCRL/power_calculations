@@ -517,16 +517,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDRMCRLpowercalculationstree5d7db7a5a629ab5789fc52b57a850ed5bdbe3fe2targetblank5d7db7aa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/DRMCRL/power_calculations/tree/5d7db7a5a629ab5789fc52b57a850ed5bdbe3fe2" target="_blank">5d7db7a</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDRMCRLpowercalculationstreedaa271685fe600adaa09c6f1c6490a60eafbdf09targetblankdaa2716a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/DRMCRL/power_calculations/tree/daa271685fe600adaa09c6f1c6490a60eafbdf09" target="_blank">daa2716</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomDRMCRLpowercalculationstree5d7db7a5a629ab5789fc52b57a850ed5bdbe3fe2targetblank5d7db7aa" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomDRMCRLpowercalculationstreedaa271685fe600adaa09c6f1c6490a60eafbdf09targetblankdaa2716a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/DRMCRL/power_calculations/tree/5d7db7a5a629ab5789fc52b57a850ed5bdbe3fe2" target="_blank">5d7db7a</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/DRMCRL/power_calculations/tree/daa271685fe600adaa09c6f1c6490a60eafbdf09" target="_blank">daa2716</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -535,9 +535,6 @@ Note that you need to be careful to ensure that all relevant files for the analy
 Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
-
-Unstaged changes:
-    Modified:   analysis/_site.yml
 
 </code></pre>
 <p>
@@ -576,6 +573,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/DRMCRL/power_calculations/blob/daa271685fe600adaa09c6f1c6490a60eafbdf09/analysis/20210616_TULip_Ki67.Rmd" target="_blank">daa2716</a>
+</td>
+<td>
+Steve Ped
+</td>
+<td>
+2021-06-17
+</td>
+<td>
+Increased N to 80-140
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/DRMCRL/power_calculations/3bf6e3eaa087bfbbab49c2bc49da75188099542a/docs/20210616_TULip_Ki67.html" target="_blank">3bf6e3e</a>
+</td>
+<td>
+Steve Ped
+</td>
+<td>
+2021-06-17
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1223,7 +1254,7 @@ Steve Ped
 <pre class="r"><code>n_sim &lt;- 5000
 if (interactive()) n_sim &lt;- 1000 # For faster working interactively
 alpha &lt;- 0.05
-N &lt;- seq(60, 120, by = 10)
+N &lt;- seq(80, 140, by = 10)
 n0 &lt;- floor(c(N/2, N/2.5, N/3))
 n1 &lt;- rep(N, 3) - n0</code></pre>
 <pre class="r"><code>set.seed(1000)
@@ -1336,6 +1367,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/DRMCRL/power_calculations/blob/3bf6e3eaa087bfbbab49c2bc49da75188099542a/docs/figure/20210616_TULip_Ki67.Rmd/plot_curves-1.png" target="_blank">3bf6e3e</a>
+</td>
+<td>
+Steve Ped
+</td>
+<td>
+2021-06-17
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/DRMCRL/power_calculations/blob/a72d492490dd3175a4dd2b59facee0248c5096f5/docs/figure/20210616_TULip_Ki67.Rmd/plot_curves-1.png" target="_blank">a72d492</a>
@@ -1520,24 +1562,24 @@ Steve Ped
 <td align="right">3.3%</td>
 <td align="right">1.2%</td>
 <td align="right">78.8%</td>
-<td align="right">92.2%</td>
+<td align="right">92.1%</td>
 <td align="right">-16.9%</td>
 </tr>
 <tr class="even">
 <td align="right">20.0%</td>
-<td align="right">15.6%</td>
+<td align="right">15.5%</td>
 <td align="right">3.7%</td>
 <td align="right">1.4%</td>
 <td align="right">76.3%</td>
 <td align="right">91.0%</td>
-<td align="right">-19.3%</td>
+<td align="right">-19.2%</td>
 </tr>
 <tr class="odd">
 <td align="right">25.0%</td>
-<td align="right">15.5%</td>
+<td align="right">15.6%</td>
 <td align="right">3.9%</td>
 <td align="right">1.5%</td>
-<td align="right">74.8%</td>
+<td align="right">74.9%</td>
 <td align="right">90.3%</td>
 <td align="right">-20.7%</td>
 </tr>
@@ -1546,7 +1588,7 @@ Steve Ped
 <td align="right">15.5%</td>
 <td align="right">4.2%</td>
 <td align="right">1.6%</td>
-<td align="right">73.1%</td>
+<td align="right">73.2%</td>
 <td align="right">89.4%</td>
 <td align="right">-22.3%</td>
 </tr>
