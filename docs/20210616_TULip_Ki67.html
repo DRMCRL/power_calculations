@@ -517,16 +517,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDRMCRLpowercalculationstreedaa271685fe600adaa09c6f1c6490a60eafbdf09targetblankdaa2716a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/DRMCRL/power_calculations/tree/daa271685fe600adaa09c6f1c6490a60eafbdf09" target="_blank">daa2716</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDRMCRLpowercalculationstreec6baf0ab74cee7ba7b81b55bfcc9b3af2d6cddc7targetblankc6baf0aa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/DRMCRL/power_calculations/tree/c6baf0ab74cee7ba7b81b55bfcc9b3af2d6cddc7" target="_blank">c6baf0a</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomDRMCRLpowercalculationstreedaa271685fe600adaa09c6f1c6490a60eafbdf09targetblankdaa2716a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomDRMCRLpowercalculationstreec6baf0ab74cee7ba7b81b55bfcc9b3af2d6cddc7targetblankc6baf0aa" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/DRMCRL/power_calculations/tree/daa271685fe600adaa09c6f1c6490a60eafbdf09" target="_blank">daa2716</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/DRMCRL/power_calculations/tree/c6baf0ab74cee7ba7b81b55bfcc9b3af2d6cddc7" target="_blank">c6baf0a</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -573,6 +573,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/DRMCRL/power_calculations/blob/c6baf0ab74cee7ba7b81b55bfcc9b3af2d6cddc7/analysis/20210616_TULip_Ki67.Rmd" target="_blank">c6baf0a</a>
+</td>
+<td>
+Steve Ped
+</td>
+<td>
+2021-06-17
+</td>
+<td>
+Minor text changes
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/DRMCRL/power_calculations/5b94b6be8bb6aca17ed40ff61f6e0e3d529e5eb0/docs/20210616_TULip_Ki67.html" target="_blank">5b94b6b</a>
+</td>
+<td>
+Steve Ped
+</td>
+<td>
+2021-06-17
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -974,17 +1008,15 @@ geom_mean &lt;- function(x, ...){
 }</code></pre>
 <div id="introduction" class="section level1">
 <h1>Introduction</h1>
-<p>The common measurement of Ki67 data is as a percentage of cells staining +ve for Ki67.</p>
+<p>The common measurement of Ki67 data is as a percentage of cells staining +ve for Ki67. This study is a comparison of %Ki67+<sup>ve</sup> cells for an Aromatase Inhibitor treated arm (Letrazole) with a double-treated arm (Letrazole + Testosterone Undecanoate). The desired reduction in Ki67 for double-treated (L+TU) samples is an additional 20% beyond that seen by Letrazole alone. Based on a previous study, Letrazole was found to reduce the percentage of Ki67<sup>+</sup> cells by 76%.</p>
 <div id="power-calculations" class="section level2">
 <h2>Power Calculations</h2>
 <div id="explanatory-notes" class="section level3">
 <h3>Explanatory Notes</h3>
-<p>In this study a comparison of an Aromatase Inhibitor treated arm (Letrazole) with a double-treated arm (Letrazole + Testosterone Undecanoate). The desired reduction in Ki67 for double-treated (L+TU) samples is an additional 20% beyond that seen by Letrazole alone.</p>
-<p>Based on the values observed in <a href="https://www.thelancet.com/journals/lanonc/article/PIIS1470-2045(20)30458-7/fulltext"><em>Long-term outcome and prognostic value of Ki67 after perioperative endocrine therapy in postmenopausal women with hormone-sensitive early breast cancer (POETIC): an open-label, multicentre, parallel-group, randomised, phase 3 trial</em> (The Lancet, 2020)</a>, untreated samples were simulated using a truncated normal distribution with location μ = 0.065 and scale σ = 0.19. Truncation points were the values 0 &amp; 1, and this gave distributions which provided broadly similar values for median and the IQR as obtained by this study.</p>
-<p>For simulations, data were assumed to be drawn from a Truncated Normal Distribution bounded at a = 0 and b = 1. Untreated Ki67 values were simulated from the Truncated Normal <span class="math inline">\(\mathcal{N}\)</span>(μ<sub>0</sub>, σ<sub>0</sub>) such that the resultant distribution strongly resembled those from <em>untreated samples</em> in the POETIC study.</p>
-<p>For both treatments, values were simulated by specifying values <em>a<sub>Let</sub></em> or <em>a<sub>L+TU</sub></em> such that data could be simulated from the Truncated distribution <span class="math inline">\(\mathcal{N}\)</span>(aμ<sub>0</sub>, √aσ<sub>0</sub>). This follows the principles of linear transformation of random variables. However, it is important to note that a 75% reduction in the location parameter μ<sub>0</sub> (i.e. a = 0.25) will <em>not result in a 75% reduction in either the mean or median values drawn from the transformed distribution.</em></p>
+<p>Using values observed in <a href="https://www.thelancet.com/journals/lanonc/article/PIIS1470-2045(20)30458-7/fulltext"><em>Long-term outcome and prognostic value of Ki67 after perioperative endocrine therapy in postmenopausal women with hormone-sensitive early breast cancer (POETIC): an open-label, multicentre, parallel-group, randomised, phase 3 trial</em> (The Lancet, 2020)</a>, untreated samples were simulated using a truncated normal distribution with location μ<sub>0</sub> = 0.065 and scale σ<sub>0</sub> = 0.19. Truncation points were the values a = 0 &amp; b = 1, and untreated Ki67 values were simulated from the Truncated Normal <span class="math inline">\(\mathcal{N}\)</span>(μ<sub>0</sub>, σ<sub>0</sub>) as above, such that the resultant distribution strongly resembled those from <em>untreated samples</em> in the POETIC study.</p>
+<p>For both treatment arms, values were simulated by specifying values <em>a<sub>Let</sub></em> or <em>a<sub>L+TU</sub></em> such that data could be simulated from the Truncated distribution <span class="math inline">\(\mathcal{N}\)</span>(aμ<sub>0</sub>, √aσ<sub>0</sub>). This follows the principles of linear transformation for random variables. However, it is important to note that a 75% reduction in the location parameter μ<sub>0</sub> (i.e. a = 0.25) will <em>not result in a 75% reduction in either the mean or median values drawn from the transformed distribution.</em> As a result, values for the scaling parameter <em>a</em> were found empirically.</p>
 <p>Whilst a non-responder rate to both compounds was simulated between 10% to 30%, it may of note that in <a href="https://cancerres.aacrjournals.org/content/63/19/6523.long">one early study</a> up to 25% of patients failed to respond to Letrazole. However, it should be noted that as part of the simulation process some non-responders may appear to be responders just by having low Ki67 values prior to intervention. This is relatively representative of the true data where some non-responders will not be able to be identified unless matched Ki67 values are obtained pre/post intervention. Importantly, <strong>the non-responder rate was assumed to be equal between treatment groups</strong></p>
-<p>In addition to non-responders, a <em>participant dropout rate of 5%</em> was included into simulations.</p>
+<p>In addition to non-responders, a <em>participant dropout rate of 5%</em> was included in all simulations. Final sample sizes thus take dropouts into account.</p>
 </div>
 <div id="calculations" class="section level3">
 <h3>Calculations</h3>
@@ -1051,12 +1083,12 @@ expected &lt;- list(
     justify = &quot;lrrrr&quot;,
     caption = &quot;
     Theoretical expected median Ki67% and the expected reduction in Ki67% using the default simulation parameters.
-    Values were set to show a slight overestimate of reduction, given that a varying proportion of non-responders were to be included in the simulations.
-    Reductions obtained below in simulations were more reflective of the intended values.
+    Values were seelected to show a slight overestimate of reduction, given that a varying proportion of non-responders were to be included in the simulations.
+    Reductions obtained in simulations below were more reflective of the intended values.
     &quot;
   )</code></pre>
 <table>
-<caption>Theoretical expected median Ki67% and the expected reduction in Ki67% using the default simulation parameters. Values were set to show a slight overestimate of reduction, given that a varying proportion of non-responders were to be included in the simulations. Reductions obtained below in simulations were more reflective of the intended values.</caption>
+<caption>Theoretical expected median Ki67% and the expected reduction in Ki67% using the default simulation parameters. Values were seelected to show a slight overestimate of reduction, given that a varying proportion of non-responders were to be included in the simulations. Reductions obtained in simulations below were more reflective of the intended values.</caption>
 <colgroup>
 <col width="12%" />
 <col width="25%" />
@@ -1369,6 +1401,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/DRMCRL/power_calculations/blob/5b94b6be8bb6aca17ed40ff61f6e0e3d529e5eb0/docs/figure/20210616_TULip_Ki67.Rmd/plot_curves-1.png" target="_blank">5b94b6b</a>
+</td>
+<td>
+Steve Ped
+</td>
+<td>
+2021-06-17
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/DRMCRL/power_calculations/blob/3bf6e3eaa087bfbbab49c2bc49da75188099542a/docs/figure/20210616_TULip_Ki67.Rmd/plot_curves-1.png" target="_blank">3bf6e3e</a>
 </td>
 <td>
@@ -1558,12 +1601,12 @@ Steve Ped
 <tbody>
 <tr class="odd">
 <td align="right">10.0%</td>
-<td align="right">15.6%</td>
+<td align="right">15.5%</td>
 <td align="right">3.3%</td>
 <td align="right">1.2%</td>
-<td align="right">78.8%</td>
+<td align="right">78.7%</td>
 <td align="right">92.1%</td>
-<td align="right">-16.9%</td>
+<td align="right">-17.0%</td>
 </tr>
 <tr class="even">
 <td align="right">20.0%</td>
@@ -1572,14 +1615,14 @@ Steve Ped
 <td align="right">1.4%</td>
 <td align="right">76.3%</td>
 <td align="right">91.0%</td>
-<td align="right">-19.2%</td>
+<td align="right">-19.3%</td>
 </tr>
 <tr class="odd">
 <td align="right">25.0%</td>
 <td align="right">15.6%</td>
 <td align="right">3.9%</td>
 <td align="right">1.5%</td>
-<td align="right">74.9%</td>
+<td align="right">74.8%</td>
 <td align="right">90.3%</td>
 <td align="right">-20.7%</td>
 </tr>
