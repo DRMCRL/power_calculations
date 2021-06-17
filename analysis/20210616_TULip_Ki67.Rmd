@@ -36,6 +36,8 @@ library(parallel)
 
 ```{r options}
 theme_set(theme_bw())
+panderOptions("big.mark", ",")
+panderOptions("table.split.table", Inf)
 geom_mean <- function(x, ...){
   exp(mean(log(x), ...))
 }
@@ -50,17 +52,22 @@ The common measurement of Ki67 data is as a percentage of cells staining +ve for
 In this study a comparison of an Aromatase Inhibitor treated arm (Letrazole) with a double-treated arm (Letrazole + Testosterone Undecanoate).
 The desired reduction in Ki67 for double-treated (L+TU) samples is an additional 20% beyond that seen by Letrazole alone.
 
-Based on the values observed in [*Long-term outcome and prognostic value of Ki67 after perioperative endocrine therapy in postmenopausal women with hormone-sensitive early breast cancer (POETIC): an open-label, multicentre, parallel-group, randomised, phase 3 trial* (The Lancet, 2020)](https://www.thelancet.com/journals/lanonc/article/PIIS1470-2045(20)30458-7/fulltext), untreated samples were simulated using a truncated normal distribution with location &mu; = 0.086 and scale &sigma; = 0.18.
+Based on the values observed in [*Long-term outcome and prognostic value of Ki67 after perioperative endocrine therapy in postmenopausal women with hormone-sensitive early breast cancer (POETIC): an open-label, multicentre, parallel-group, randomised, phase 3 trial* (The Lancet, 2020)](https://www.thelancet.com/journals/lanonc/article/PIIS1470-2045(20)30458-7/fulltext), untreated samples were simulated using a truncated normal distribution with location &mu; = 0.065 and scale &sigma; = 0.19.
 Truncation points were the values 0 & 1, and this gave distributions which provided broadly similar values for median and the IQR as obtained by this study.
 
+For simulations, data were assumed to be drawn from a Truncated Normal Distribution bounded at a = 0 and b = 1.
+Untreated Ki67 values were simulated from the Truncated Normal $\mathcal{N}$(&mu;~0~, &sigma;~0~) such that the resultant distribution strongly resembled those from *untreated samples* in the POETIC study.
+For both treatments, values were simulated by specifying values *a~Let~* or *a~L+TU~* such that data could be simulated from the Truncated distribution $\mathcal{N}$(a&mu;~0~, &#8730;a&sigma;~0~).
+This follows the principles of linear transformation of random variables.
+However, it is important to note that a 75% reduction in &mu;~0~ (i.e. a = 0.25) will not result in a 75% reduction in either the mean or median values drawn from the transformed distribution.
+
 Whilst a non-responder rate to both compounds was simulated between 10% to 30%, it may of note that in [one early study](https://cancerres.aacrjournals.org/content/63/19/6523.long) up to 25% of patients failed to respond to Letrazole.
-Given the significant advances since 2003, the non-responder range as used here was considered suitable.
 However, it should be noted that as part of the simulation process some non-responders may appear to be responders just by having low Ki67 values prior to intervention.
 This is relatively representative of the true data where some non-responders will not be able to be identified unless matched Ki67 values are obtained pre/post intervention.
 
 
 ```{r sim_data}
-sim_data <- function(n0, n1, ki0 = 0.065, sigma0 = 0.19, delta1 = 0.923, delta2 = 0.997, p_non = 0.1, dropout = 0.05, ...){
+sim_data <- function(n0, n1, ki0 = 0.065, sigma0 = 0.19, delta1 = 0.95, delta2 = 0.998, p_non = 0.1, dropout = 0.05, ...){
   
   ## Here n0 represents the letrazole arm, whilst n1 represents the combined arm
   ## The pre-treatment data is designed to replicate the POETIC data, with 
@@ -94,8 +101,8 @@ sim_data <- function(n0, n1, ki0 = 0.065, sigma0 = 0.19, delta1 = 0.923, delta2 
 ```{r default_params}
 ki0 <- 0.065
 sigma0 <- 0.19
-delta1 <- 0.923
-delta2 <- 0.997
+delta1 <- 0.95
+delta2 <- 0.998
 const <- function(mu, sigma, a, b){
   alpha <- (a - mu)/sigma
   beta <- (b - mu)/sigma
@@ -118,13 +125,18 @@ expected %>%
   ) %>%
   mutate(
     `Expected Reduction` = percent(1 - Ki67 / dplyr::filter(., Treatment == "Pre")$Ki67, accuracy = 0.1),
-    Ki67 = percent(Ki67, accuracy = 0.1)
+    Ki67 = percent(Ki67, accuracy = 0.1),
+    `Location (&mu;)`= c(ki0, (1 - delta1)*ki0, (1 - delta2)*ki0),
+    `Scale (&sigma;)`= c(sigma0, sqrt(1 - delta1)*sigma0, sqrt(1 - delta2)*sigma0)
+  ) %>%
+  rename(
+    `Expected Median Ki67%` = Ki67
   ) %>%
   pander(
-    justify = "lrr",
+    justify = "lrrrr",
     caption = "
-    Expected median Ki67% and the expected reduction in Ki67% using the default simulation parameters.
-    Values were set to show a slight overestimate of change, given that a proportion of non-responders were to be included in the simulations
+    Theoretical expected median Ki67% and the expected reduction in Ki67% using the default simulation parameters.
+    Values were set to show a slight overestimate of change, given that a proportion of non-responders were to be included in the simulations.
     "
   )
 ```
@@ -136,7 +148,7 @@ set.seed(123)
 example_data <- sim_data(
   n0 = 1000, n1 =1000, 
   ki0 = 0.065, sigma0 = 0.19, 
-  delta1 = 0.923, delta2 = 0.997
+  delta1 = 0.95, delta2 = 0.998
 ) %>%
   lapply(list) %>%
   as_tibble()
@@ -219,6 +231,11 @@ sim_res <- list(
   tibble(
     n0 = n0,
     n1 = n1,
+    p_non = 0.25
+  ),
+  tibble(
+    n0 = n0,
+    n1 = n1,
     p_non = 0.30
   )
 ) %>%
@@ -235,14 +252,14 @@ sim_res <- list(
       p <- apply(
         data, 
         MARGIN = 2, 
-        function(x){wilcox.test(x$let, x$ltu)$p.value}
+        function(x){wilcox.test(x$let, x$ltu, alternative = "greater")$p.value}
       )
       median_pre <- apply(data, MARGIN = 2, function(x){median(x$pre)})
       median_let <- apply(data, MARGIN = 2, function(x){median(x$let)})
       median_ltu <- apply(data, MARGIN = 2, function(x){median(x$ltu)})
       mutate(
         x, 
-        power = mean(p < alpha),
+        power = mean(p < alpha/2), # Given we have a one-sided test
         median_pre = median(median_pre),
         median_let = median(median_let),
         median_ltu = median(median_ltu)
@@ -263,7 +280,8 @@ sim_res %>%
       str_remove_all("1%\\*%") %>%
       str_replace_all("2\\.", "2%*%") %>%
       fct_inorder(),
-    se = sqrt(power*(1-power)/n_sim)
+    se = sqrt(power*(1-power)/n_sim),
+    p_non = percent(p_non, accuracy = 1)
   ) %>% 
   ggplot(aes(N, power, colour = as.factor(p_non))) +
   geom_point() + 
@@ -277,21 +295,78 @@ sim_res %>%
   scale_y_continuous(labels = scales::percent) +
   labs(
     x = "Total Sample Size",
-    y = "Power",
+    y = "Estimated Power",
     colour = "% Non-Responders"
   ) +
   theme(
-    legend.position = c(0.9, 0.1)
+    legend.position = c(0.9, 0.15)
   )
 ```
+
+
+```{r}
+sim_res %>%
+  mutate(
+    red_let = 1 - median_let/median_pre,
+    red_ltu = 1 - median_ltu/median_pre
+  ) %>%
+  group_by(p_non) %>%
+  summarise(
+    across(
+      .cols = c(starts_with("median"), starts_with("red")),
+      .fns = median
+    )
+  ) %>%
+  mutate(diff = red_ltu - red_let) %>%
+  mutate_all(percent, accuracy = 0.1) %>%
+  rename(
+    `% Non-Responser` = p_non,
+    Difference = diff
+  ) %>%
+  rename_all(
+    str_replace_all,
+    pattern = "(.+)_(.+)",
+    replacement = "\\1 (\\2)"
+  ) %>%
+  rename_all(
+    str_replace_all,
+    pattern = "median",
+    replacement = "Median Ki67"
+  ) %>%
+  rename_all(
+    str_replace_all,
+    pattern = "red",
+    replacement = "% Reduction"
+  ) %>%
+  rename_all(
+    str_replace_all,
+    pattern = "pre",
+    replacement = "Untreated"
+  ) %>%
+  rename_all(
+    str_replace_all,
+    pattern = "let",
+    replacement = "Let"
+  ) %>%
+  rename_all(
+    str_replace_all,
+    pattern = "ltu",
+    replacement = "L+TU"
+    ) %>%
+  pander(
+    justify = "rrrrrrr",
+    caption = "Summary of all simulated values taking median values across all simulations"
+  )
+```
+
 
 ## Conclusion
 
 Using 30% non-responders from the above power curves:
 
-- *Keeping group sizes equal* requires N = 100 (n1 = 60; n2 = 60) to achieve a 90% power (in the presence of 30% non-responders)
-- *Including an additional 50% of participants in the combined treatment group* is able to achieve a power > 90% at N = 100 (n1 = 40; n2 = 60)
-- *Including double the number of participants in the combined treatment group* is able to achieve a power of 90% at N > 100 (n1 = 35; n2 = 70)
+- *Keeping group sizes equal* requires N = 100 (n~Let~ = 60; n~L+TU~ = 60) to achieve a 90% power (in the presence of 30% non-responders)
+- *Including an additional 50% of participants in the combined treatment group* is able to achieve a power > 90% at N = 100 (n~Let~ = 40; n~L+TU~ = 60)
+- *Including double the number of participants in the combined treatment group* is able to achieve a power of 90% at N > 100 (n~Let~ = 35; n~L+TU~ = 70)
 
 Importantly a *sample size of 100 participants* exceeds a power of 80% for all combinations of n~L+TU~ and n~L~ and all non-response rates.
 Allowing for drop-outs, a recommended total sample size for the study should be 100-110 participants.
