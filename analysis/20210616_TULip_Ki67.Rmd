@@ -38,6 +38,7 @@ library(parallel)
 theme_set(theme_bw())
 panderOptions("big.mark", ",")
 panderOptions("table.split.table", Inf)
+panderOptions("digits", 3)
 geom_mean <- function(x, ...){
   exp(mean(log(x), ...))
 }
@@ -49,6 +50,8 @@ The common measurement of Ki67 data is as a percentage of cells staining +ve for
 
 ## Power Calculations
 
+### Explanatory Notes
+
 In this study a comparison of an Aromatase Inhibitor treated arm (Letrazole) with a double-treated arm (Letrazole + Testosterone Undecanoate).
 The desired reduction in Ki67 for double-treated (L+TU) samples is an additional 20% beyond that seen by Letrazole alone.
 
@@ -57,17 +60,23 @@ Truncation points were the values 0 & 1, and this gave distributions which provi
 
 For simulations, data were assumed to be drawn from a Truncated Normal Distribution bounded at a = 0 and b = 1.
 Untreated Ki67 values were simulated from the Truncated Normal $\mathcal{N}$(&mu;~0~, &sigma;~0~) such that the resultant distribution strongly resembled those from *untreated samples* in the POETIC study.
+
 For both treatments, values were simulated by specifying values *a~Let~* or *a~L+TU~* such that data could be simulated from the Truncated distribution $\mathcal{N}$(a&mu;~0~, &#8730;a&sigma;~0~).
 This follows the principles of linear transformation of random variables.
-However, it is important to note that a 75% reduction in &mu;~0~ (i.e. a = 0.25) will not result in a 75% reduction in either the mean or median values drawn from the transformed distribution.
+However, it is important to note that a 75% reduction in the location parameter &mu;~0~ (i.e. a = 0.25) will *not result in a 75% reduction in either the mean or median values drawn from the transformed distribution.*
 
 Whilst a non-responder rate to both compounds was simulated between 10% to 30%, it may of note that in [one early study](https://cancerres.aacrjournals.org/content/63/19/6523.long) up to 25% of patients failed to respond to Letrazole.
 However, it should be noted that as part of the simulation process some non-responders may appear to be responders just by having low Ki67 values prior to intervention.
 This is relatively representative of the true data where some non-responders will not be able to be identified unless matched Ki67 values are obtained pre/post intervention.
+Importantly, **the non-responder rate was assumed to be equal between treatment groups**
+
+In addition to non-responders, a *participant dropout rate of 5%* was included into simulations.
+
+### Calculations
 
 
 ```{r sim_data}
-sim_data <- function(n0, n1, ki0 = 0.065, sigma0 = 0.19, delta1 = 0.95, delta2 = 0.998, p_non = 0.1, dropout = 0.05, ...){
+sim_data <- function(n0, n1, ki0 = 0.065, sigma0 = 0.19, delta1 = 0.95, delta2 = 0.993, p_non = 0.1, dropout = 0.05, ...){
   
   ## Here n0 represents the letrazole arm, whilst n1 represents the combined arm
   ## The pre-treatment data is designed to replicate the POETIC data, with 
@@ -99,10 +108,10 @@ sim_data <- function(n0, n1, ki0 = 0.065, sigma0 = 0.19, delta1 = 0.95, delta2 =
 ```
 
 ```{r default_params}
-ki0 <- 0.065
-sigma0 <- 0.19
-delta1 <- 0.95
-delta2 <- 0.998
+ki0 <- formals(sim_data)$ki0
+sigma0 <- formals(sim_data)$sigma0
+delta1 <- formals(sim_data)$delta1
+delta2 <- formals(sim_data)$delta2
 const <- function(mu, sigma, a, b){
   alpha <- (a - mu)/sigma
   beta <- (b - mu)/sigma
@@ -136,7 +145,8 @@ expected %>%
     justify = "lrrrr",
     caption = "
     Theoretical expected median Ki67% and the expected reduction in Ki67% using the default simulation parameters.
-    Values were set to show a slight overestimate of change, given that a proportion of non-responders were to be included in the simulations.
+    Values were set to show a slight overestimate of reduction, given that a varying proportion of non-responders were to be included in the simulations.
+    Reductions obtained below in simulations were more reflective of the intended values.
     "
   )
 ```
@@ -146,9 +156,7 @@ expected %>%
 ```{r example_data}
 set.seed(123)
 example_data <- sim_data(
-  n0 = 1000, n1 =1000, 
-  ki0 = 0.065, sigma0 = 0.19, 
-  delta1 = 0.95, delta2 = 0.998
+  n0 = 1000, n1 =1000
 ) %>%
   lapply(list) %>%
   as_tibble()
@@ -201,7 +209,7 @@ example_data %>%
   pander(
     caption = "
     Example simulated data showing an approximate recapitulation of the untreated samples in the POETIC study, along with reductions in the median Ki67% of 75% and 95%.
-    The 75% reduction simulated for Letrazole again recapitulates the POETIC dataset well where this reduction was also observed.
+    The 75% reduction simulated for Letrazole closely recapitulates the POETIC dataset where this reduction was also observed.
     "
   )
 ```
@@ -209,7 +217,8 @@ example_data %>%
 
 ```{r sim_params}
 n_sim <- 5000
-alpha <- 0.025
+if (interactive()) n_sim <- 1000 # For faster working interactively
+alpha <- 0.05
 N <- seq(60, 120, by = 10)
 n0 <- floor(c(N/2, N/2.5, N/3))
 n1 <- rep(N, 3) - n0
@@ -317,10 +326,10 @@ sim_res %>%
       .fns = median
     )
   ) %>%
-  mutate(diff = red_ltu - red_let) %>%
+  mutate(diff = 1 - red_ltu / red_let) %>%
   mutate_all(percent, accuracy = 0.1) %>%
   rename(
-    `% Non-Responser` = p_non,
+    `% Non-Responder` = p_non,
     Difference = diff
   ) %>%
   rename_all(
@@ -369,4 +378,4 @@ Using 30% non-responders from the above power curves:
 - *Including double the number of participants in the combined treatment group* is able to achieve a power of 90% at N > 100 (n~Let~ = 35; n~L+TU~ = 70)
 
 Importantly a *sample size of 100 participants* exceeds a power of 80% for all combinations of n~L+TU~ and n~L~ and all non-response rates.
-Allowing for drop-outs, a recommended total sample size for the study should be 100-110 participants.
+All simulations included a dropout rate of `r percent(formals(sim_data)$dropout)`
