@@ -47,30 +47,29 @@ geom_mean <- function(x, ...){
 # Introduction
 
 The common measurement of Ki67 data is as a percentage of cells staining +ve for Ki67.
+This study is a comparison of %Ki67+^ve^ cells for an Aromatase Inhibitor treated arm (Letrazole) with a double-treated arm (Letrazole + Testosterone Undecanoate).
+The desired reduction in Ki67 for double-treated (L+TU) samples is an additional 20% beyond that seen by Letrazole alone.
+Based on a previous study, Letrazole was found to reduce the percentage of Ki67^+^ cells by 76%.
 
 ## Power Calculations
 
 ### Explanatory Notes
 
-In this study a comparison of an Aromatase Inhibitor treated arm (Letrazole) with a double-treated arm (Letrazole + Testosterone Undecanoate).
-The desired reduction in Ki67 for double-treated (L+TU) samples is an additional 20% beyond that seen by Letrazole alone.
+Using values observed in [*Long-term outcome and prognostic value of Ki67 after perioperative endocrine therapy in postmenopausal women with hormone-sensitive early breast cancer (POETIC): an open-label, multicentre, parallel-group, randomised, phase 3 trial* (The Lancet, 2020)](https://www.thelancet.com/journals/lanonc/article/PIIS1470-2045(20)30458-7/fulltext), untreated samples were simulated using a truncated normal distribution with location &mu;~0~ = 0.065 and scale &sigma;~0~ = 0.19.
+Truncation points were the values a = 0 & b = 1, and untreated Ki67 values were simulated from the Truncated Normal $\mathcal{N}$(&mu;~0~, &sigma;~0~) as above, such that the resultant distribution strongly resembled those from *untreated samples* in the POETIC study.
 
-Based on the values observed in [*Long-term outcome and prognostic value of Ki67 after perioperative endocrine therapy in postmenopausal women with hormone-sensitive early breast cancer (POETIC): an open-label, multicentre, parallel-group, randomised, phase 3 trial* (The Lancet, 2020)](https://www.thelancet.com/journals/lanonc/article/PIIS1470-2045(20)30458-7/fulltext), untreated samples were simulated using a truncated normal distribution with location &mu; = 0.065 and scale &sigma; = 0.19.
-Truncation points were the values 0 & 1, and this gave distributions which provided broadly similar values for median and the IQR as obtained by this study.
-
-For simulations, data were assumed to be drawn from a Truncated Normal Distribution bounded at a = 0 and b = 1.
-Untreated Ki67 values were simulated from the Truncated Normal $\mathcal{N}$(&mu;~0~, &sigma;~0~) such that the resultant distribution strongly resembled those from *untreated samples* in the POETIC study.
-
-For both treatments, values were simulated by specifying values *a~Let~* or *a~L+TU~* such that data could be simulated from the Truncated distribution $\mathcal{N}$(a&mu;~0~, &#8730;a&sigma;~0~).
-This follows the principles of linear transformation of random variables.
+For both treatment arms, values were simulated by specifying values *a~Let~* or *a~L+TU~* such that data could be simulated from the Truncated distribution $\mathcal{N}$(a&mu;~0~, &#8730;a&sigma;~0~).
+This follows the principles of linear transformation for random variables.
 However, it is important to note that a 75% reduction in the location parameter &mu;~0~ (i.e. a = 0.25) will *not result in a 75% reduction in either the mean or median values drawn from the transformed distribution.*
+As a result, values for the scaling parameter *a* were found empirically.
 
 Whilst a non-responder rate to both compounds was simulated between 10% to 30%, it may of note that in [one early study](https://cancerres.aacrjournals.org/content/63/19/6523.long) up to 25% of patients failed to respond to Letrazole.
 However, it should be noted that as part of the simulation process some non-responders may appear to be responders just by having low Ki67 values prior to intervention.
 This is relatively representative of the true data where some non-responders will not be able to be identified unless matched Ki67 values are obtained pre/post intervention.
 Importantly, **the non-responder rate was assumed to be equal between treatment groups**
 
-In addition to non-responders, a *participant dropout rate of 5%* was included into simulations.
+In addition to non-responders, a *participant dropout rate of 5%* was included in all simulations.
+Final sample sizes thus take dropouts into account.
 
 ### Calculations
 
@@ -145,8 +144,8 @@ expected %>%
     justify = "lrrrr",
     caption = "
     Theoretical expected median Ki67% and the expected reduction in Ki67% using the default simulation parameters.
-    Values were set to show a slight overestimate of reduction, given that a varying proportion of non-responders were to be included in the simulations.
-    Reductions obtained below in simulations were more reflective of the intended values.
+    Values were seelected to show a slight overestimate of reduction, given that a varying proportion of non-responders were to be included in the simulations.
+    Reductions obtained in simulations below were more reflective of the intended values.
     "
   )
 ```
