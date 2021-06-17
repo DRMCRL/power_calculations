@@ -371,11 +371,12 @@ sim_res %>%
 
 ## Conclusion
 
-Using 30% non-responders from the above power curves:
+Using 25% non-responders from the above power curves, and a significance threshold of &alpha; = `r alpha`:
 
-- *Keeping group sizes equal* requires N = 100 (n~Let~ = 60; n~L+TU~ = 60) to achieve a 90% power (in the presence of 30% non-responders)
-- *Including an additional 50% of participants in the combined treatment group* is able to achieve a power > 90% at N = 100 (n~Let~ = 40; n~L+TU~ = 60)
-- *Including double the number of participants in the combined treatment group* is able to achieve a power of 90% at N > 100 (n~Let~ = 35; n~L+TU~ = 70)
+- *Keeping group sizes equal* requires N = 100 (n~Let~ = 60; n~L+TU~ = 60) to achieve a 80% power (in the presence of &#8924;25% non-responders)
+- *Including an additional 50% of participants in the combined treatment group* is able to achieve a power &#8925;80% at N = 100 (n~Let~ = 40; n~L+TU~ = 60)
+- *Including double the number of participants in the combined treatment group* is able to achieve a power &#8776; 80% at N > 100 (n~Let~ = 34; n~L+TU~ = 68)
 
-Importantly a *sample size of 100 participants* exceeds a power of 80% for all combinations of n~L+TU~ and n~L~ and all non-response rates.
+Importantly a *sample size of 110 participants* achieves a power > 80% for all combinations of n~L+TU~ and n~L~ and all non-responder rates &#8924;25%.
+For 30% non-responders, the power is still within acceptable bounds at &#8776;75% for N = 110.
 All simulations included a dropout rate of `r percent(formals(sim_data)$dropout)`
